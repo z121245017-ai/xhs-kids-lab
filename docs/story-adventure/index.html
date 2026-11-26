@@ -1,0 +1,2317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+<title>小探险家双语思维冒险 · Little Explorer Bilingual Adventure</title>
+<style>
+  :root {
+    --bg: #fdfaf5;
+    --card: #ffffff;
+    --ink: #1e293b;
+    --muted: #64748b;
+    --primary: #d97706;
+    --primary-dark: #b45309;
+    --primary-soft: #fef3c7;
+    --emerald: #059669;
+    --emerald-soft: #d1fae5;
+    --indigo: #4f46e5;
+    --indigo-soft: #eef2ff;
+    --rose: #e11d48;
+    --rose-soft: #ffe4e6;
+    --border: #e7e5e4;
+    --shadow: 0 12px 32px -12px rgba(30, 41, 59, 0.14);
+    --radius: 22px;
+    --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  button, input, textarea { font-family: inherit; }
+
+  /* Sticky Topbar */
+  .topbar {
+    background: linear-gradient(135deg, #78350f 0%, #b45309 52%, #d97706 100%);
+    color: #fff;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    box-shadow: 0 4px 20px rgba(120, 53, 15, 0.24);
+  }
+  .topbar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fde68a, #f59e0b);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    flex-shrink: 0;
+  }
+  .brand h1 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+  .brand p {
+    margin: 0;
+    font-size: 12px;
+    color: #fef3c7;
+  }
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pill-btn {
+    border: 1px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .pill-btn:hover { background: rgba(255,255,255,0.24); }
+  .pill-btn:active { transform: scale(0.96); }
+  .pill-btn.active {
+    background: #10b981;
+    border-color: #34d399;
+    color: #fff;
+  }
+  .pill-btn.lang-btn {
+    background: #ffffff;
+    color: #92400e;
+    border-color: #fde68a;
+  }
+  .pill-btn.muted-fallback {
+    opacity: 0.78;
+    cursor: default;
+  }
+
+  /* Layout */
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 18px 16px 36px;
+  }
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+  }
+  .story-card {
+    padding: 0;
+    overflow: hidden;
+  }
+  .scene-stage {
+    position: relative;
+    background: linear-gradient(180deg, #fef9ec 0%, #fff 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 18px 10px;
+  }
+  .chapter-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .chapter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+  }
+  .node-counter {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    background: #f5f5f4;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .illustration-box {
+    width: 100%;
+    height: 220px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f8fafc;
+    border: 1px solid #ece7df;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .illustration-box svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .story-body {
+    padding: 20px 22px 24px;
+  }
+  .story-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .story-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .speak-node-btn {
+    border: 1px solid #fed7aa;
+    background: #fff7ed;
+    color: #c2410c;
+    padding: 7px 12px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .speak-node-btn:hover { background: #ffedd5; }
+  .speak-node-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .story-text {
+    margin: 0 0 14px;
+    font-size: 15.5px;
+    color: #334155;
+    line-height: 1.75;
+  }
+
+  .parent-tip {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-left: 4px solid var(--emerald);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    font-size: 13.5px;
+    color: #14532d;
+  }
+  .parent-tip strong {
+    display: block;
+    font-size: 12.5px;
+    margin-bottom: 3px;
+    color: #065f46;
+  }
+
+  .choices-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0 0 10px;
+  }
+  .choices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .choice-btn {
+    width: 100%;
+    text-align: left;
+    background: #fff;
+    border: 2px solid #e7e5e4;
+    border-radius: 16px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .choice-btn:hover {
+    border-color: var(--primary);
+    background: #fffbeb;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px -8px rgba(217, 119, 6, 0.35);
+  }
+  .choice-btn:active { transform: scale(0.99); }
+  .choice-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .choice-letter {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+    font-weight: 900;
+    font-size: 13px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .choice-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+  }
+  .choice-hint {
+    font-size: 12px;
+    color: var(--muted);
+    display: block;
+    margin-top: 2px;
+  }
+  .choice-arrow {
+    color: var(--primary);
+    font-weight: 900;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Ending Banner & Certificate Panel */
+  .ending-box {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 2px solid #f59e0b;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .ending-tag {
+    display: inline-block;
+    background: #d97706;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .ending-box h3 {
+    margin: 0 0 6px;
+    font-size: 19px;
+    font-weight: 900;
+    color: #78350f;
+  }
+  .ending-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #92400e;
+  }
+  .ending-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .btn-primary {
+    border: none;
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: #fff;
+    padding: 11px 18px;
+    border-radius: 13px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 8px 18px -6px rgba(180, 83, 9, 0.45);
+  }
+  .btn-secondary {
+    border: 1.5px solid #d6d3d1;
+    background: #fff;
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Right HUD Sidebar */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 800;
+  }
+  .mini-pill {
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  /* Trait Meters */
+  .trait-row { margin-bottom: 12px; }
+  .trait-row:last-child { margin-bottom: 0; }
+  .trait-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .trait-bar-track {
+    height: 11px;
+    background: #f1f5f9;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .trait-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.35s ease;
+  }
+  .fill-curiosity { background: linear-gradient(90deg, #6366f1, #4f46e5); }
+  .fill-empathy { background: linear-gradient(90deg, #fb7185, #e11d48); }
+  .fill-logic { background: linear-gradient(90deg, #34d399, #059669); }
+
+  /* Badges Grid */
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .badge-item {
+    border: 1px solid var(--border);
+    background: #fafaf9;
+    border-radius: 14px;
+    padding: 9px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.48;
+    filter: grayscale(0.8);
+    transition: all 0.25s ease;
+  }
+  .badge-item.unlocked {
+    opacity: 1;
+    filter: none;
+    background: #fffbeb;
+    border-color: #fcd34d;
+    box-shadow: 0 4px 12px -6px rgba(217, 119, 6, 0.35);
+  }
+  .badge-emoji {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .badge-name {
+    font-size: 12px;
+    font-weight: 800;
+    display: block;
+    line-height: 1.25;
+  }
+  .badge-status {
+    font-size: 10.5px;
+    color: var(--muted);
+    display: block;
+  }
+
+  /* Endings Tracker */
+  .endings-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .ending-chip {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #fafaf9;
+    color: var(--muted);
+  }
+  .ending-chip.found {
+    background: var(--emerald-soft);
+    border-color: #6ee7b7;
+    color: #065f46;
+  }
+
+  /* Chapter Replay Log */
+  .log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .log-item {
+    border: 1px solid #ece7df;
+    background: #fcfaf7;
+    border-radius: 12px;
+    padding: 9px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12.5px;
+  }
+  .log-item-text strong {
+    display: block;
+    font-size: 12.5px;
+    color: var(--ink);
+  }
+  .log-item-text span {
+    color: var(--muted);
+    font-size: 11.5px;
+  }
+  .replay-btn {
+    border: 1px solid #fed7aa;
+    background: #fff7ed;
+    color: #c2410c;
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* Printable Reflection Card & Certificate */
+  .print-section {
+    margin-top: 22px;
+  }
+  .print-controls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .field-group label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .field-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+    background: #fff;
+  }
+  .cert-sheet {
+    border: 3px double #d97706;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #fffdf8 0%, #fffbeb 100%);
+    padding: 24px;
+    position: relative;
+  }
+  .cert-header {
+    text-align: center;
+    border-bottom: 1.5px dashed #fcd34d;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+  }
+  .cert-header h3 {
+    margin: 4px 0;
+    font-size: 22px;
+    font-weight: 900;
+    color: #92400e;
+  }
+  .cert-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #b45309;
+  }
+  .cert-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .cert-box {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid #fde68a;
+    border-radius: 14px;
+    padding: 14px;
+  }
+  .cert-box h4 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #78350f;
+  }
+  .cert-box p, .cert-box li {
+    font-size: 13px;
+    color: #334155;
+    margin: 4px 0;
+  }
+  .cert-box ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+  }
+  .cert-footer {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12.5px;
+    color: #78350f;
+  }
+  .seal-stamp {
+    border: 3px solid #dc2626;
+    color: #dc2626;
+    border-radius: 999px;
+    width: 78px;
+    height: 78px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 11px;
+    transform: rotate(-10deg);
+    background: rgba(254, 226, 226, 0.28);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1e293b;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    z-index: 60;
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  footer {
+    text-align: center;
+    padding: 14px 16px 28px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 860px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .cert-grid, .print-controls { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .container { padding: 12px 12px 28px; }
+    .brand h1 { font-size: 15.5px; }
+    .illustration-box { height: 185px; }
+    .story-title { font-size: 19px; }
+    .badges-grid, .endings-list { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .topbar, .main-grid, .print-controls, .print-action-bar, footer, .toast { display: none !important; }
+    .container { max-width: 100%; padding: 0; }
+    .print-section { margin: 0; box-shadow: none; border: none; padding: 0; }
+    .cert-sheet { border: 3px double #b45309; page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-icon">🧭</div>
+      <div>
+        <h1 id="brandTitle">小探险家双语思维冒险</h1>
+        <p id="brandSub">5–10岁亲子共读 · 15个分支抉择 · 4大性格结局</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="langToggleBtn" class="pill-btn lang-btn" type="button">🌐 中 / EN</button>
+      <button id="speechToggleBtn" class="pill-btn" type="button">🔊 语音朗读: 关</button>
+      <button id="sfxToggleBtn" class="pill-btn active" type="button">🎵 音效: 开</button>
+      <button id="restartTopBtn" class="pill-btn" type="button">🔄 重新开始</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="main-grid">
+    <!-- Left: Interactive Story Stage -->
+    <article class="card story-card">
+      <div class="scene-stage">
+        <div class="chapter-meta">
+          <span id="chapterBadge" class="chapter-badge">第 1 章 · 迷雾森林入口</span>
+          <span id="nodeCounter" class="node-counter">已探索节点 1 · 结局 0/4</span>
+        </div>
+        <div id="illustrationBox" class="illustration-box" aria-hidden="true"></div>
+      </div>
+
+      <div class="story-body">
+        <div class="story-title-row">
+          <h2 id="storyTitle" class="story-title"></h2>
+          <button id="speakNowBtn" class="speak-node-btn" type="button">🗣️ 朗读本节</button>
+        </div>
+        <p id="storyText" class="story-text"></p>
+
+        <div id="parentTipBox" class="parent-tip"></div>
+
+        <div id="endingContainer" style="display:none;"></div>
+
+        <div id="choicesWrap">
+          <p id="choicesHeading" class="choices-title">选择你的探险行动</p>
+          <div id="choicesList" class="choices-list"></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Right: Traits, Badges, Endings & Replay Log -->
+    <aside class="sidebar">
+      <section class="card">
+        <div class="section-head">
+          <h2 id="traitsHeading">✨ 小探险家能力雷达</h2>
+          <span id="stepCountPill" class="mini-pill">0 步抉择</span>
+        </div>
+        <div class="trait-row">
+          <div class="trait-label-row">
+            <span id="labelCuriosity">🔭 好奇心 Curiosity</span>
+            <span id="valCuriosity">2</span>
+          </div>
+          <div class="trait-bar-track"><div id="barCuriosity" class="trait-bar-fill fill-curiosity" style="width:20%"></div></div>
+        </div>
+        <div class="trait-row">
+          <div class="trait-label-row">
+            <span id="labelEmpathy">💛 共情力 Empathy</span>
+            <span id="valEmpathy">2</span>
+          </div>
+          <div class="trait-bar-track"><div id="barEmpathy" class="trait-bar-fill fill-empathy" style="width:20%"></div></div>
+        </div>
+        <div class="trait-row">
+          <div class="trait-label-row">
+            <span id="labelLogic">🧩 逻辑力 Logic</span>
+            <span id="valLogic">2</span>
+          </div>
+          <div class="trait-bar-track"><div id="barLogic" class="trait-bar-fill fill-logic" style="width:20%"></div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2 id="badgesHeading">🏅 探险徽章收集</h2>
+          <span id="badgeCountPill" class="mini-pill">0 / 6</span>
+        </div>
+        <div id="badgesGrid" class="badges-grid"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2 id="endingsHeading">🗺️ 4 大结局图鉴</h2>
+          <span id="endingCountPill" class="mini-pill">0 / 4</span>
+        </div>
+        <div id="endingsGrid" class="endings-list"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2 id="logHeading">📜 探险足迹与章节回放</h2>
+          <span id="logCountPill" class="mini-pill">0 条</span>
+        </div>
+        <div id="logList" class="log-list"></div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Printable Parent-Child Reflection Card & Completion Certificate -->
+  <section id="printSection" class="card print-section">
+    <div class="section-head">
+      <h2 id="certSectionTitle">🎓 亲子共读反思卡 &amp; 探险结业证书（支持打印 / 保存）</h2>
+      <div class="print-action-bar" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="printCardBtn" class="btn-primary" type="button">🖨️ 打印反思卡与证书</button>
+        <button id="exportCertPngBtn" class="btn-secondary" type="button">📥 导出 PNG 证书</button>
+      </div>
+    </div>
+
+    <div class="print-controls">
+      <div class="field-group">
+        <label id="lblChildName" for="childNameInput">宝贝探险家昵称</label>
+        <input id="childNameInput" type="text" maxlength="24" value="小探险家乐乐">
+      </div>
+      <div class="field-group">
+        <label id="lblParentNote" for="parentNoteInput">爸爸妈妈的一句鼓励</label>
+        <input id="parentNoteInput" type="text" maxlength="60" value="每一次思考和善良选择，都在让你变得更闪亮！">
+      </div>
+    </div>
+
+    <div id="certSheet" class="cert-sheet">
+      <div class="cert-header">
+        <span id="certRibbon" style="font-size:12px;font-weight:800;color:#b45309;letter-spacing:1px;">LITTLE EXPLORER · BILINGUAL ADVENTURE</span>
+        <h3 id="certMainTitle">🏆 小探险家双语思维冒险 · 结业证书与反思卡</h3>
+        <p id="certSubtitle"></p>
+      </div>
+      <div class="cert-grid">
+        <div class="cert-box">
+          <h4 id="certProfileTitle">📊 探险性格画像</h4>
+          <p id="certProfileBody"></p>
+          <p id="certBadgesSummary" style="margin-top:8px;font-weight:700;color:#92400e;"></p>
+        </div>
+        <div class="cert-box">
+          <h4 id="certPromptsTitle">💬 今晚睡前亲子对话卡</h4>
+          <ul id="certPromptsList"></ul>
+        </div>
+      </div>
+      <div class="cert-footer">
+        <div>
+          <div id="certParentQuote" style="font-style:italic;font-weight:700;margin-bottom:4px;"></div>
+          <div id="certDateText"></div>
+        </div>
+        <div class="seal-stamp">
+          <span>EXPLORER</span>
+          <span>★ 认证 ★</span>
+          <span>5–10 YRS</span>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="certCanvas" width="1200" height="820" style="display:none;"></canvas>
+    <div id="certPngPreviewWrap" style="display:none;text-align:center;margin-top:14px;">
+      <p id="certPngTip" style="font-size:12.5px;color:var(--muted);margin:0 0 8px;"></p>
+      <img id="certPngPreview" style="max-width:100%;border-radius:14px;border:1px solid var(--border);" alt="Certificate PNG">
+    </div>
+  </section>
+</main>
+
+<footer id="footerNote">
+  小探险家双语思维冒险 · 100% 纯离线单文件交互故事 · 本地自动保存成长徽章与结局图鉴
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  const STORAGE_KEY = 'xhs_story_adventure_v1';
+
+  // =========================================================================
+  // BILINGUAL UI DICTIONARY
+  // =========================================================================
+  const UI = {
+    zh: {
+      brandTitle: '小探险家双语思维冒险',
+      brandSub: '5–10岁亲子共读 · 15个分支抉择 · 4大性格结局',
+      langBtn: '🌐 切换 English',
+      speechOn: '🔊 语音朗读: 开',
+      speechOff: '🔇 语音朗读: 关',
+      speechUnsupported: '🔇 语音不可用',
+      sfxOn: '🎵 音效: 开',
+      sfxOff: '🔇 音效: 关',
+      restartBtn: '🔄 重新探险',
+      speakNow: '🗣️ 朗读本节',
+      choicesHeading: '选择你的探险行动',
+      traitsHeading: '✨ 小探险家能力雷达',
+      curiosity: '🔭 好奇心 Curiosity',
+      empathy: '💛 共情力 Empathy',
+      logic: '🧩 逻辑力 Logic',
+      badgesHeading: '🏅 探险徽章收集',
+      endingsHeading: '🗺️ 4 大结局图鉴',
+      logHeading: '📜 探险足迹与章节回放',
+      stepsUnit: '步抉择',
+      logsUnit: '条',
+      unlocked: '已点亮',
+      locked: '未解锁',
+      found: '已达成',
+      unfound: '待探索',
+      replay: '回到这里',
+      noLog: '还没有作出选择，快在左侧点击第一个行动吧！',
+      parentTipTitle: '👨‍👩‍👧 亲子共读小提问：',
+      endingBadge: '🎉 达成故事结局',
+      playAgain: '🧭 再探一次收集新结局',
+      jumpPrint: '🎓 查看我的反思卡与证书',
+      certSectionTitle: '🎓 亲子共读反思卡 & 探险结业证书（支持打印 / 保存）',
+      printBtn: '🖨️ 打印反思卡与证书',
+      exportPngBtn: '📥 导出 PNG 证书',
+      lblChildName: '宝贝探险家昵称',
+      lblParentNote: '爸爸妈妈的一句鼓励',
+      certMainTitle: '🏆 小探险家双语思维冒险 · 结业证书与反思卡',
+      certProfileTitle: '📊 探险性格画像',
+      certPromptsTitle: '💬 今晚睡前亲子对话卡',
+      certPngTip: '✅ 高清证书已生成！电脑端已自动下载，手机端可直接长按图片保存：',
+      footer: '小探险家双语思维冒险 · 100% 纯离线单文件交互故事 · 本地自动保存成长徽章与结局图鉴',
+      nodeCounter: (visited, endings) => `已探索节点 ${visited}/19 · 结局 ${endings}/4`,
+      badgeToast: (name) => `🏅 解锁新徽章：${name}`,
+      restartToast: '🧭 已回到迷雾森林入口，开启全新探险！',
+      replayToast: (ch) => `⏪ 已回到「${ch}」重新选择`,
+      speechFallbackToast: '当前浏览器环境不支持语音朗读，已继续静音阅读模式'
+    },
+    en: {
+      brandTitle: 'Little Explorer Bilingual Adventure',
+      brandSub: 'Ages 5–10 Co-Reading · 15 Branching Choices · 4 Endings',
+      langBtn: '🌐 Switch 中文',
+      speechOn: '🔊 Read Aloud: On',
+      speechOff: '🔇 Read Aloud: Off',
+      speechUnsupported: '🔇 Voice N/A',
+      sfxOn: '🎵 SFX: On',
+      sfxOff: '🔇 SFX: Off',
+      restartBtn: '🔄 Restart',
+      speakNow: '🗣️ Read Section',
+      choicesHeading: 'Choose Your Next Action',
+      traitsHeading: '✨ Explorer Trait Meters',
+      curiosity: '🔭 Curiosity',
+      empathy: '💛 Empathy',
+      logic: '🧩 Logic',
+      badgesHeading: '🏅 Explorer Badges',
+      endingsHeading: '🗺️ 4 Story Endings',
+      logHeading: '📜 Journey Log & Replay',
+      stepsUnit: 'choices',
+      logsUnit: 'steps',
+      unlocked: 'Unlocked',
+      locked: 'Locked',
+      found: 'Discovered',
+      unfound: 'Undiscovered',
+      replay: 'Replay',
+      noLog: 'No choices yet — pick your first action on the left!',
+      parentTipTitle: '👨‍👩‍👧 Co-Reading Prompt:',
+      endingBadge: '🎉 Ending Unlocked',
+      playAgain: '🧭 Play Again for Another Ending',
+      jumpPrint: '🎓 Jump to Reflection Card & Certificate',
+      certSectionTitle: '🎓 Parent-Child Reflection Card & Certificate (Print / Save)',
+      printBtn: '🖨️ Print Card & Certificate',
+      exportPngBtn: '📥 Export PNG Certificate',
+      lblChildName: 'Explorer Name',
+      lblParentNote: 'Parent Encouragement Note',
+      certMainTitle: '🏆 Little Explorer Bilingual Adventure · Certificate',
+      certProfileTitle: '📊 Explorer Trait Profile',
+      certPromptsTitle: '💬 Bedtime Co-Reading Questions',
+      certPngTip: '✅ PNG Certificate ready! Downloaded on desktop or long-press below on mobile:',
+      footer: 'Little Explorer Bilingual Adventure · 100% Offline Single-File Story · Progress saved locally',
+      nodeCounter: (visited, endings) => `Nodes Explored ${visited}/19 · Endings ${endings}/4`,
+      badgeToast: (name) => `🏅 New Badge Unlocked: ${name}`,
+      restartToast: '🧭 Back at Whispering Forest Gate — new adventure started!',
+      replayToast: (ch) => `⏪ Rewound to "${ch}"`,
+      speechFallbackToast: 'Speech synthesis is unavailable in this browser; continuing silently.'
+    }
+  };
+
+  // =========================================================================
+  // BADGES & ENDINGS METADATA
+  // =========================================================================
+  const BADGES = [
+    { id: 'compass_starter', emoji: '🧭', zh: '启程罗盘', en: 'First Compass' },
+    { id: 'pattern_decoder', emoji: '🔐', zh: '密码破译者', en: 'Pattern Decoder' },
+    { id: 'kind_listener', emoji: '🐰', zh: '倾听之心', en: 'Kind Listener' },
+    { id: 'sky_observer', emoji: '🔭', zh: '星空观察员', en: 'Sky Observer' },
+    { id: 'bridge_builder', emoji: '🌉', zh: '合作桥梁', en: 'Bridge Builder' },
+    { id: 'master_explorer', emoji: '👑', zh: '全能探险家', en: 'Master Explorer' }
+  ];
+
+  const ENDINGS_META = [
+    { id: 'ending_logic', emoji: '⚙️', zh: '智慧齿轮解谜王', en: 'Master Logic Architect' },
+    { id: 'ending_empathy', emoji: '💚', zh: '森林共情守护者', en: 'Heartkeeper of Forest' },
+    { id: 'ending_curiosity', emoji: '🌈', zh: '星云奇思探险家', en: 'Starlight Wonder Seeker' },
+    { id: 'ending_harmony', emoji: '🏮', zh: '和谐领航小队长', en: 'Harmony Pathfinder' }
+  ];
+
+  // =========================================================================
+  // INLINE SVG SCENE ILLUSTRATIONS (ZERO EXTERNAL IMAGES)
+  // =========================================================================
+  const SCENES = {
+    forest_gate: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="fgSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#fef3c7"/></linearGradient>
+        </defs>
+        <rect width="640" height="240" fill="url(#fgSky)"/>
+        <circle cx="520" cy="56" r="28" fill="#fbbf24"/>
+        <path d="M0 190 Q160 140 320 185 T640 175 L640 240 L0 240 Z" fill="#86efac"/>
+        <path d="M0 205 Q220 170 430 205 T640 195 L640 240 L0 240 Z" fill="#22c55e"/>
+        <g transform="translate(80,75)">
+          <polygon points="35,0 0,85 70,85" fill="#15803d"/>
+          <polygon points="35,28 -6,108 76,108" fill="#166534"/>
+          <rect x="28" y="108" width="14" height="28" fill="#78350f"/>
+        </g>
+        <g transform="translate(500,82)">
+          <polygon points="32,0 -4,82 68,82" fill="#0f766e"/>
+          <rect x="25" y="82" width="14" height="32" fill="#78350f"/>
+        </g>
+        <g transform="translate(275,112)">
+          <rect x="38" y="25" width="12" height="72" rx="4" fill="#92400e"/>
+          <rect x="10" y="14" width="76" height="24" rx="8" fill="#f59e0b" stroke="#78350f" stroke-width="2.5"/>
+          <circle cx="46" cy="26" r="6" fill="#fffbeb"/>
+          <path d="M46 21 L49 26 L46 31 L43 26 Z" fill="#dc2626"/>
+        </g>
+        <circle cx="220" cy="188" r="10" fill="#fde047" opacity="0.9"/>
+        <circle cx="245" cy="175" r="8" fill="#fde047" opacity="0.75"/>
+        <circle cx="272" cy="186" r="10" fill="#fde047" opacity="0.9"/>
+      </svg>`,
+    squirrel_map: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#fef7ed"/>
+        <path d="M0 185 Q180 155 360 185 T640 175 L640 240 L0 240 Z" fill="#bbf7d0"/>
+        <g transform="translate(180,85)">
+          <ellipse cx="48" cy="64" rx="34" ry="42" fill="#d97706"/>
+          <circle cx="88" cy="46" r="24" fill="#ea580c"/>
+          <polygon points="75,26 83,8 92,26" fill="#ea580c"/>
+          <polygon points="94,25 103,8 109,28" fill="#ea580c"/>
+          <circle cx="96" cy="42" r="4" fill="#1e293b"/>
+          <ellipse cx="32" cy="54" rx="22" ry="38" transform="rotate(-25 32 54)" fill="#b45309"/>
+          <circle cx="110" cy="52" r="4" fill="#78350f"/>
+        </g>
+        <g transform="translate(360,65)">
+          <rect x="0" y="10" width="128" height="92" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+          <path d="M18 32 Q55 62 72 45 T110 80" stroke="#2563eb" stroke-width="4" fill="none" stroke-dasharray="6 4"/>
+          <circle cx="20" cy="32" r="6" fill="#ef4444"/>
+          <path d="M104 74 L116 86 M116 74 L104 86" stroke="#dc2626" stroke-width="3.5"/>
+        </g>
+      </svg>`,
+    compass_dial: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#eef2ff"/>
+        <circle cx="320" cy="120" r="88" fill="#fde68a" stroke="#b45309" stroke-width="6"/>
+        <circle cx="320" cy="120" r="72" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+        <polygon points="320,56 334,120 320,108 306,120" fill="#dc2626"/>
+        <polygon points="320,184 334,120 320,132 306,120" fill="#475569"/>
+        <circle cx="320" cy="120" r="9" fill="#92400e"/>
+        <text x="313" y="45" font-size="16" font-weight="bold" fill="#78350f">N</text>
+        <text x="315" y="206" font-size="16" font-weight="bold" fill="#78350f">S</text>
+        <text x="234" y="126" font-size="16" font-weight="bold" fill="#78350f">W</text>
+        <text x="394" y="126" font-size="16" font-weight="bold" fill="#78350f">E</text>
+      </svg>`,
+    music_bridge: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#ecfeff"/>
+        <rect x="0" y="160" width="640" height="80" fill="#38bdf8"/>
+        <path d="M80 172 Q320 96 560 172" stroke="#92400e" stroke-width="16" fill="none"/>
+        <rect x="150" y="132" width="44" height="20" rx="6" fill="#f59e0b"/>
+        <rect x="224" y="114" width="44" height="20" rx="6" fill="#ec4899"/>
+        <rect x="298" y="106" width="44" height="20" rx="6" fill="#8b5cf6"/>
+        <rect x="372" y="114" width="44" height="20" rx="6" fill="#10b981"/>
+        <rect x="446" y="132" width="44" height="20" rx="6" fill="#3b82f6"/>
+        <text x="210" y="72" font-size="26" fill="#db2777">♪</text>
+        <text x="316" y="54" font-size="30" fill="#7c3aed">♫</text>
+        <text x="415" y="74" font-size="26" fill="#059669">♩</text>
+      </svg>`,
+    owl_treehouse: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#f5f3ff"/>
+        <rect x="220" y="18" width="200" height="222" rx="18" fill="#92400e"/>
+        <circle cx="320" cy="118" r="56" fill="#fef3c7" stroke="#78350f" stroke-width="5"/>
+        <ellipse cx="320" cy="126" rx="34" ry="38" fill="#8b5cf6"/>
+        <circle cx="306" cy="112" r="12" fill="#fff"/>
+        <circle cx="334" cy="112" r="12" fill="#fff"/>
+        <circle cx="307" cy="112" r="5" fill="#1e293b"/>
+        <circle cx="333" cy="112" r="5" fill="#1e293b"/>
+        <polygon points="320,118 313,128 327,128" fill="#f59e0b"/>
+        <rect x="455" y="95" width="90" height="105" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="3"/>
+        <line x1="472" y1="120" x2="526" y2="120" stroke="#6366f1" stroke-width="4"/>
+        <line x1="472" y1="142" x2="518" y2="142" stroke="#f59e0b" stroke-width="4"/>
+        <line x1="472" y1="164" x2="528" y2="164" stroke="#10b981" stroke-width="4"/>
+      </svg>`,
+    firefly_valley: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#1e1b4b"/>
+        <circle cx="520" cy="54" r="24" fill="#fef08a"/>
+        <path d="M0 190 Q200 150 420 190 T640 180 L640 240 L0 240 Z" fill="#064e3b"/>
+        <circle cx="150" cy="95" r="10" fill="#fde047"/>
+        <circle cx="150" cy="95" r="22" fill="#fde047" opacity="0.25"/>
+        <circle cx="265" cy="70" r="12" fill="#a7f3d0"/>
+        <circle cx="265" cy="70" r="26" fill="#a7f3d0" opacity="0.24"/>
+        <circle cx="370" cy="115" r="11" fill="#fde047"/>
+        <circle cx="370" cy="115" r="24" fill="#fde047" opacity="0.26"/>
+        <circle cx="450" cy="88" r="9" fill="#fbcfe8"/>
+        <circle cx="450" cy="88" r="20" fill="#fbcfe8" opacity="0.24"/>
+      </svg>`,
+    star_gate: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#0f172a"/>
+        <circle cx="320" cy="126" r="84" fill="none" stroke="#f59e0b" stroke-width="10"/>
+        <circle cx="320" cy="126" r="60" fill="none" stroke="#38bdf8" stroke-width="6" stroke-dasharray="10 8"/>
+        <circle cx="320" cy="126" r="34" fill="#312e81" stroke="#fde047" stroke-width="4"/>
+        <polygon points="320,98 328,118 350,118 332,130 338,150 320,138 302,150 308,130 290,118 312,118" fill="#fde047"/>
+        <circle cx="120" cy="52" r="4" fill="#fff"/>
+        <circle cx="510" cy="48" r="5" fill="#fde047"/>
+        <circle cx="170" cy="178" r="3" fill="#fff"/>
+        <circle cx="480" cy="176" r="4" fill="#38bdf8"/>
+      </svg>`,
+    crystal_gears: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#f0fdf4"/>
+        <circle cx="245" cy="122" r="54" fill="#f59e0b" stroke="#92400e" stroke-width="6" stroke-dasharray="18 8"/>
+        <circle cx="245" cy="122" r="20" fill="#fffbeb"/>
+        <circle cx="378" cy="122" r="72" fill="#38bdf8" stroke="#0284c7" stroke-width="6" stroke-dasharray="22 9"/>
+        <circle cx="378" cy="122" r="26" fill="#e0f2fe"/>
+        <polygon points="120,60 144,105 96,105" fill="#c084fc" opacity="0.85"/>
+        <polygon points="520,54 548,105 492,105" fill="#34d399" opacity="0.85"/>
+      </svg>`,
+    rainbow_bridge: `
+      <svg viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg">
+        <rect width="640" height="240" fill="#eff6ff"/>
+        <path d="M80 210 A240 175 0 0 1 560 210" fill="none" stroke="#ef4444" stroke-width="14"/>
+        <path d="M96 210 A224 160 0 0 1 544 210" fill="none" stroke="#f59e0b" stroke-width="14"/>
+        <path d="M112 210 A208 145 0 0 1 528 210" fill="none" stroke="#10b981" stroke-width="14"/>
+        <path d="M128 210 A192 130 0 0 1 512 210" fill="none" stroke="#3b82f6" stroke-width="14"/>
+        <path d="M144 210 A176 115 0 0 1 496 210" fill="none" stroke="#8b5cf6" stroke-width="14"/>
+        <ellipse cx="120" cy="205" rx="68" ry="28" fill="#fff"/>
+        <ellipse cx="520" cy="205" rx="68" ry="28" fill="#fff"/>
+      </svg>`
+  };
+
+  // =========================================================================
+  // BRANCHING STORY GRAPH (15 INTERACTIVE DECISION NODES + 4 DISTINCT ENDINGS)
+  // =========================================================================
+  const NODES = {
+    start: {
+      chapterZh: '第 1 章 · 迷雾森林入口',
+      chapterEn: 'Chapter 1 · Whispering Forest Gate',
+      scene: 'forest_gate',
+      titleZh: '清晨，会发光的路标',
+      titleEn: 'The Glowing Morning Signpost',
+      textZh: '你背上小小探险包，来到迷雾森林的木头路标前。清晨的雾气还没散开，地面上有几串亮晶晶的小脚印，树旁传出轻轻的抽泣声，而路标顶部还嵌着一个古老的铜太阳罗盘。',
+      textEn: 'With your explorer backpack ready, you reach the Whispering Forest signpost. Soft mist swirls around glowing footprints on the moss, quiet sniffles echo near a hollow root, and an old brass sun-dial rests atop the post.',
+      tipZh: '如果只选一件事先开始，宝贝最想先看脚印、安慰小动物，还是研究罗盘？为什么？',
+      tipEn: 'If you could check only one clue first—footprints, the crying sound, or the sun-dial—which would you pick and why?',
+      choices: [
+        {
+          id: 'c1_a',
+          labelZh: '拿出放大镜，蹲下数一数发光脚印的规律',
+          labelEn: 'Use your magnifying glass to study the glowing footprints',
+          hintZh: '好奇心 +2 · 逻辑力 +1',
+          hintEn: '+2 Curiosity · +1 Logic',
+          delta: { curiosity: 2, empathy: 0, logic: 1 },
+          badge: 'compass_starter',
+          next: 'ch2_tracks'
+        },
+        {
+          id: 'c1_b',
+          labelZh: '走近树洞轻声问候：“有人需要帮忙吗？”',
+          labelEn: 'Step toward the tree hollow and ask kindly if someone needs help',
+          hintZh: '共情力 +2 · 好奇心 +1',
+          hintEn: '+2 Empathy · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 2, logic: 0 },
+          badge: 'compass_starter',
+          next: 'ch2_squirrel'
+        },
+        {
+          id: 'c1_c',
+          labelZh: '观察阳光影子，转动木头路标上的铜罗盘',
+          labelEn: 'Check the morning sun shadow and inspect the brass sun-dial',
+          hintZh: '逻辑力 +2 · 好奇心 +1',
+          hintEn: '+2 Logic · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 0, logic: 2 },
+          badge: 'compass_starter',
+          next: 'ch2_compass'
+        }
+      ]
+    },
+
+    ch2_tracks: {
+      chapterZh: '第 2 章 · 发光脚印',
+      chapterEn: 'Chapter 2 · The Glowing Footprints',
+      scene: 'forest_gate',
+      titleZh: '跳格子一样的石头节奏',
+      titleEn: 'A Hopscotch Stone Pattern',
+      textZh: '通过放大镜，你发现发光粉尘按“左脚1步、右脚2步、左脚1步、右脚2步”的规律落在一块块青苔石上，而旁边的老树桩里好像还传来小翅膀扑腾的声音。',
+      textEn: 'Through your lens, the glowing dust follows a steady rhythm: 1 left step, 2 right hops, 1 left step, 2 right hops! Nearby, tiny wings flutter inside a mossy hollow.',
+      tipZh: '你能帮小探险家接着说出后面的脚印规律吗？1-2-1-2 之后是什么？',
+      tipEn: 'Can you predict the next part of the pattern after 1-2-1-2?',
+      choices: [
+        {
+          id: 'c2t_a',
+          labelZh: '按 1-2-1-2 的间隔预测下一块石头，找到秘密小径',
+          labelEn: 'Predict the next stone using the 1-2-1-2 pattern to unlock the trail',
+          hintZh: '逻辑力 +2 · 解锁「密码破译者」徽章',
+          hintEn: '+2 Logic · Unlocks Pattern Decoder',
+          delta: { curiosity: 0, empathy: 0, logic: 2 },
+          badge: 'pattern_decoder',
+          next: 'ch3_bridge'
+        },
+        {
+          id: 'c2t_b',
+          labelZh: '先轻敲苔藓树洞，确认里面的小家伙安全',
+          labelEn: 'Tap gently on the mossy hollow to make sure the tiny creature is safe',
+          hintZh: '共情力 +2 · 好奇心 +1',
+          hintEn: '+2 Empathy · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 2, logic: 0 },
+          next: 'ch3_owl'
+        }
+      ]
+    },
+
+    ch2_squirrel: {
+      chapterZh: '第 2 章 · 小松鼠皮普',
+      chapterEn: 'Chapter 2 · Pip the Squirrel',
+      scene: 'squirrel_map',
+      titleZh: '被风吹散的松果地图',
+      titleEn: 'The Torn Acorn Map',
+      textZh: '原来是小松鼠皮普！它抱着三块被风撕碎的地图哭鼻子：“妈妈的森林派对地图破了，我找不到去音乐石桥的路了！”',
+      textEn: 'It is Pip the Squirrel! He holds three torn pieces of an acorn map. "The wind ripped my map to the Musical Stone Bridge!" he sniffles.',
+      tipZh: '安慰难过的朋友时，除了说“别哭”，还可以做什么贴心的小动作？',
+      tipEn: 'When a friend feels upset, what gentle action helps them feel calm and supported?',
+      choices: [
+        {
+          id: 'c2s_a',
+          labelZh: '先分给他半颗香甜莓果，等他平静下来再问细节',
+          labelEn: 'Share half a berry snack first and listen calmly to his story',
+          hintZh: '共情力 +2 · 解锁「倾听之心」徽章',
+          hintEn: '+2 Empathy · Unlocks Kind Listener',
+          delta: { curiosity: 0, empathy: 2, logic: 0 },
+          badge: 'kind_listener',
+          next: 'ch3_owl'
+        },
+        {
+          id: 'c2s_b',
+          labelZh: '把三块碎地图摊在平石头上，对齐蓝色小河线拼起来',
+          labelEn: 'Spread the 3 torn pieces on a flat rock and align the blue river lines',
+          hintZh: '逻辑力 +2 · 共情力 +1',
+          hintEn: '+2 Logic · +1 Empathy',
+          delta: { curiosity: 0, empathy: 1, logic: 2 },
+          next: 'ch3_bridge'
+        }
+      ]
+    },
+
+    ch2_compass: {
+      chapterZh: '第 2 章 · 太阳罗盘',
+      chapterEn: 'Chapter 2 · The Sun-Dial Post',
+      scene: 'compass_dial',
+      titleZh: '藏在三角刻度里的密码',
+      titleEn: 'Triangles Carved in Brass',
+      textZh: '太阳从东方升起，木杆的影子正好指向西北角。罗盘底座刻着三枚大小不同的三角形，旁边还有一条通往高高瞭望石的小路。',
+      textEn: 'As the morning sun rises in the east, the shadow points cleanly toward the carved triangles on the brass ring. Beside you, a safe trail climbs up to a windy lookout boulder.',
+      tipZh: '太阳早上从东边升起，影子会指向哪一边呢？可以一起用手比划一下！',
+      tipEn: 'When the sun rises in the east, which direction do shadows point? Let us act it out!',
+      choices: [
+        {
+          id: 'c2c_a',
+          labelZh: '把铜环对齐北方影子，按三角大小顺序解开暗格',
+          labelEn: 'Align the brass ring to North and order the triangles by size',
+          hintZh: '逻辑力 +2 · 解锁「密码破译者」徽章',
+          hintEn: '+2 Logic · Unlocks Pattern Decoder',
+          delta: { curiosity: 0, empathy: 0, logic: 2 },
+          badge: 'pattern_decoder',
+          next: 'ch3_bridge'
+        },
+        {
+          id: 'c2c_b',
+          labelZh: '爬上安全瞭望石，画下山谷云朵与风向轨迹',
+          labelEn: 'Climb the safe lookout rock to sketch the valley clouds and wind path',
+          hintZh: '好奇心 +2 · 解锁「星空观察员」徽章',
+          hintEn: '+2 Curiosity · Unlocks Sky Observer',
+          delta: { curiosity: 2, empathy: 0, logic: 0 },
+          badge: 'sky_observer',
+          next: 'ch3_observatory'
+        }
+      ]
+    },
+
+    ch3_bridge: {
+      chapterZh: '第 3 章 · 音乐石桥',
+      chapterEn: 'Chapter 3 · The Musical Stone Bridge',
+      scene: 'music_bridge',
+      titleZh: '只有唱对音阶才会点亮的石桥',
+      titleEn: 'Stones That Sing Do-Re-Mi-Fa',
+      textZh: '小溪横在面前，桥上的彩色石板踩下去会发出不同的音符！水花有点急，而小松鼠皮普也背着满满一篮松果赶到了桥头。',
+      textEn: 'A sparkling stream flows ahead. The colorful stepping stones chime with musical notes when tapped! Pip arrives right behind you carrying a heavy acorn basket.',
+      tipZh: '过河之前先做个小实验测试安全，还是互相搭把手，你更欣赏哪种习惯？',
+      tipEn: 'Why is testing safety or helping a friend carry a load smart before crossing?',
+      choices: [
+        {
+          id: 'c3b_a',
+          labelZh: '用树枝轻敲石板，按 Do-Re-Mi-Fa 音高从低到高走过',
+          labelEn: 'Tap the stones softly and cross in ascending Do-Re-Mi-Fa pitch order',
+          hintZh: '逻辑力 +2 · 好奇心 +1',
+          hintEn: '+2 Logic · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 0, logic: 2 },
+          next: 'ch4_river'
+        },
+        {
+          id: 'c3b_b',
+          labelZh: '先折一只树叶小船放进水里，测测水流速度和方向',
+          labelEn: 'Fold a tiny leaf-boat first to test the stream speed safely',
+          hintZh: '好奇心 +2 · 逻辑力 +1',
+          hintEn: '+2 Curiosity · +1 Logic',
+          delta: { curiosity: 2, empathy: 0, logic: 1 },
+          next: 'ch4_river'
+        },
+        {
+          id: 'c3b_c',
+          labelZh: '停下来等皮普，一人抬一边松果篮一起稳稳过桥',
+          labelEn: 'Wait for Pip and carry the heavy acorn basket across together',
+          hintZh: '共情力 +2 · 逻辑力 +1',
+          hintEn: '+2 Empathy · +1 Logic',
+          delta: { curiosity: 0, empathy: 2, logic: 1 },
+          next: 'ch4_lantern'
+        }
+      ]
+    },
+
+    ch3_owl: {
+      chapterZh: '第 3 章 · 猫头鹰书屋',
+      chapterEn: 'Chapter 3 · Barnaby Owl’s Treehouse',
+      scene: 'owl_treehouse',
+      titleZh: '乱成一团的星图卷轴',
+      titleEn: 'The Mixed-Up Star Scrolls',
+      textZh: '树屋里的猫头鹰巴纳比先生戴着圆眼镜，皱着眉头整理一地卷轴：“昨晚的风把星图吹乱了，今晚的迷雾又这么厚……”',
+      textEn: 'Inside the cozy treehouse, Barnaby Owl adjusts his round glasses over scattered star scrolls. "Last night’s gust tangled my charts, and tonight’s mist is growing thick..."',
+      tipZh: '看到大朋友发愁时，先帮他整理分类，还是先关心他为什么担心？',
+      tipEn: 'When someone looks worried, how can we help with both our hands and our words?',
+      choices: [
+        {
+          id: 'c3o_a',
+          labelZh: '按星座连线形状把卷轴分成三叠，帮巴纳比快速归类',
+          labelEn: 'Sort the scrolls into three neat piles by constellation shape',
+          hintZh: '逻辑力 +2 · 好奇心 +1',
+          hintEn: '+2 Logic · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 0, logic: 2 },
+          next: 'ch4_observatory_gate'
+        },
+        {
+          id: 'c3o_b',
+          labelZh: '先问问巴纳比先生在担心什么，一起想办法点亮夜路',
+          labelEn: 'Ask Barnaby kindly why the mist worries him and offer to help',
+          hintZh: '共情力 +2 · 解锁「倾听之心」徽章',
+          hintEn: '+2 Empathy · Unlocks Kind Listener',
+          delta: { curiosity: 0, empathy: 2, logic: 0 },
+          badge: 'kind_listener',
+          next: 'ch4_lantern'
+        }
+      ]
+    },
+
+    ch3_observatory: {
+      chapterZh: '第 3 章 · 风铃山脊',
+      chapterEn: 'Chapter 3 · Wind-Chime Ridge',
+      scene: 'firefly_valley',
+      titleZh: '风铃密码与小萤火虫',
+      titleEn: 'Wind-Chime Beats & Little Firefly',
+      textZh: '风铃山脊上的铜铃铛发出“短-短-短-长”的节奏，回声似乎在指引一个隐蔽洞口。草丛里还有一只小萤火虫的翅膀被蛛丝轻轻缠住了。',
+      textEn: 'Copper chimes on the ridge ring "short-short-short-long", echoing toward a hidden arch. In the grass nearby, a tiny firefly has its wing caught on sticky silk.',
+      tipZh: '仔细听声音规律和及时帮助小生命，哪一件事让你觉得最不能错过？',
+      tipEn: 'Which clue calls to your heart right now: decoding the chimes or freeing the tiny firefly?',
+      choices: [
+        {
+          id: 'c3v_a',
+          labelZh: '记住“三短一长”风铃节奏，顺着回声找到风之石门',
+          labelEn: 'Record the "3-short, 1-long" beat to locate the wind-arch gate',
+          hintZh: '好奇心 +2 · 逻辑力 +2',
+          hintEn: '+2 Curiosity · +2 Logic',
+          delta: { curiosity: 2, empathy: 0, logic: 2 },
+          next: 'ch4_observatory_gate'
+        },
+        {
+          id: 'c3v_b',
+          labelZh: '小心用小草拨开蛛丝，放飞小萤火虫并听它道谢',
+          labelEn: 'Gently free the firefly’s wing with a soft blade of grass',
+          hintZh: '共情力 +2 · 好奇心 +1',
+          hintEn: '+2 Empathy · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 2, logic: 0 },
+          next: 'ch4_lantern'
+        }
+      ]
+    },
+
+    ch4_river: {
+      chapterZh: '第 4 章 · 镜面湖渡船',
+      chapterEn: 'Chapter 4 · Mirror Lake Ferry',
+      scene: 'music_bridge',
+      titleZh: '不平衡的小木筏与河龟爷爷',
+      titleEn: 'The Tilting Raft & River Turtle',
+      textZh: '来到平静的镜面湖边，岸上有艘只放了一侧石头的跷跷板木筏，而爱出谜语的河龟爷爷正探出脑袋晒太阳。',
+      textEn: 'At calm Mirror Lake, a balance-raft tilts because all the stones sit on one side. Grumpy-but-kind River Turtle pokes his head out to watch.',
+      tipZh: '怎样让两边重量一样的木筏保持平衡？如果请河龟帮忙，你会怎么有礼貌地开口？',
+      tipEn: 'How can we balance the raft evenly? Or how would you politely greet River Turtle?',
+      choices: [
+        {
+          id: 'c4r_a',
+          labelZh: '把大石头换成两堆重量相等的小石头，让木筏稳稳平衡',
+          labelEn: 'Balance both ends of the raft using equal-weight stone piles',
+          hintZh: '逻辑力 +2 · 好奇心 +1',
+          hintEn: '+2 Logic · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 0, logic: 2 },
+          next: 'ch5_vault'
+        },
+        {
+          id: 'c4r_b',
+          labelZh: '鞠个躬跟河龟爷爷对一个双语谜语，请他载你过湖',
+          labelEn: 'Trade a cheerful bilingual riddle with River Turtle for a ride',
+          hintZh: '共情力 +2 · 好奇心 +1',
+          hintEn: '+2 Empathy · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 2, logic: 0 },
+          next: 'ch5_garden'
+        }
+      ]
+    },
+
+    ch4_lantern: {
+      chapterZh: '第 4 章 · 萤火虫灯笼谷',
+      chapterEn: 'Chapter 4 · Firefly Lantern Valley',
+      scene: 'firefly_valley',
+      titleZh: '会听歌的萤火虫与月光花',
+      titleEn: 'Singing Fireflies & Moon-Flowers',
+      textZh: '山谷渐渐暗下来，数百只萤火虫像会飞的小星星。旁边的溪流边，几朵平时闭合的月光花正悄悄吐露荧光。',
+      textEn: 'Twilight settles over the valley as hundreds of fireflies drift like floating stars. Along the moonlit stream, shy Moon-Flowers begin to glow.',
+      tipZh: '如果大自然会回应你的声音或观察，你想试着和萤火虫合唱，还是记录月光花的秘密？',
+      tipEn: 'Would you rather hum gently with the fireflies or map where Moon-Flowers bloom?',
+      choices: [
+        {
+          id: 'c4l_a',
+          labelZh: '轻声哼起森林摇篮曲，请萤火虫排成发光箭头指引方向',
+          labelEn: 'Hum softly so the fireflies form a glowing arrow toward the meadow',
+          hintZh: '共情力 +2 · 好奇心 +1',
+          hintEn: '+2 Empathy · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 2, logic: 0 },
+          next: 'ch5_garden'
+        },
+        {
+          id: 'c4l_b',
+          labelZh: '在笔记本画出月光花只在水边绽放的规律地图',
+          labelEn: 'Sketch a field map showing Moon-Flowers bloom only near streams',
+          hintZh: '好奇心 +2 · 逻辑力 +1',
+          hintEn: '+2 Curiosity · +1 Logic',
+          delta: { curiosity: 2, empathy: 0, logic: 1 },
+          next: 'ch5_star_tower'
+        }
+      ]
+    },
+
+    ch4_observatory_gate: {
+      chapterZh: '第 4 章 · 星盘大门',
+      chapterEn: 'Chapter 4 · The Astrolabe Gate',
+      scene: 'star_gate',
+      titleZh: '日月星三环对齐之门',
+      titleEn: 'Aligning Sun, Moon & Star',
+      textZh: '面前矗立着青铜星盘大门！门上有太阳、月亮、星星三个可旋转的内环，门楣上还刻着一首双语小诗：“Ask why, look close, and shine together.”',
+      textEn: 'You stand before the bronze Astrolabe Gate! Three rotating rings show the Sun, Moon, and Star, with a bilingual line carved above: "Ask why, look close, and shine together."',
+      tipZh: '爸妈可以和宝贝一起大声读一遍门上的英文句子，猜猜它是什么意思！',
+      tipEn: 'Read the carved motto aloud together—what does "shine together" mean to you?',
+      choices: [
+        {
+          id: 'c4g_a',
+          labelZh: '计算旋转角度，把日、月、星三枚徽章对齐同一条中轴线',
+          labelEn: 'Calculate the ring turns until Sun, Moon, and Star align cleanly',
+          hintZh: '逻辑力 +2 · 好奇心 +1',
+          hintEn: '+2 Logic · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 0, logic: 2 },
+          next: 'ch5_star_tower'
+        },
+        {
+          id: 'c4g_b',
+          labelZh: '和爸爸妈妈一起大声朗读门上的双语小诗唤醒机关',
+          labelEn: 'Read the bilingual poem aloud together to awaken the gate chime',
+          hintZh: '好奇心 +2 · 共情力 +1',
+          hintEn: '+2 Curiosity · +1 Empathy',
+          delta: { curiosity: 2, empathy: 1, logic: 0 },
+          next: 'ch5_vault'
+        }
+      ]
+    },
+
+    ch5_vault: {
+      chapterZh: '第 5 章 · 水晶齿轮密室',
+      chapterEn: 'Chapter 5 · Crystal Gear Chamber',
+      scene: 'crystal_gears',
+      titleZh: '12 齿铜轮与 24 齿水晶轮',
+      titleEn: '12-Tooth Brass & 24-Tooth Crystal',
+      textZh: '门后是一座发出暖光的齿轮密室！工作台上有 12 齿小铜轮和 24 齿大水晶轮，旁边立着一块会折射七彩光芒的透明棱镜。',
+      textEn: 'Inside glows a warm gear chamber! A 12-tooth brass gear and a 24-tooth crystal wheel rest on the bench beside a sparkling glass prism.',
+      tipZh: '小齿轮转两圈，大齿轮才会转一圈哦！为什么太阳光穿过三角玻璃会变成彩虹？',
+      tipEn: 'If the 12-tooth gear spins twice, the 24-tooth wheel turns once! Why does a prism split light?',
+      choices: [
+        {
+          id: 'c5v_a',
+          labelZh: '把 12 齿和 24 齿齿轮咬合，验证“2:1 减速增力”打开内门',
+          labelEn: 'Mesh the 12-tooth and 24-tooth gears to power open the inner gate',
+          hintZh: '逻辑力 +2 · 好奇心 +1',
+          hintEn: '+2 Logic · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 0, logic: 2 },
+          next: 'ch6_echo_hall'
+        },
+        {
+          id: 'c5v_b',
+          labelZh: '转动透明三棱镜，追着七彩光斑找到通往天桥的密道',
+          labelEn: 'Tilt the crystal prism and follow the rainbow beam to the sky-bridge',
+          hintZh: '好奇心 +2 · 逻辑力 +1',
+          hintEn: '+2 Curiosity · +1 Logic',
+          delta: { curiosity: 2, empathy: 0, logic: 1 },
+          next: 'ch6_sky_bridge'
+        }
+      ]
+    },
+
+    ch5_garden: {
+      chapterZh: '第 5 章 · 共鸣花海',
+      chapterEn: 'Chapter 5 · Echo Blossom Meadow',
+      scene: 'squirrel_map',
+      titleZh: '森林守护鹿与干渴的星星树',
+      titleEn: 'The Guardian Deer & Star-Tree',
+      textZh: '花海中央，森林守护鹿正在寻找丢失的银铃铛；不远处的小星星树因为缺水而垂下了叶片，河龟、小松鼠和萤火虫都围了过来。',
+      textEn: 'In Echo Blossom Meadow, the Forest Guardian Deer searches for her silver bell while a thirsty Star-Tree droops nearby. Turtle, Pip, and the Fireflies gather around.',
+      tipZh: '一个人做不到的事情，大家一起分担会有多大的力量？',
+      tipEn: 'When friends share a task together, what magic happens?',
+      choices: [
+        {
+          id: 'c5g_a',
+          labelZh: '把在草丛捡到的银铃铛亲手还给守护鹿，拥抱告别',
+          labelEn: 'Return the lost silver bell to the Forest Guardian Deer with a smile',
+          hintZh: '共情力 +3 · 解锁「合作桥梁」徽章',
+          hintEn: '+3 Empathy · Unlocks Bridge Builder',
+          delta: { curiosity: 0, empathy: 3, logic: 0 },
+          badge: 'bridge_builder',
+          next: 'ending_empathy'
+        },
+        {
+          id: 'c5g_b',
+          labelZh: '组织河龟盛水、松鼠松土、萤火虫照亮，大家一起救活星星树',
+          labelEn: 'Team up with Turtle, Pip, and Fireflies to water the Star-Tree together',
+          hintZh: '共情力 +2 · 逻辑力 +1 · 解锁「合作桥梁」徽章',
+          hintEn: '+2 Empathy · +1 Logic · Bridge Builder',
+          delta: { curiosity: 0, empathy: 2, logic: 1 },
+          badge: 'bridge_builder',
+          next: 'ch6_echo_hall'
+        }
+      ]
+    },
+
+    ch5_star_tower: {
+      chapterZh: '第 5 章 · 望远镜塔楼',
+      chapterEn: 'Chapter 5 · The Telescope Tower',
+      scene: 'star_gate',
+      titleZh: '双镜片里的彩虹彗星',
+      titleEn: 'The Rainbow Comet in Dual Lenses',
+      textZh: '登上高高的天文塔楼，黄铜望远镜正对着渐亮的星空。只要调准前后两块镜片的焦距，就能看清千年一遇的彩虹彗星！',
+      textEn: 'Atop the observatory tower, a brass telescope points at the brightening twilight sky. Adjust the two lenses just right to spot the rare Rainbow Comet!',
+      tipZh: '为什么望远镜需要调节焦距才能看清远处？就像眼睛对焦一样奇妙！',
+      tipEn: 'Why do we slide telescope lenses closer or farther to make distant stars sharp?',
+      choices: [
+        {
+          id: 'c5t_a',
+          labelZh: '微调镜筒焦距，追着彩虹彗星的尾巴去往彩虹天桥',
+          labelEn: 'Focus the dual lenses and follow the comet’s glow to the Sky-Bridge',
+          hintZh: '好奇心 +2 · 解锁「星空观察员」徽章',
+          hintEn: '+2 Curiosity · Unlocks Sky Observer',
+          delta: { curiosity: 2, empathy: 0, logic: 0 },
+          badge: 'sky_observer',
+          next: 'ch6_sky_bridge'
+        },
+        {
+          id: 'c5t_b',
+          labelZh: '精确测算彗星轨道角度并记进探险日志，解开终极星图',
+          labelEn: 'Measure the comet’s orbit angle in your logbook to complete the chart',
+          hintZh: '逻辑力 +3 · 好奇心 +1',
+          hintEn: '+3 Logic · +1 Curiosity',
+          delta: { curiosity: 1, empathy: 0, logic: 3 },
+          next: 'ending_logic'
+        }
+      ]
+    },
+
+    ch6_echo_hall: {
+      chapterZh: '第 6 章 · 回声共鸣厅',
+      chapterEn: 'Chapter 6 · Hall of Echoes',
+      scene: 'owl_treehouse',
+      titleZh: '最后一场森林灯笼晚会',
+      titleEn: 'The Final Lantern Seating Puzzle',
+      textZh: '大家都聚到了回声共鸣厅！小个子松鼠怕被挡住视线，河龟喜欢靠水池，猫头鹰站在高枝。你要怎么安排座位，才能开启最终庆典？',
+      textEn: 'All the forest friends gather in the Hall of Echoes! Tiny Pip needs a clear view, Turtle loves the poolside, and Owl Barnaby prefers a high perch. How will you host the finale?',
+      tipZh: '既照顾每个朋友的身体特点，又倾听大家的感受，这就是最棒的小队长智慧！',
+      tipEn: 'Balancing everyone’s needs and feelings is true leadership—how will you arrange them?',
+      choices: [
+        {
+          id: 'c6e_a',
+          labelZh: '设计“由矮到高”的阶梯座位图，让每个伙伴都看得见舞台',
+          labelEn: 'Arrange stepped seating from shortest to tallest so everyone sees',
+          hintZh: '逻辑力 +2 · 共情力 +1 · 直通结局',
+          hintEn: '+2 Logic · +1 Empathy · Finale',
+          delta: { curiosity: 0, empathy: 1, logic: 2 },
+          badge: 'bridge_builder',
+          next: 'ending_harmony'
+        },
+        {
+          id: 'c6e_b',
+          labelZh: '请每位伙伴分享今天最温暖的一句话，共同点亮心愿灯笼',
+          labelEn: 'Invite every friend to share one kind memory to light the heart lantern',
+          hintZh: '共情力 +2 · 直通结局',
+          hintEn: '+2 Empathy · Finale',
+          delta: { curiosity: 0, empathy: 2, logic: 0 },
+          badge: 'kind_listener',
+          next: 'ending_empathy'
+        }
+      ]
+    },
+
+    ch6_sky_bridge: {
+      chapterZh: '第 6 章 · 彩虹天桥',
+      chapterEn: 'Chapter 6 · Rainbow Sky-Bridge',
+      scene: 'rainbow_bridge',
+      titleZh: '点亮森林上空的最后一道门',
+      titleEn: 'Lighting the Final Sky-Arch',
+      textZh: '云端之上架起了一座半透明的彩虹天桥！桥头需要调整棱镜折射角让阳光洒满山谷，或者算准配重石块让桥锁稳稳弹开。',
+      textEn: 'High above the clouds arches the translucent Rainbow Sky-Bridge! Either angle the giant sun-prism across the valley or balance the bridge counterweights to unlock the grand arch.',
+      tipZh: '走到冒险终点前最后一步啦！你更想用科学想象力点亮彩虹，还是用严谨计算开启桥锁？',
+      tipEn: 'One final step! Will you paint the sky with prism light or calculate the bridge lock?',
+      choices: [
+        {
+          id: 'c6s_a',
+          labelZh: '调整棱镜角度，把一道七彩彩虹桥投影到整个森林上空',
+          labelEn: 'Angle the sun-prism to project a dazzling rainbow across the valley',
+          hintZh: '好奇心 +3 · 逻辑力 +1 · 直通结局',
+          hintEn: '+3 Curiosity · +1 Logic · Finale',
+          delta: { curiosity: 3, empathy: 0, logic: 1 },
+          badge: 'sky_observer',
+          next: 'ending_curiosity'
+        },
+        {
+          id: 'c6s_b',
+          labelZh: '算准桥头左右配重石块比例，让天桥金锁“咔哒”开启',
+          labelEn: 'Calculate the exact bridge counterweight ratio to click the lock open',
+          hintZh: '逻辑力 +3 · 直通结局',
+          hintEn: '+3 Logic · Finale',
+          delta: { curiosity: 0, empathy: 0, logic: 3 },
+          badge: 'pattern_decoder',
+          next: 'ending_logic'
+        }
+      ]
+    },
+
+    // =========================================================================
+    // 4 DISTINCT ENDINGS
+    // =========================================================================
+    ending_logic: {
+      isEnding: true,
+      endingId: 'ending_logic',
+      chapterZh: '结局 1/4 · 智慧齿轮解谜王',
+      chapterEn: 'Ending 1/4 · Master Logic Architect',
+      scene: 'crystal_gears',
+      titleZh: '⚙️ 智慧齿轮解谜王 · 秩序之门开启！',
+      titleEn: '⚙️ Master Logic Architect · Gate of Order!',
+      textZh: '咔哒——随着最后一道精密机械锁弹开，整座迷雾森林的齿轮时钟与星图完美同步运转！你冷静观察规律、拆解难题，用逻辑力证明了思考的力量。',
+      textEn: 'Click! As the final precision lock opens, every gear-clock and star-chart in the forest hums in harmony. Through calm observation and clear reasoning, you proved the power of a sharp mind!',
+      tipZh: '回顾今天最烧脑的那一步：宝贝是用什么线索推出答案的？给爸爸妈妈讲讲思路吧！',
+      tipEn: 'Which puzzle felt trickiest today, and how did you figure out the pattern? Teach your parents!',
+      summaryZh: '善于发现数字、齿轮与方向规律，遇到复杂问题能一步步拆解推理。',
+      summaryEn: 'Spots patterns in numbers, gears, and directions; breaks tricky puzzles into calm steps.'
+    },
+
+    ending_empathy: {
+      isEnding: true,
+      endingId: 'ending_empathy',
+      chapterZh: '结局 2/4 · 森林共情守护者',
+      chapterEn: 'Ending 2/4 · Heartkeeper of the Forest',
+      scene: 'firefly_valley',
+      titleZh: '💚 森林共情守护者 · 温暖萤火点亮夜空！',
+      titleEn: '💚 Heartkeeper of the Forest · Lantern Glow!',
+      textZh: '小松鼠皮普、猫头鹰巴纳比和守护鹿围成一圈为你鼓掌！整片山谷亮起最温柔的金色萤火，因为你总能看见别人小小的难过，并用耐心与善意温暖世界。',
+      textEn: 'Pip, Barnaby Owl, and the Guardian Deer gather around cheering! Golden fireflies glow across the valley because you noticed others’ feelings and met every creature with patience and kindness.',
+      tipZh: '现实生活中，如果同学或好朋友遇到困难，宝贝会像今天一样怎么帮他？',
+      tipEn: 'In real life, how can we show the same patience and kindness to a friend at school or home?',
+      summaryZh: '情感细腻、乐于倾听和安慰他人，是朋友们最信任的温暖小太阳。',
+      summaryEn: 'Warm, attentive, and quick to comfort others—a trusted friend who leads with kindness.'
+    },
+
+    ending_curiosity: {
+      isEnding: true,
+      endingId: 'ending_curiosity',
+      chapterZh: '结局 3/4 · 星云奇思探险家',
+      chapterEn: 'Ending 3/4 · Starlight Wonder Seeker',
+      scene: 'rainbow_bridge',
+      titleZh: '🌈 星云奇思探险家 · 彩虹彗星划过天际！',
+      titleEn: '🌈 Starlight Wonder Seeker · Rainbow Comet!',
+      textZh: '一道横跨天际的七彩彩虹在你眼前绽放，远方的彩虹彗星拖着闪亮尾巴缓缓飞过！你敢于追问“为什么”，用双手和想象力把普通清晨变成了奇幻发现之旅。',
+      textEn: 'A shimmering seven-color rainbow arcs across the valley as the Rainbow Comet glides overhead! By asking "Why?" and testing new ideas, you turned an ordinary morning into pure discovery.',
+      tipZh: '今天的故事里，哪个科学现象（太阳影子、水流、棱镜或彗星）让宝贝最想在现实里试试？',
+      tipEn: 'Which real-world wonder—shadows, floating boats, prisms, or comets—do you want to test next?',
+      summaryZh: '对世界充满好奇心，喜欢动手实验与观察自然奥秘，拥有极强的探索驱动力。',
+      summaryEn: 'Driven by wonder and hands-on curiosity, always eager to test how the natural world works.'
+    },
+
+    ending_harmony: {
+      isEnding: true,
+      endingId: 'ending_harmony',
+      chapterZh: '结局 4/4 · 和谐领航小队长',
+      chapterEn: 'Ending 4/4 · Harmony Pathfinder',
+      scene: 'star_gate',
+      titleZh: '🏮 和谐领航小队长 · 森林大联欢点亮星盘！',
+      titleEn: '🏮 Harmony Pathfinder · Grand Forest Celebration!',
+      textZh: '河龟、小松鼠、猫头鹰和萤火虫在你的协调下各展所长，星星树重新开出璀璨花朵！你把聪明才智和体贴他人的心结合在一起，成为最棒的团队领航员。',
+      textEn: 'Under your thoughtful guidance, Turtle, Pip, Barnaby, and the Fireflies each shine in their own way as the Star-Tree blooms again! Combining clever planning with care makes you a true leader.',
+      tipZh: '当家人或小伙伴意见不一样时，宝贝觉得怎样安排才能让大家都开心？',
+      tipEn: 'When family or friends want different things, how can we plan so everyone feels included?',
+      summaryZh: '兼顾逻辑思考与团队合作，懂得尊重每个人的特点，擅长带领大家一起成功。',
+      summaryEn: 'Balances smart planning with teamwork, helping every companion contribute their strengths.'
+    }
+  };
+
+  // =========================================================================
+  // STATE & LOCALSTORAGE PERSISTENCE
+  // =========================================================================
+  const defaultState = () => ({
+    lang: 'zh',
+    currentNode: 'start',
+    traits: { curiosity: 2, empathy: 2, logic: 2 },
+    badges: [],
+    endingsFound: [],
+    visitedNodes: ['start'],
+    history: [],
+    childName: '小探险家乐乐',
+    parentNote: '每一次思考和善良选择，都在让你变得更闪亮！'
+  });
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      const base = defaultState();
+      return {
+        ...base,
+        ...parsed,
+        traits: { ...base.traits, ...(parsed.traits || {}) },
+        badges: Array.isArray(parsed.badges) ? parsed.badges : [],
+        endingsFound: Array.isArray(parsed.endingsFound) ? parsed.endingsFound : [],
+        visitedNodes: Array.isArray(parsed.visitedNodes) && parsed.visitedNodes.length ? parsed.visitedNodes : ['start'],
+        history: Array.isArray(parsed.history) ? parsed.history : []
+      };
+    } catch (_) {
+      return defaultState();
+    }
+  }
+
+  let state = loadState();
+  if (!NODES[state.currentNode]) state.currentNode = 'start';
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (_) {}
+  }
+
+  // =========================================================================
+  // AUDIO SFX & WEB SPEECH API (GRACEFUL FALLBACK)
+  // =========================================================================
+  let sfxOn = true;
+  let speechOn = false;
+  let audioCtx = null;
+  const speechAvailable = typeof window !== 'undefined' &&
+    'speechSynthesis' in window &&
+    typeof window.SpeechSynthesisUtterance === 'function';
+
+  function getCtx() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+    return audioCtx;
+  }
+
+  function tone(freq, dur = 0.1, type = 'sine', vol = 0.08, delay = 0) {
+    if (!sfxOn) return;
+    try {
+      const ctx = getCtx();
+      if (!ctx) return;
+      const t = ctx.currentTime + delay;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start(t);
+      o.stop(t + dur + 0.02);
+    } catch (_) {}
+  }
+
+  function playStepChime() { tone(523.25, 0.09, 'triangle', 0.08); tone(659.25, 0.12, 'triangle', 0.08, 0.06); }
+  function playEndingFanfare() {
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.18, 'triangle', 0.1, i * 0.08));
+  }
+
+  function speakText(text) {
+    if (!speechAvailable) {
+      showToast(UI[state.lang].speechFallbackToast);
+      return;
+    }
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = state.lang === 'zh' ? 'zh-CN' : 'en-US';
+      u.rate = state.lang === 'zh' ? 0.96 : 0.92;
+      window.speechSynthesis.speak(u);
+    } catch (_) {}
+  }
+
+  function stopSpeech() {
+    if (speechAvailable) {
+      try { window.speechSynthesis.cancel(); } catch (_) {}
+    }
+  }
+
+  // =========================================================================
+  // TOAST
+  // =========================================================================
+  let toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // =========================================================================
+  // HELPERS
+  // =========================================================================
+  function unlockBadge(id) {
+    if (!id || state.badges.includes(id)) return;
+    state.badges.push(id);
+    const meta = BADGES.find(b => b.id === id);
+    if (meta) {
+      showToast(UI[state.lang].badgeToast(state.lang === 'zh' ? meta.zh : meta.en));
+    }
+  }
+
+  function checkMasterBadge() {
+    if (state.endingsFound.length >= 2 ||
+       (state.traits.curiosity + state.traits.empathy + state.traits.logic >= 16)) {
+      unlockBadge('master_explorer');
+    }
+  }
+
+  function selectChoice(choice) {
+    const cur = NODES[state.currentNode];
+    const snapshot = {
+      nodeId: state.currentNode,
+      chapterZh: cur.chapterZh,
+      chapterEn: cur.chapterEn,
+      choiceZh: choice.labelZh,
+      choiceEn: choice.labelEn,
+      traitsBefore: { ...state.traits }
+    };
+    state.history.push(snapshot);
+    state.traits.curiosity += choice.delta.curiosity || 0;
+    state.traits.empathy += choice.delta.empathy || 0;
+    state.traits.logic += choice.delta.logic || 0;
+    if (choice.badge) unlockBadge(choice.badge);
+
+    state.currentNode = choice.next;
+    if (!state.visitedNodes.includes(choice.next)) state.visitedNodes.push(choice.next);
+
+    const nextNode = NODES[choice.next];
+    if (nextNode && nextNode.isEnding) {
+      if (!state.endingsFound.includes(nextNode.endingId)) {
+        state.endingsFound.push(nextNode.endingId);
+      }
+      playEndingFanfare();
+    } else {
+      playStepChime();
+    }
+    checkMasterBadge();
+    saveState();
+    renderAll();
+
+    if (speechOn) {
+      const n = NODES[state.currentNode];
+      const title = state.lang === 'zh' ? n.titleZh : n.titleEn;
+      const body = state.lang === 'zh' ? n.textZh : n.textEn;
+      speakText(`${title}. ${body}`);
+    }
+  }
+
+  function replayFrom(index) {
+    const snap = state.history[index];
+    if (!snap) return;
+    stopSpeech();
+    state.currentNode = snap.nodeId;
+    state.traits = { ...snap.traitsBefore };
+    state.history = state.history.slice(0, index);
+    saveState();
+    renderAll();
+    showToast(UI[state.lang].replayToast(state.lang === 'zh' ? snap.chapterZh : snap.chapterEn));
+  }
+
+  function restartAdventure() {
+    stopSpeech();
+    state.currentNode = 'start';
+    state.traits = { curiosity: 2, empathy: 2, logic: 2 };
+    state.history = [];
+    if (!state.visitedNodes.includes('start')) state.visitedNodes.push('start');
+    saveState();
+    renderAll();
+    showToast(UI[state.lang].restartToast);
+  }
+
+  // =========================================================================
+  // RENDERING
+  // =========================================================================
+  function renderCertificate() {
+    const t = UI[state.lang];
+    const isZh = state.lang === 'zh';
+    const name = (state.childName || (isZh ? '小探险家' : 'Explorer')).trim();
+    const note = (state.parentNote || '').trim();
+    const node = NODES[state.currentNode];
+
+    document.getElementById('certSectionTitle').textContent = t.certSectionTitle;
+    document.getElementById('printCardBtn').textContent = t.printBtn;
+    document.getElementById('exportCertPngBtn').textContent = t.exportPngBtn;
+    document.getElementById('lblChildName').textContent = t.lblChildName;
+    document.getElementById('lblParentNote').textContent = t.lblParentNote;
+    document.getElementById('certMainTitle').textContent = t.certMainTitle;
+    document.getElementById('certProfileTitle').textContent = t.certProfileTitle;
+    document.getElementById('certPromptsTitle').textContent = t.certPromptsTitle;
+
+    const latestEnding = node.isEnding
+      ? node
+      : (state.endingsFound.length ? NODES[state.endingsFound[state.endingsFound.length - 1]] : null);
+
+    const rankTitle = latestEnding
+      ? (isZh ? latestEnding.titleZh : latestEnding.titleEn)
+      : (isZh ? '森林见习小探险家（继续冒险解锁专属结局）' : 'Apprentice Explorer (Complete an ending to unlock title)');
+
+    document.getElementById('certSubtitle').textContent = isZh
+      ? `特授予「${name}」荣誉称号：${rankTitle}`
+      : `Awarded to "${name}" — Title: ${rankTitle}`;
+
+    const c = state.traits.curiosity;
+    const e = state.traits.empathy;
+    const l = state.traits.logic;
+    const maxT = Math.max(c, e, l);
+    let dominantZh = '平衡成长型';
+    let dominantEn = 'Balanced Explorer';
+    if (maxT === c && c >= e && c >= l) { dominantZh = '好奇探索型'; dominantEn = 'Wonder Seeker'; }
+    else if (maxT === e && e >= c && e >= l) { dominantZh = '温暖共情型'; dominantEn = 'Kind Heartkeeper'; }
+    else if (maxT === l) { dominantZh = '冷静逻辑型'; dominantEn = 'Logic Architect'; }
+
+    const summaryText = latestEnding
+      ? (isZh ? latestEnding.summaryZh : latestEnding.summaryEn)
+      : (isZh ? '正在森林里积累每一次独立思考与温柔判断。' : 'Building curiosity, empathy, and logical thinking along the trail.');
+
+    document.getElementById('certProfileBody').innerHTML = isZh
+      ? `<strong>主导优势：</strong>${dominantZh}<br><strong>能力值：</strong>好奇心 ${c} · 共情力 ${e} · 逻辑力 ${l}<br>${summaryText}`
+      : `<strong>Lead Strength:</strong> ${dominantEn}<br><strong>Scores:</strong> Curiosity ${c} · Empathy ${e} · Logic ${l}<br>${summaryText}`;
+
+    const unlockedNames = state.badges.map(id => {
+      const m = BADGES.find(b => b.id === id);
+      return m ? `${m.emoji}${isZh ? m.zh : m.en}` : '';
+    }).filter(Boolean);
+
+    document.getElementById('certBadgesSummary').textContent = isZh
+      ? `已收集徽章 (${unlockedNames.length}/6)：${unlockedNames.join(' · ') || '启程探索中'}`
+      : `Badges (${unlockedNames.length}/6): ${unlockedNames.join(' · ') || 'Starting journey'}`;
+
+    const prompts = isZh ? [
+      `今天你在故事里做的哪一个决定，最让你骄傲？`,
+      `如果换成另一个选项（比如先帮朋友或先查线索），结果会有什么不一样？`,
+      `明天生活里，你想把“${dominantZh}”的超能力用在哪件小事上？`
+    ] : [
+      `Which choice in today's adventure made you feel proudest?`,
+      `What might have happened if you tried a different path?`,
+      `How can you use your "${dominantEn}" superpower in real life tomorrow?`
+    ];
+    document.getElementById('certPromptsList').innerHTML = prompts.map(q => `<li>${q}</li>`).join('');
+
+    document.getElementById('certParentQuote').textContent = isZh
+      ? `家长寄语：“${note}”`
+      : `Parent Note: "${note}"`;
+
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('certDateText').textContent = isZh
+      ? `记录日期：${today} · 已解锁结局 ${state.endingsFound.length}/4`
+      : `Date: ${today} · Endings Discovered ${state.endingsFound.length}/4`;
+  }
+
+  function exportCertificatePng() {
+    const canvas = document.getElementById('certCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    const isZh = state.lang === 'zh';
+    const name = (state.childName || (isZh ? '小探险家' : 'Explorer')).trim();
+    const note = (state.parentNote || '').trim();
+    const node = NODES[state.currentNode];
+    const latestEnding = node.isEnding
+      ? node
+      : (state.endingsFound.length ? NODES[state.endingsFound[state.endingsFound.length - 1]] : null);
+    const rankTitle = latestEnding
+      ? (isZh ? latestEnding.titleZh : latestEnding.titleEn)
+      : (isZh ? '森林见习小探险家' : 'Apprentice Forest Explorer');
+
+    ctx.fillStyle = '#fffdf8';
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 10;
+    ctx.strokeRect(24, 24, W - 48, H - 48);
+    ctx.strokeStyle = '#fde68a';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(42, 42, W - 84, H - 84);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('LITTLE EXPLORER · BILINGUAL ADVENTURE CERTIFICATE', W / 2, 105);
+
+    ctx.fillStyle = '#78350f';
+    ctx.font = '900 44px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(isZh ? '小探险家双语思维冒险 · 结业证书' : 'Little Explorer Completion Certificate', W / 2, 175);
+
+    ctx.fillStyle = '#1e293b';
+    ctx.font = '900 54px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(name, W / 2, 270);
+
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(W / 2 - 210, 294);
+    ctx.lineTo(W / 2 + 210, 294);
+    ctx.stroke();
+
+    ctx.fillStyle = '#92400e';
+    ctx.font = 'bold 30px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(rankTitle, W / 2, 360);
+
+    ctx.fillStyle = '#334155';
+    ctx.font = '600 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(
+      isZh
+        ? `能力成长：好奇心 ${state.traits.curiosity}  ·  共情力 ${state.traits.empathy}  ·  逻辑力 ${state.traits.logic}  ·  徽章 ${state.badges.length}/6`
+        : `Traits: Curiosity ${state.traits.curiosity} · Empathy ${state.traits.empathy} · Logic ${state.traits.logic} · Badges ${state.badges.length}/6`,
+      W / 2,
+      435
+    );
+
+    ctx.fillStyle = '#fef3c7';
+    ctx.strokeStyle = '#fcd34d';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(120, 485, W - 240, 120, 20);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#78350f';
+    ctx.font = 'italic 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(`“ ${note} ”`, W / 2, 555);
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#475569';
+    ctx.font = '600 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText((isZh ? '颁发日期：' : 'Date: ') + new Date().toISOString().slice(0, 10), 120, 695);
+    ctx.fillText(isZh ? `已解锁故事结局：${state.endingsFound.length} / 4` : `Endings Unlocked: ${state.endingsFound.length} / 4`, 120, 735);
+
+    ctx.save();
+    ctx.translate(W - 190, 685);
+    ctx.rotate(-0.12);
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.arc(0, 0, 66, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = '#dc2626';
+    ctx.textAlign = 'center';
+    ctx.font = '900 20px sans-serif';
+    ctx.fillText('EXPLORER', 0, -10);
+    ctx.fillText('★ 认证 ★', 0, 18);
+    ctx.restore();
+
+    const url = canvas.toDataURL('image/png');
+    document.getElementById('certPngPreview').src = url;
+    document.getElementById('certPngPreviewWrap').style.display = 'block';
+    document.getElementById('certPngTip').textContent = UI[state.lang].certPngTip;
+
+    const a = document.createElement('a');
+    a.download = `小探险家结业证书_${name}.png`;
+    a.href = url;
+    a.click();
+    playStepChime();
+  }
+
+  function renderAll() {
+    const isZh = state.lang === 'zh';
+    const t = UI[state.lang];
+    const node = NODES[state.currentNode];
+
+    document.documentElement.lang = isZh ? 'zh-CN' : 'en';
+    document.getElementById('brandTitle').textContent = t.brandTitle;
+    document.getElementById('brandSub').textContent = t.brandSub;
+    document.getElementById('langToggleBtn').textContent = t.langBtn;
+    document.getElementById('restartTopBtn').textContent = t.restartBtn;
+    document.getElementById('speakNowBtn').textContent = t.speakNow;
+    document.getElementById('footerNote').textContent = t.footer;
+
+    const speechBtn = document.getElementById('speechToggleBtn');
+    if (!speechAvailable) {
+      speechBtn.textContent = t.speechUnsupported;
+      speechBtn.classList.remove('active');
+      speechBtn.classList.add('muted-fallback');
+    } else {
+      speechBtn.textContent = speechOn ? t.speechOn : t.speechOff;
+      speechBtn.classList.toggle('active', speechOn);
+      speechBtn.classList.remove('muted-fallback');
+    }
+
+    const sfxBtn = document.getElementById('sfxToggleBtn');
+    sfxBtn.textContent = sfxOn ? t.sfxOn : t.sfxOff;
+    sfxBtn.classList.toggle('active', sfxOn);
+
+    // Scene & Story Node
+    document.getElementById('chapterBadge').textContent = isZh ? node.chapterZh : node.chapterEn;
+    document.getElementById('nodeCounter').textContent = t.nodeCounter(state.visitedNodes.length, state.endingsFound.length);
+    document.getElementById('illustrationBox').innerHTML = SCENES[node.scene] || SCENES.forest_gate;
+    document.getElementById('storyTitle').textContent = isZh ? node.titleZh : node.titleEn;
+    document.getElementById('storyText').textContent = isZh ? node.textZh : node.textEn;
+
+    const tipText = isZh ? node.tipZh : node.tipEn;
+    document.getElementById('parentTipBox').innerHTML = `<strong>${t.parentTipTitle}</strong>${tipText}`;
+
+    // Choices or Ending
+    const choicesWrap = document.getElementById('choicesWrap');
+    const endingContainer = document.getElementById('endingContainer');
+    if (node.isEnding) {
+      choicesWrap.style.display = 'none';
+      endingContainer.style.display = 'block';
+      endingContainer.innerHTML = `
+        <div class="ending-box">
+          <span class="ending-tag">${t.endingBadge}</span>
+          <h3>${isZh ? node.titleZh : node.titleEn}</h3>
+          <p>${isZh ? node.summaryZh : node.summaryEn}</p>
+          <div class="ending-actions">
+            <button id="playAgainBtn" class="btn-primary" type="button">${t.playAgain}</button>
+            <button id="jumpPrintBtn" class="btn-secondary" type="button">${t.jumpPrint}</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('playAgainBtn').addEventListener('click', restartAdventure);
+      document.getElementById('jumpPrintBtn').addEventListener('click', () => {
+        document.getElementById('printSection').scrollIntoView({ behavior: 'smooth' });
+      });
+    } else {
+      endingContainer.style.display = 'none';
+      choicesWrap.style.display = 'block';
+      document.getElementById('choicesHeading').textContent = t.choicesHeading;
+      const list = document.getElementById('choicesList');
+      list.innerHTML = '';
+      const letters = ['A', 'B', 'C'];
+      node.choices.forEach((choice, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'choice-btn';
+        btn.dataset.choiceId = choice.id;
+        btn.innerHTML = `
+          <span class="choice-main">
+            <span class="choice-letter">${letters[idx] || idx + 1}</span>
+            <span>
+              <span class="choice-label">${isZh ? choice.labelZh : choice.labelEn}</span>
+              <span class="choice-hint">${isZh ? choice.hintZh : choice.hintEn}</span>
+            </span>
+          </span>
+          <span class="choice-arrow">➜</span>
+        `;
+        btn.addEventListener('click', () => selectChoice(choice));
+        list.appendChild(btn);
+      });
+    }
+
+    // Trait Meters
+    document.getElementById('traitsHeading').textContent = t.traitsHeading;
+    document.getElementById('stepCountPill').textContent = `${state.history.length} ${t.stepsUnit}`;
+    document.getElementById('labelCuriosity').textContent = t.curiosity;
+    document.getElementById('labelEmpathy').textContent = t.empathy;
+    document.getElementById('labelLogic').textContent = t.logic;
+    document.getElementById('valCuriosity').textContent = state.traits.curiosity;
+    document.getElementById('valEmpathy').textContent = state.traits.empathy;
+    document.getElementById('valLogic').textContent = state.traits.logic;
+    const pct = (v) => `${Math.min(100, Math.round((v / 14) * 100))}%`;
+    document.getElementById('barCuriosity').style.width = pct(state.traits.curiosity);
+    document.getElementById('barEmpathy').style.width = pct(state.traits.empathy);
+    document.getElementById('barLogic').style.width = pct(state.traits.logic);
+
+    // Badges
+    document.getElementById('badgesHeading').textContent = t.badgesHeading;
+    document.getElementById('badgeCountPill').textContent = `${state.badges.length} / ${BADGES.length}`;
+    document.getElementById('badgesGrid').innerHTML = BADGES.map(b => {
+      const ok = state.badges.includes(b.id);
+      return `
+        <div class="badge-item ${ok ? 'unlocked' : ''}">
+          <span class="badge-emoji">${b.emoji}</span>
+          <span>
+            <span class="badge-name">${isZh ? b.zh : b.en}</span>
+            <span class="badge-status">${ok ? t.unlocked : t.locked}</span>
+          </span>
+        </div>
+      `;
+    }).join('');
+
+    // Endings Tracker
+    document.getElementById('endingsHeading').textContent = t.endingsHeading;
+    document.getElementById('endingCountPill').textContent = `${state.endingsFound.length} / 4`;
+    document.getElementById('endingsGrid').innerHTML = ENDINGS_META.map(e => {
+      const ok = state.endingsFound.includes(e.id);
+      return `
+        <div class="ending-chip ${ok ? 'found' : ''}">
+          ${e.emoji} ${isZh ? e.zh : e.en} · ${ok ? t.found : t.unfound}
+        </div>
+      `;
+    }).join('');
+
+    // Replay Log
+    document.getElementById('logHeading').textContent = t.logHeading;
+    document.getElementById('logCountPill').textContent = `${state.history.length} ${t.logsUnit}`;
+    const logList = document.getElementById('logList');
+    if (!state.history.length) {
+      logList.innerHTML = `<div style="font-size:12.5px;color:var(--muted);padding:6px 2px;">${t.noLog}</div>`;
+    } else {
+      logList.innerHTML = '';
+      state.history.forEach((h, idx) => {
+        const row = document.createElement('div');
+        row.className = 'log-item';
+        row.innerHTML = `
+          <div class="log-item-text">
+            <strong>${idx + 1}. ${isZh ? h.chapterZh : h.chapterEn}</strong>
+            <span>${isZh ? h.choiceZh : h.choiceEn}</span>
+          </div>
+          <button type="button" class="replay-btn">${t.replay}</button>
+        `;
+        row.querySelector('.replay-btn').addEventListener('click', () => replayFrom(idx));
+        logList.appendChild(row);
+      });
+    }
+
+    renderCertificate();
+  }
+
+  // =========================================================================
+  // EVENT LISTENERS
+  // =========================================================================
+  document.getElementById('langToggleBtn').addEventListener('click', () => {
+    stopSpeech();
+    state.lang = state.lang === 'zh' ? 'en' : 'zh';
+    saveState();
+    renderAll();
+    playStepChime();
+  });
+
+  document.getElementById('speechToggleBtn').addEventListener('click', () => {
+    if (!speechAvailable) {
+      showToast(UI[state.lang].speechFallbackToast);
+      return;
+    }
+    speechOn = !speechOn;
+    if (!speechOn) stopSpeech();
+    renderAll();
+    if (speechOn) {
+      const n = NODES[state.currentNode];
+      speakText(`${state.lang === 'zh' ? n.titleZh : n.titleEn}. ${state.lang === 'zh' ? n.textZh : n.textEn}`);
+    }
+  });
+
+  document.getElementById('speakNowBtn').addEventListener('click', () => {
+    const n = NODES[state.currentNode];
+    speakText(`${state.lang === 'zh' ? n.titleZh : n.titleEn}. ${state.lang === 'zh' ? n.textZh : n.textEn}`);
+  });
+
+  document.getElementById('sfxToggleBtn').addEventListener('click', () => {
+    sfxOn = !sfxOn;
+    renderAll();
+    if (sfxOn) playStepChime();
+  });
+
+  document.getElementById('restartTopBtn').addEventListener('click', restartAdventure);
+  document.getElementById('printCardBtn').addEventListener('click', () => window.print());
+  document.getElementById('exportCertPngBtn').addEventListener('click', exportCertificatePng);
+
+  const nameInput = document.getElementById('childNameInput');
+  const noteInput = document.getElementById('parentNoteInput');
+  nameInput.value = state.childName;
+  noteInput.value = state.parentNote;
+  nameInput.addEventListener('input', () => {
+    state.childName = nameInput.value;
+    saveState();
+    renderCertificate();
+  });
+  noteInput.addEventListener('input', () => {
+    state.parentNote = noteInput.value;
+    saveState();
+    renderCertificate();
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
