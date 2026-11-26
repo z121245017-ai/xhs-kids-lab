@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪐</text></svg>">
+<title>星际小科学家 · 儿童互动探索实验室</title>
+<style>
+  :root {
+    --bg: #f4f7ff;
+    --card: #ffffff;
+    --ink: #1e293b;
+    --muted: #64748b;
+    --primary: #4f46e5;
+    --primary-light: #eef2ff;
+    --accent: #f59e0b;
+    --accent-soft: #fef3c7;
+    --success: #10b981;
+    --danger: #ef4444;
+    --space-bg: #0b1026;
+    --border: #e2e8f0;
+    --shadow: 0 10px 30px -10px rgba(30, 41, 59, 0.12);
+    --radius: 20px;
+    --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  button, input, select { font-family: inherit; }
+
+  /* Header */
+  .topbar {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 55%, #4338ca 100%);
+    color: #fff;
+    padding: 14px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.22);
+  }
+  .topbar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fbbf24, #f97316);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+    flex-shrink: 0;
+  }
+  .brand h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+  }
+  .brand p {
+    margin: 0;
+    font-size: 12px;
+    color: #c7d2fe;
+  }
+  .audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pill-btn {
+    border: 1px solid rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.18s ease;
+    min-height: 36px;
+  }
+  .pill-btn.active {
+    background: #10b981;
+    border-color: #34d399;
+    color: #fff;
+  }
+  .pill-btn:active { transform: scale(0.96); }
+
+  /* Container */
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* Lab Tabs */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .tab-btn {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 10px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+    min-height: 62px;
+  }
+  .tab-btn:hover { border-color: #a5b4fc; transform: translateY(-1px); }
+  .tab-btn.active {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+    box-shadow: 0 8px 20px -6px rgba(79, 70, 229, 0.25);
+  }
+  .tab-emoji {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: #f1f5f9;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .tab-btn.active .tab-emoji {
+    background: var(--primary);
+    color: #fff;
+  }
+  .tab-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink);
+    display: block;
+  }
+  .tab-sub {
+    font-size: 11px;
+    color: var(--muted);
+    display: block;
+  }
+
+  /* Panels */
+  .lab-panel { display: none; animation: fadeIn 0.25s ease; }
+  .lab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .lab-grid {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 18px;
+  }
+  .card-title {
+    margin: 0 0 12px;
+    font-size: 17px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+  .badge.gold { background: var(--accent-soft); color: #b45309; }
+  .badge.green { background: #d1fae5; color: #065f46; }
+
+  .canvas-wrap {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--space-bg);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+  .canvas-wrap.light {
+    background: linear-gradient(180deg, #fffdf7 0%, #f8fafc 100%);
+  }
+  .canvas-wrap.heart-bg {
+    background: radial-gradient(circle at 50% 45%, #1f1638 0%, #0f172a 100%);
+  }
+  canvas.stage {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .canvas-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    background: rgba(15, 23, 42, 0.72);
+    color: #e2e8f0;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Controls */
+  .controls-bar {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    background: #f8fafc;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .control-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 180px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .control-item input[type="range"] {
+    flex: 1;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .btn {
+    border: none;
+    border-radius: 12px;
+    padding: 9px 15px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.16s ease;
+    min-height: 40px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(79,70,229,0.28); }
+  .btn-primary:hover { background: #4338ca; }
+  .btn-amber { background: #f59e0b; color: #fff; }
+  .btn-soft { background: #eef2ff; color: var(--primary); }
+  .btn-outline { background: #fff; color: var(--ink); border: 1.5px solid var(--border); }
+  .btn-success { background: var(--success); color: #fff; }
+
+  /* Quick Chips */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+  }
+  .chip {
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--ink);
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+    min-height: 34px;
+  }
+  .chip.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+  }
+  .chip.visited::after {
+    content: "✓";
+    font-size: 11px;
+    color: #10b981;
+    margin-left: 2px;
+  }
+  .chip.active.visited::after { color: #a7f3d0; }
+
+  /* Info Card */
+  .info-hero {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 12px;
+  }
+  .info-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    background: #eef2ff;
+    flex-shrink: 0;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-box {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+  }
+  .stat-label { font-size: 11px; color: var(--muted); display: block; }
+  .stat-val { font-size: 15px; font-weight: 800; color: var(--ink); margin-top: 2px; display: block; }
+
+  .fun-fact {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1px solid #fde68a;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: #78350f;
+    margin-bottom: 12px;
+  }
+  .fun-fact strong { display: block; margin-bottom: 4px; color: #92400e; }
+
+  /* Gear Telemetry */
+  .gear-mode-box {
+    border-radius: 14px;
+    padding: 14px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    margin-bottom: 12px;
+  }
+  .gear-mode-box h4 { margin: 0 0 6px; font-size: 15px; color: #1e40af; }
+  .gear-mode-box p { margin: 0; font-size: 13px; color: #1e3a8a; }
+
+  /* Quiz */
+  .quiz-wrap { max-width: 780px; margin: 0 auto; }
+  .progress-track {
+    height: 10px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4f46e5, #06b6d4);
+    width: 10%;
+    transition: width 0.3s ease;
+  }
+  .quiz-q {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 14px;
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .opt-btn {
+    text-align: left;
+    padding: 14px;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    background: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-height: 52px;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #f5f3ff; }
+  .opt-btn.correct { border-color: #10b981; background: #d1fae5; color: #065f46; }
+  .opt-btn.wrong { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+  .quiz-explain {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    font-size: 13.5px;
+    display: none;
+  }
+  .quiz-explain.show { display: block; }
+
+  /* Certificate Section */
+  .cert-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .field input, .field select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    font-size: 14px;
+    background: #fff;
+  }
+  .cert-preview-img {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: block;
+    margin-top: 12px;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 20px 12px 28px;
+  }
+
+  @media (max-width: 860px) {
+    .lab-grid { grid-template-columns: 1fr; }
+    .tabs { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .container { padding: 12px; }
+    .brand h1 { font-size: 16px; }
+    .options-grid { grid-template-columns: 1fr; }
+    .cert-form { grid-template-columns: 1fr; }
+    .tab-btn { padding: 10px 8px; gap: 8px; }
+    .tab-emoji { width: 32px; height: 32px; font-size: 17px; }
+    .tab-title { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-icon">🚀</div>
+      <div>
+        <h1>星际小科学家 · 互动探索实验室</h1>
+        <p>4大沉浸式实验 · 边玩边学物理 / 天文 / 人体奥秘</p>
+      </div>
+    </div>
+    <div class="audio-controls">
+      <button id="toggleVoiceBtn" class="pill-btn active" type="button">🔊 语音讲解: 开</button>
+      <button id="toggleSfxBtn" class="pill-btn active" type="button">🎵 趣味音效: 开</button>
+      <span id="explorerScorePill" class="pill-btn">⭐ 探索徽章 0/4</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <nav class="tabs" aria-label="实验室切换">
+    <button class="tab-btn active" data-tab="solar" type="button">
+      <span class="tab-emoji">🪐</span>
+      <span><span class="tab-title">太阳系公转</span><span class="tab-sub">8大行星互动探索</span></span>
+    </button>
+    <button class="tab-btn" data-tab="heart" type="button">
+      <span class="tab-emoji">❤️</span>
+      <span><span class="tab-title">心脏血液循环</span><span class="tab-sub">动态血管与心跳模拟</span></span>
+    </button>
+    <button class="tab-btn" data-tab="gear" type="button">
+      <span class="tab-emoji">⚙️</span>
+      <span><span class="tab-title">机械齿轮乐园</span><span class="tab-sub">齿比转速与省力原理</span></span>
+    </button>
+    <button class="tab-btn" data-tab="quiz" type="button">
+      <span class="tab-emoji">🏆</span>
+      <span><span class="tab-title">闯关拿奖状</span><span class="tab-sub">10题测验 + PNG认证</span></span>
+    </button>
+  </nav>
+
+  <!-- LAB 1: SOLAR SYSTEM -->
+  <section id="panel-solar" class="lab-panel active">
+    <div class="lab-grid">
+      <div class="card">
+        <div class="card-title">
+          <span>🌌 太阳系八大行星实时公转台</span>
+          <span id="solarProgressBadge" class="badge">已探索 1/8 颗</span>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="solarCanvas" class="stage" width="680" height="480"></canvas>
+          <div class="canvas-hint">👆 点击画布中任意行星，或点下方星球按钮</div>
+        </div>
+        <div class="controls-bar">
+          <button id="solarPlayBtn" class="btn btn-primary" type="button">⏸ 暂停公转</button>
+          <div class="control-item">
+            <span>公转速度</span>
+            <input id="solarSpeed" type="range" min="0.2" max="4" step="0.1" value="1">
+            <span id="solarSpeedVal">1.0x</span>
+          </div>
+          <button id="solarLabelBtn" class="btn btn-outline" type="button">🏷 名称: 开</button>
+        </div>
+        <div id="planetChips" class="chip-row"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🔭 星球科普档案卡</span>
+          <button id="speakPlanetBtn" class="btn btn-soft" type="button">🗣️ 听语音科普</button>
+        </div>
+        <div class="info-hero">
+          <div id="planetAvatar" class="info-avatar">🌍</div>
+          <div>
+            <h2 id="planetName" style="margin:0;font-size:20px;">地球 (Earth)</h2>
+            <div id="planetTag" style="font-size:12px;color:var(--muted);">太阳系第 3 颗行星 · 蓝色生命摇篮</div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="stat-label">平均直径</span><span id="planetDia" class="stat-val">12,742 km</span></div>
+          <div class="stat-box"><span class="stat-label">表面平均温度</span><span id="planetTemp" class="stat-val">15 °C</span></div>
+          <div class="stat-box"><span class="stat-label">天然卫星数</span><span id="planetMoons" class="stat-val">1 颗（月球）</span></div>
+          <div class="stat-box"><span class="stat-label">公转周期</span><span id="planetYear" class="stat-val">365 天</span></div>
+        </div>
+        <div class="fun-fact">
+          <strong>💡 奇趣冷知识</strong>
+          <span id="planetFact">地球是目前已知宇宙中唯一表面有大量液态水和生命居住的行星，大气层像被子一样保护着我们！</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);">
+          🎯 小任务：把 8 颗行星都点一遍，解锁「小小天文学家」徽章！
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 2: HEART & BLOOD -->
+  <section id="panel-heart" class="lab-panel">
+    <div class="lab-grid">
+      <div class="card">
+        <div class="card-title">
+          <span>🫀 人体心脏与双循环动态模拟</span>
+          <span id="heartBpmBadge" class="badge green">75 BPM · 正常安静</span>
+        </div>
+        <div class="canvas-wrap heart-bg">
+          <canvas id="heartCanvas" class="stage" width="680" height="480"></canvas>
+          <div class="canvas-hint">🔴 鲜红含氧血 &nbsp;|&nbsp; 🔵 暗蓝缺氧血 &nbsp;|&nbsp; 点击器官节点</div>
+        </div>
+        <div class="controls-bar">
+          <button id="heartPlayBtn" class="btn btn-primary" type="button">⏸ 暂停跳动</button>
+          <div class="control-item">
+            <span>心率 (BPM)</span>
+            <input id="heartBpm" type="range" min="60" max="160" step="1" value="75">
+            <span id="heartBpmVal">75</span>
+          </div>
+          <button id="heartBeatSoundBtn" class="btn btn-outline" type="button">💓 心跳声: 关</button>
+        </div>
+        <div class="chip-row" style="margin-top:10px;">
+          <button class="chip heart-preset" data-bpm="65" type="button">😴 睡觉 65</button>
+          <button class="chip heart-preset active" data-bpm="75" type="button">📖 看书 75</button>
+          <button class="chip heart-preset" data-bpm="110" type="button">🚴 骑车 110</button>
+          <button class="chip heart-preset" data-bpm="150" type="button">🏃 冲刺 150</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🩺 器官解剖小百科</span>
+          <button id="speakHeartBtn" class="btn btn-soft" type="button">🗣️ 听语音讲解</button>
+        </div>
+        <div id="heartChips" class="chip-row" style="margin-top:0;margin-bottom:14px;"></div>
+        <div class="info-hero">
+          <div id="heartAvatar" class="info-avatar" style="background:#ffe4e6;">❤️</div>
+          <div>
+            <h2 id="heartNodeTitle" style="margin:0;font-size:19px;">左心室 (强力泵血发动机)</h2>
+            <div id="heartNodeSub" style="font-size:12px;color:var(--muted);">体循环起点 · 壁最厚实</div>
+          </div>
+        </div>
+        <div class="fun-fact" style="background:linear-gradient(135deg,#fff1f2,#ffe4e6);border-color:#fecdd3;color:#881337;">
+          <strong style="color:#9f1239;">🔬 它是怎么工作的？</strong>
+          <span id="heartNodeDesc">左心室的肌肉最强壮，每一次用力收缩，都能把充满氧气的鲜红血液通过主动脉泵向全身的肌肉和大脑！</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="stat-label">每分钟泵血量</span><span id="heartOutput" class="stat-val">约 5.2 升</span></div>
+          <div class="stat-box"><span class="stat-label">血液颜色秘密</span><span class="stat-val">富氧鲜红 / 缺氧暗蓝</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 3: GEARS -->
+  <section id="panel-gear" class="lab-panel">
+    <div class="lab-grid">
+      <div class="card">
+        <div class="card-title">
+          <span>⚙️ 机械齿轮啮合传动游乐场</span>
+          <span id="gearRatioBadge" class="badge gold">传动比 2.00 : 1</span>
+        </div>
+        <div class="canvas-wrap light">
+          <canvas id="gearCanvas" class="stage" width="680" height="440"></canvas>
+          <div class="canvas-hint">🟠 主动轮（输入动力） &nbsp;|&nbsp; 🔵 从动轮（输出动作）</div>
+        </div>
+        <div class="controls-bar">
+          <button id="gearPlayBtn" class="btn btn-primary" type="button">⏸ 暂停转动</button>
+          <button id="gearReverseBtn" class="btn btn-outline" type="button">🔄 切换转向</button>
+          <div class="control-item">
+            <span>输入转速</span>
+            <input id="gearRpm" type="range" min="10" max="100" step="2" value="40">
+            <span id="gearRpmVal">40 RPM</span>
+          </div>
+        </div>
+        <div class="controls-bar" style="margin-top:10px;">
+          <div class="control-item">
+            <span>🟠 主动轮齿数</span>
+            <input id="driverTeeth" type="range" min="8" max="30" step="1" value="12">
+            <span id="driverTeethVal">12 齿</span>
+          </div>
+          <div class="control-item">
+            <span>🔵 从动轮齿数</span>
+            <input id="drivenTeeth" type="range" min="8" max="36" step="1" value="24">
+            <span id="drivenTeethVal">24 齿</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>📐 实时机械原理仪表盘</span>
+          <button id="speakGearBtn" class="btn btn-soft" type="button">🗣️ 听原理讲解</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box"><span class="stat-label">🟠 主动轮转速</span><span id="statDriverRpm" class="stat-val">40.0 转/分 (顺时针)</span></div>
+          <div class="stat-box"><span class="stat-label">🔵 从动轮转速</span><span id="statDrivenRpm" class="stat-val">20.0 转/分 (逆时针)</span></div>
+          <div class="stat-box"><span class="stat-label">齿轮传动比</span><span id="statRatio" class="stat-val">2.00 : 1</span></div>
+          <div class="stat-box"><span class="stat-label">输出力量变化</span><span id="statTorque" class="stat-val">扭矩放大 2.00 倍</span></div>
+        </div>
+        <div id="gearModeBox" class="gear-mode-box">
+          <h4 id="gearModeTitle">💪 当前模式：减速增力（爬坡大力士）</h4>
+          <p id="gearModeDesc">小齿轮带动大齿轮，虽然大齿轮转得慢了一半，但力量放大了 2 倍！就像自行车上坡时挂的大飞轮，踩起来特别省力。</p>
+        </div>
+        <div class="fun-fact">
+          <strong>🔍 为什么两个咬合的齿轮总是反向转动？</strong>
+          <span>当主动轮右侧的牙齿向下压住从动轮左侧的牙齿时，就会推着从动轮朝相反方向旋转！如果需要同向转动，工程师会在中间再加一个“惰轮”。</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAB 4: QUIZ & CERTIFICATE -->
+  <section id="panel-quiz" class="lab-panel">
+    <div class="quiz-wrap">
+      <div id="quizCard" class="card">
+        <div class="card-title">
+          <span>🧠 10题小小科学家大闯关</span>
+          <span id="quizCounterBadge" class="badge">第 1 / 10 题 · 得分 0</span>
+        </div>
+        <div class="progress-track"><div id="quizProgress" class="progress-fill"></div></div>
+        <p id="quizQuestion" class="quiz-q"></p>
+        <div id="quizOptions" class="options-grid"></div>
+        <div id="quizExplain" class="quiz-explain"></div>
+        <div style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          <button id="quizRestartBtn" class="btn btn-outline" type="button">↺ 重新挑战</button>
+          <button id="quizNextBtn" class="btn btn-primary" type="button" style="display:none;">下一题 ➜</button>
+        </div>
+      </div>
+
+      <div id="certCard" class="card" style="margin-top:18px;display:none;">
+        <div class="card-title">
+          <span>🏅 恭喜过关！专属 PNG 认证奖状生成</span>
+          <span id="certRankBadge" class="badge gold">星际首席科学家</span>
+        </div>
+        <p id="certSummaryText" style="margin:0 0 10px;font-size:14px;"></p>
+        <div class="cert-form">
+          <div class="field">
+            <label for="childNameInput">宝贝姓名 / 昵称</label>
+            <input id="childNameInput" type="text" maxlength="16" value="星际小探险家" placeholder="例如：乐乐 / 小宇">
+          </div>
+          <div class="field">
+            <label for="childGroupInput">组别选择</label>
+            <select id="childGroupInput">
+              <option value="科学萌芽组 (4-6岁)">科学萌芽组 (4-6岁)</option>
+              <option value="探索少年组 (7-9岁)" selected>探索少年组 (7-9岁)</option>
+              <option value="物理天文组 (10-12岁)">物理天文组 (10-12岁)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="certDateInput">颁发日期</label>
+            <input id="certDateInput" type="text" maxlength="20">
+          </div>
+          <div class="field">
+            <label for="certNoteInput">家长鼓励寄语</label>
+            <input id="certNoteInput" type="text" maxlength="32" value="保持好奇心，宇宙比想象更精彩！">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button id="renderCertBtn" class="btn btn-soft" type="button">✨ 刷新奖状预览</button>
+          <button id="downloadCertBtn" class="btn btn-success" type="button">📥 下载高清 PNG 奖状</button>
+          <button id="playAgainBtn" class="btn btn-outline" type="button">🔄 再答一次</button>
+        </div>
+        <canvas id="certCanvas" width="1200" height="850" style="display:none;"></canvas>
+        <img id="certPreview" class="cert-preview-img" alt="小小科学家认证奖状预览">
+        <p style="font-size:12px;color:var(--muted);margin:8px 0 0;">📱 手机端若无法直接弹出下载，可长按上方高清奖状图片「保存到相册」晒朋友圈/小红书打卡！</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer-note">
+  星际小科学家 · 纯离线单文件互动版（无需联网、无广告、支持手机/平板/电脑双端使用）
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ---------- Audio & Speech Engine (Zero external files) ----------
+  const state = {
+    voiceOn: true,
+    sfxOn: true,
+    badges: { solar: false, heart: false, gear: false, quiz: false }
+  };
+
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    return audioCtx;
+  }
+
+  function playTone(freq, duration = 0.14, type = 'sine', vol = 0.12, delay = 0) {
+    if (!state.sfxOn) return;
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime + delay;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.exponentialRampToValueAtTime(vol, now + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration + 0.02);
+  }
+
+  function playChime() {
+    playTone(523.25, 0.12, 'triangle', 0.12, 0);
+    playTone(659.25, 0.14, 'triangle', 0.12, 0.08);
+    playTone(783.99, 0.22, 'triangle', 0.13, 0.16);
+  }
+  function playPop() { playTone(580, 0.08, 'sine', 0.1); }
+  function playBuzz() {
+    playTone(190, 0.16, 'sawtooth', 0.08, 0);
+    playTone(150, 0.2, 'sawtooth', 0.08, 0.12);
+  }
+  function playHeartbeatThump() {
+    if (!state.sfxOn) return;
+    playTone(72, 0.09, 'sine', 0.22, 0);
+    playTone(58, 0.11, 'sine', 0.16, 0.14);
+  }
+
+  function speakText(text) {
+    if (!state.voiceOn || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = 0.98;
+      u.pitch = 1.08;
+      const voices = window.speechSynthesis.getVoices();
+      const zh = voices.find(v => v.lang && v.lang.toLowerCase().includes('zh'));
+      if (zh) u.voice = zh;
+      window.speechSynthesis.speak(u);
+    } catch (_) {}
+  }
+
+  function unlockBadge(key) {
+    if (state.badges[key]) return;
+    state.badges[key] = true;
+    const count = Object.values(state.badges).filter(Boolean).length;
+    document.getElementById('explorerScorePill').textContent = `⭐ 探索徽章 ${count}/4`;
+  }
+
+  document.getElementById('toggleVoiceBtn').addEventListener('click', function() {
+    state.voiceOn = !state.voiceOn;
+    this.classList.toggle('active', state.voiceOn);
+    this.textContent = state.voiceOn ? '🔊 语音讲解: 开' : '🔇 语音讲解: 关';
+    if (!state.voiceOn && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+    playPop();
+  });
+
+  document.getElementById('toggleSfxBtn').addEventListener('click', function() {
+    state.sfxOn = !state.sfxOn;
+    this.classList.toggle('active', state.sfxOn);
+    this.textContent = state.sfxOn ? '🎵 趣味音效: 开' : '🔕 趣味音效: 关';
+    if (state.sfxOn) playPop();
+  });
+
+  // ---------- Tab Navigation ----------
+  let activeTab = 'solar';
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.lab-panel').forEach(p => p.classList.toggle('active', p.id === `panel-${activeTab}`));
+      playPop();
+      if (activeTab === 'gear') unlockBadge('gear');
+    });
+  });
+
+  // =========================================================================
+  // LAB 1: SOLAR SYSTEM
+  // =========================================================================
+  const PLANETS = [
+    {
+      id: 'mercury', name: '水星', en: 'Mercury', emoji: '🪨', color: '#a8a29e', r: 6, orbit: 50, speed: 4.1, angle: 0.4,
+      dia: '4,879 km', temp: '-173 ~ 427 °C', moons: '0 颗', year: '88 天',
+      tag: '太阳系第 1 颗行星 · 跑得最快的小个子',
+      fact: '水星离太阳最近，表面布满陨石坑。虽然叫“水”星，但它上面一滴水也没有，白天极热夜晚极冷！'
+    },
+    {
+      id: 'venus', name: '金星', en: 'Venus', emoji: '🟡', color: '#facc15', r: 9, orbit: 74, speed: 2.6, angle: 1.9,
+      dia: '12,104 km', temp: '465 °C', moons: '0 颗', year: '225 天',
+      tag: '太阳系第 2 颗行星 · 夜空中最亮的星',
+      fact: '金星穿着厚厚的二氧化碳“大棉袄”，是太阳系最热的行星！而且它和别的行星自转方向相反，太阳从西边升起。'
+    },
+    {
+      id: 'earth', name: '地球', en: 'Earth', emoji: '🌍', color: '#38bdf8', r: 10, orbit: 102, speed: 1.8, angle: 3.1,
+      dia: '12,742 km', temp: '平均 15 °C', moons: '1 颗（月球）', year: '365 天',
+      tag: '太阳系第 3 颗行星 · 蓝色生命摇篮',
+      fact: '地球表面71%被海洋覆盖，还有保护我们的臭氧层和磁场，是目前已知唯一有生命的家园！'
+    },
+    {
+      id: 'mars', name: '火星', en: 'Mars', emoji: '🔴', color: '#ef4444', r: 8, orbit: 130, speed: 1.3, angle: 5.0,
+      dia: '6,779 km', temp: '平均 -63 °C', moons: '2 颗', year: '687 天',
+      tag: '太阳系第 4 颗行星 · 红色沙漠星球',
+      fact: '火星表面铺满富含氧化铁的红沙尘，还有太阳系最高的火山——奥林帕斯山，足足有珠穆朗玛峰的3倍高！'
+    },
+    {
+      id: 'jupiter', name: '木星', en: 'Jupiter', emoji: '🟠', color: '#fb923c', r: 19, orbit: 168, speed: 0.72, angle: 0.8,
+      dia: '139,820 km', temp: '-110 °C', moons: '95 颗', year: '11.9 年',
+      tag: '太阳系第 5 颗行星 · 巨无霸行星之王',
+      fact: '木星体积大到能装下1300个地球！它脸上那个著名的“大红斑”，是一场已经刮了300多年的超级风暴。'
+    },
+    {
+      id: 'saturn', name: '土星', en: 'Saturn', emoji: '🪐', color: '#fcd34d', r: 16, orbit: 208, speed: 0.48, angle: 2.5, ring: true,
+      dia: '116,460 km', temp: '-140 °C', moons: '146 颗', year: '29.5 年',
+      tag: '太阳系第 6 颗行星 · 戴着光环的优雅王子',
+      fact: '土星的美丽光环是由无数冰块和岩石碎片组成的。它密度比水还轻，如果有个宇宙超级大浴缸，土星能浮在水面上！'
+    },
+    {
+      id: 'uranus', name: '天王星', en: 'Uranus', emoji: '🩵', color: '#67e8f9', r: 12, orbit: 244, speed: 0.32, angle: 4.2,
+      dia: '50,724 km', temp: '-195 °C', moons: '28 颗', year: '84 年',
+      tag: '太阳系第 7 颗行星 · 躺着打滚的冰巨星',
+      fact: '天王星的自转轴几乎横躺着，像是躺着在轨道上“滚”着走，它的每一季都要持续21年！'
+    },
+    {
+      id: 'neptune', name: '海王星', en: 'Neptune', emoji: '🔵', color: '#3b82f6', r: 12, orbit: 278, speed: 0.22, angle: 5.7,
+      dia: '49,244 km', temp: '-200 °C', moons: '16 颗', year: '165 年',
+      tag: '太阳系第 8 颗行星 · 狂风呼啸的深蓝边疆',
+      fact: '海王星是太阳系最远的大行星，那里刮着时速超过2000公里的超级飓风，比地球上的音速还要快！'
+    }
+  ];
+
+  const solarCanvas = document.getElementById('solarCanvas');
+  const sCtx = solarCanvas.getContext('2d');
+  let solarPlaying = true;
+  let solarSpeed = 1.0;
+  let showLabels = true;
+  let selectedPlanet = PLANETS[2]; // Earth
+  const visitedPlanets = new Set(['earth']);
+
+  // Static starfield
+  const STARS = Array.from({ length: 110 }, () => ({
+    x: Math.random() * 680,
+    y: Math.random() * 480,
+    r: Math.random() * 1.6 + 0.4,
+    phase: Math.random() * Math.PI * 2
+  }));
+
+  function renderPlanetChips() {
+    const row = document.getElementById('planetChips');
+    row.innerHTML = '';
+    PLANETS.forEach(p => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip' + (p.id === selectedPlanet.id ? ' active' : '') + (visitedPlanets.has(p.id) ? ' visited' : '');
+      btn.textContent = `${p.emoji} ${p.name}`;
+      btn.addEventListener('click', () => selectPlanet(p, true));
+      row.appendChild(btn);
+    });
+    document.getElementById('solarProgressBadge').textContent = `已探索 ${visitedPlanets.size}/8 颗`;
+    if (visitedPlanets.size === 8) unlockBadge('solar');
+  }
+
+  function selectPlanet(p, speak = false) {
+    selectedPlanet = p;
+    visitedPlanets.add(p.id);
+    document.getElementById('planetAvatar').textContent = p.emoji;
+    document.getElementById('planetName').textContent = `${p.name} (${p.en})`;
+    document.getElementById('planetTag').textContent = p.tag;
+    document.getElementById('planetDia').textContent = p.dia;
+    document.getElementById('planetTemp').textContent = p.temp;
+    document.getElementById('planetMoons').textContent = p.moons;
+    document.getElementById('planetYear').textContent = p.year;
+    document.getElementById('planetFact').textContent = p.fact;
+    renderPlanetChips();
+    playChime();
+    if (speak) speakText(`${p.name}。${p.fact}`);
+  }
+
+  solarCanvas.addEventListener('click', (e) => {
+    const rect = solarCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (solarCanvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (solarCanvas.height / rect.height);
+    const cx = solarCanvas.width / 2;
+    const cy = solarCanvas.height / 2;
+    let best = null, bestDist = 34;
+    PLANETS.forEach(p => {
+      const px = cx + Math.cos(p.angle) * p.orbit;
+      const py = cy + Math.sin(p.angle) * p.orbit * 0.78;
+      const d = Math.hypot(x - px, y - py);
+      if (d < bestDist) { bestDist = d; best = p; }
+    });
+    if (best) selectPlanet(best, true);
+  });
+
+  document.getElementById('solarPlayBtn').addEventListener('click', function() {
+    solarPlaying = !solarPlaying;
+    this.textContent = solarPlaying ? '⏸ 暂停公转' : '▶ 继续公转';
+    playPop();
+  });
+  document.getElementById('solarSpeed').addEventListener('input', function() {
+    solarSpeed = parseFloat(this.value);
+    document.getElementById('solarSpeedVal').textContent = `${solarSpeed.toFixed(1)}x`;
+  });
+  document.getElementById('solarLabelBtn').addEventListener('click', function() {
+    showLabels = !showLabels;
+    this.textContent = showLabels ? '🏷 名称: 开' : '🏷 名称: 关';
+    playPop();
+  });
+  document.getElementById('speakPlanetBtn').addEventListener('click', () => {
+    speakText(`${selectedPlanet.name}，${selectedPlanet.tag}。${selectedPlanet.fact}`);
+  });
+
+  function drawSolar(t) {
+    const w = solarCanvas.width, h = solarCanvas.height;
+    const cx = w / 2, cy = h / 2;
+    sCtx.fillStyle = '#070b1e';
+    sCtx.fillRect(0, 0, w, h);
+
+    // Stars
+    STARS.forEach(s => {
+      const a = 0.35 + 0.55 * Math.sin(t * 0.002 + s.phase);
+      sCtx.fillStyle = `rgba(255,255,255,${a.toFixed(2)})`;
+      sCtx.beginPath();
+      sCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      sCtx.fill();
+    });
+
+    // Orbits
+    PLANETS.forEach(p => {
+      sCtx.strokeStyle = p.id === selectedPlanet.id ? 'rgba(99,102,241,0.75)' : 'rgba(148,163,184,0.22)';
+      sCtx.lineWidth = p.id === selectedPlanet.id ? 1.8 : 1;
+      sCtx.beginPath();
+      sCtx.ellipse(cx, cy, p.orbit, p.orbit * 0.78, 0, 0, Math.PI * 2);
+      sCtx.stroke();
+    });
+
+    // Sun glow
+    const sunGrad = sCtx.createRadialGradient(cx, cy, 4, cx, cy, 44);
+    sunGrad.addColorStop(0, '#fff7ed');
+    sunGrad.addColorStop(0.35, '#fbbf24');
+    sunGrad.addColorStop(0.7, '#ea580c');
+    sunGrad.addColorStop(1, 'rgba(234,88,12,0)');
+    sCtx.fillStyle = sunGrad;
+    sCtx.beginPath();
+    sCtx.arc(cx, cy, 44, 0, Math.PI * 2);
+    sCtx.fill();
+    if (showLabels) {
+      sCtx.fillStyle = '#fef3c7';
+      sCtx.font = 'bold 11px sans-serif';
+      sCtx.textAlign = 'center';
+      sCtx.fillText('太阳', cx, cy + 36);
+    }
+
+    // Planets
+    PLANETS.forEach(p => {
+      if (solarPlaying) p.angle += 0.006 * p.speed * solarSpeed;
+      const px = cx + Math.cos(p.angle) * p.orbit;
+      const py = cy + Math.sin(p.angle) * p.orbit * 0.78;
+
+      if (p.id === selectedPlanet.id) {
+        sCtx.strokeStyle = '#fbbf24';
+        sCtx.lineWidth = 2;
+        sCtx.beginPath();
+        sCtx.arc(px, py, p.r + 6, 0, Math.PI * 2);
+        sCtx.stroke();
+      }
+
+      if (p.ring) {
+        sCtx.save();
+        sCtx.translate(px, py);
+        sCtx.rotate(-0.35);
+        sCtx.strokeStyle = 'rgba(253, 230, 138, 0.75)';
+        sCtx.lineWidth = 4;
+        sCtx.beginPath();
+        sCtx.ellipse(0, 0, p.r + 12, 6, 0, 0, Math.PI * 2);
+        sCtx.stroke();
+        sCtx.restore();
+      }
+
+      const pg = sCtx.createRadialGradient(px - p.r * 0.3, py - p.r * 0.3, 1, px, py, p.r);
+      pg.addColorStop(0, '#ffffff');
+      pg.addColorStop(0.35, p.color);
+      pg.addColorStop(1, '#0f172a');
+      sCtx.fillStyle = pg;
+      sCtx.beginPath();
+      sCtx.arc(px, py, p.r, 0, Math.PI * 2);
+      sCtx.fill();
+
+      if (p.id === 'earth') {
+        const mx = px + Math.cos(t * 0.004) * 18;
+        const my = py + Math.sin(t * 0.004) * 14;
+        sCtx.fillStyle = '#e2e8f0';
+        sCtx.beginPath();
+        sCtx.arc(mx, my, 2.5, 0, Math.PI * 2);
+        sCtx.fill();
+      }
+
+      if (showLabels) {
+        sCtx.fillStyle = p.id === selectedPlanet.id ? '#fde047' : '#cbd5e1';
+        sCtx.font = 'bold 11px sans-serif';
+        sCtx.textAlign = 'center';
+        sCtx.fillText(p.name, px, py - p.r - 7);
+      }
+    });
+  }
+  renderPlanetChips();
+
+  // =========================================================================
+  // LAB 2: HEART & BLOOD CIRCULATION
+  // =========================================================================
+  const HEART_NODES = [
+    {
+      id: 'lungs', name: '肺部毛细血管', avatar: '🫁', sub: '气体交换站 · 暗蓝变鲜红',
+      x: 340, y: 66,
+      desc: '蓝色的缺氧血来到肺部，把废气二氧化碳呼出体外，同时吸进满满的氧气，瞬间变身鲜红色的富氧血！'
+    },
+    {
+      id: 'ra', name: '右心房', avatar: '💙', sub: '静脉回流第一站',
+      x: 268, y: 195,
+      desc: '全身各处流回来的蓝色缺氧血液，首先回到右心房休息，再向下送进右心室。'
+    },
+    {
+      id: 'rv', name: '右心室', avatar: '🌀', sub: '肺循环发动泵',
+      x: 274, y: 272,
+      desc: '右心室用力把缺氧血液向上泵送到肺部，去给血液重新“充氧”。'
+    },
+    {
+      id: 'la', name: '左心房', avatar: '💗', sub: '富氧血接收站',
+      x: 412, y: 195,
+      desc: '在肺部吸饱了氧气的鲜红色血液，流回左心房，准备出发去支援全身！'
+    },
+    {
+      id: 'lv', name: '左心室', avatar: '❤️', sub: '体循环强力发动机',
+      x: 406, y: 272,
+      desc: '左心室的肌肉最厚实！它每次用力跳动，都能把鲜红血液泵向全身大脑、手脚和肌肉。'
+    },
+    {
+      id: 'body', name: '全身器官与肌肉', avatar: '🏃', sub: '营养消耗站 · 鲜红变暗蓝',
+      x: 340, y: 412,
+      desc: '肌肉和大脑消耗掉氧气和能量后，血液变成暗蓝色缺氧血，再顺着静脉一路回到右心房，开始新一轮旅行！'
+    }
+  ];
+
+  const heartCanvas = document.getElementById('heartCanvas');
+  const hCtx = heartCanvas.getContext('2d');
+  let heartPlaying = true;
+  let heartBpm = 75;
+  let heartSoundOn = false;
+  let selectedHeartNode = HEART_NODES[4]; // LV
+  let lastBeatIndex = -1;
+  let heartPhase = 0;
+
+  // Circuit waypoints: normalized 0..1 around the figure-8 double loop
+  // Loop path points: [x, y, isOxygenated]
+  const LOOP_PTS = [
+    { x: 340, y: 70, oxy: true },   // 0 lungs exit
+    { x: 455, y: 108, oxy: true },  // 1 pulmonary vein
+    { x: 414, y: 195, oxy: true },  // 2 LA
+    { x: 406, y: 272, oxy: true },  // 3 LV
+    { x: 515, y: 315, oxy: true },  // 4 aorta arch right
+    { x: 520, y: 390, oxy: true },  // 5 systemic artery
+    { x: 340, y: 412, oxy: false }, // 6 body capillaries (turns blue)
+    { x: 162, y: 390, oxy: false }, // 7 systemic vein
+    { x: 166, y: 310, oxy: false }, // 8 vena cava
+    { x: 268, y: 195, oxy: false }, // 9 RA
+    { x: 274, y: 272, oxy: false }, // 10 RV
+    { x: 225, y: 108, oxy: false }  // 11 pulmonary artery back to lungs
+  ];
+
+  const BLOOD_CELLS = Array.from({ length: 28 }, (_, i) => ({
+    progress: i / 28,
+    offset: (Math.random() - 0.5) * 10
+  }));
+
+  function sampleCircuit(u) {
+    const n = LOOP_PTS.length;
+    const scaled = ((u % 1) + 1) % 1 * n;
+    const idx = Math.floor(scaled);
+    const frac = scaled - idx;
+    const a = LOOP_PTS[idx];
+    const b = LOOP_PTS[(idx + 1) % n];
+    return {
+      x: a.x + (b.x - a.x) * frac,
+      y: a.y + (b.y - a.y) * frac,
+      oxy: a.oxy
+    };
+  }
+
+  function renderHeartChips() {
+    const row = document.getElementById('heartChips');
+    row.innerHTML = '';
+    HEART_NODES.forEach(node => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip' + (node.id === selectedHeartNode.id ? ' active' : '');
+      b.textContent = `${node.avatar} ${node.name}`;
+      b.addEventListener('click', () => selectHeartNode(node, true));
+      row.appendChild(b);
+    });
+  }
+
+  function selectHeartNode(node, speak = false) {
+    selectedHeartNode = node;
+    document.getElementById('heartAvatar').textContent = node.avatar;
+    document.getElementById('heartNodeTitle').textContent = node.name;
+    document.getElementById('heartNodeSub').textContent = node.sub;
+    document.getElementById('heartNodeDesc').textContent = node.desc;
+    renderHeartChips();
+    unlockBadge('heart');
+    playPop();
+    if (speak) speakText(`${node.name}。${node.desc}`);
+  }
+
+  heartCanvas.addEventListener('click', (e) => {
+    const rect = heartCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (heartCanvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (heartCanvas.height / rect.height);
+    let best = null, bestD = 50;
+    HEART_NODES.forEach(n => {
+      const d = Math.hypot(x - n.x, y - n.y);
+      if (d < bestD) { bestD = d; best = n; }
+    });
+    if (best) selectHeartNode(best, true);
+  });
+
+  function updateBpmUI(bpm) {
+    heartBpm = bpm;
+    document.getElementById('heartBpm').value = bpm;
+    document.getElementById('heartBpmVal').textContent = bpm;
+    const status = bpm < 70 ? '睡眠静息' : bpm < 100 ? '正常安静' : bpm < 130 ? '轻度运动' : '剧烈奔跑';
+    document.getElementById('heartBpmBadge').textContent = `${bpm} BPM · ${status}`;
+    const liters = (bpm * 0.07).toFixed(1);
+    document.getElementById('heartOutput').textContent = `约 ${liters} 升`;
+    document.querySelectorAll('.heart-preset').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.bpm, 10) === bpm);
+    });
+  }
+
+  document.getElementById('heartBpm').addEventListener('input', function() {
+    updateBpmUI(parseInt(this.value, 10));
+    unlockBadge('heart');
+  });
+  document.querySelectorAll('.heart-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      updateBpmUI(parseInt(btn.dataset.bpm, 10));
+      playPop();
+      unlockBadge('heart');
+    });
+  });
+  document.getElementById('heartPlayBtn').addEventListener('click', function() {
+    heartPlaying = !heartPlaying;
+    this.textContent = heartPlaying ? '⏸ 暂停跳动' : '▶ 继续跳动';
+    playPop();
+  });
+  document.getElementById('heartBeatSoundBtn').addEventListener('click', function() {
+    heartSoundOn = !heartSoundOn;
+    this.textContent = heartSoundOn ? '💓 心跳声: 开' : '💓 心跳声: 关';
+    if (heartSoundOn) playHeartbeatThump();
+  });
+  document.getElementById('speakHeartBtn').addEventListener('click', () => {
+    speakText(`${selectedHeartNode.name}。${selectedHeartNode.desc}`);
+  });
+
+  function drawHeart(dt) {
+    const w = heartCanvas.width, h = heartCanvas.height;
+    hCtx.clearRect(0, 0, w, h);
+
+    if (heartPlaying) {
+      heartPhase += (heartBpm / 60) * dt;
+      const beatIdx = Math.floor(heartPhase);
+      if (beatIdx !== lastBeatIndex) {
+        lastBeatIndex = beatIdx;
+        if (heartSoundOn && activeTab === 'heart') playHeartbeatThump();
+      }
+    }
+    const beatFrac = heartPhase % 1;
+    const pulse = 1 + 0.08 * Math.exp(-beatFrac * 8) * Math.sin(beatFrac * Math.PI * 3);
+
+    // Draw vessel paths
+    hCtx.lineWidth = 18;
+    hCtx.lineCap = 'round';
+    hCtx.lineJoin = 'round';
+
+    // Red oxygenated half (0 -> 6)
+    hCtx.strokeStyle = 'rgba(239, 68, 68, 0.32)';
+    hCtx.beginPath();
+    for (let i = 0; i <= 6; i++) {
+      const p = LOOP_PTS[i];
+      if (i === 0) hCtx.moveTo(p.x, p.y);
+      else hCtx.lineTo(p.x, p.y);
+    }
+    hCtx.stroke();
+
+    // Blue deoxygenated half (6 -> 11 -> 0)
+    hCtx.strokeStyle = 'rgba(59, 130, 246, 0.32)';
+    hCtx.beginPath();
+    for (let i = 6; i <= 12; i++) {
+      const p = LOOP_PTS[i % LOOP_PTS.length];
+      if (i === 6) hCtx.moveTo(p.x, p.y);
+      else hCtx.lineTo(p.x, p.y);
+    }
+    hCtx.stroke();
+
+    // Lungs organ shape
+    hCtx.fillStyle = 'rgba(244, 114, 182, 0.25)';
+    hCtx.strokeStyle = '#f472b6';
+    hCtx.lineWidth = 2.5;
+    hCtx.beginPath();
+    hCtx.ellipse(295, 66, 46, 32, -0.15, 0, Math.PI * 2);
+    hCtx.ellipse(385, 66, 46, 32, 0.15, 0, Math.PI * 2);
+    hCtx.fill();
+    hCtx.stroke();
+    hCtx.fillStyle = '#fbcfe8';
+    hCtx.font = 'bold 13px sans-serif';
+    hCtx.textAlign = 'center';
+    hCtx.fillText('🫁 肺部 (吸氧排碳)', 340, 71);
+
+    // Body tissue box
+    hCtx.fillStyle = 'rgba(251, 191, 36, 0.18)';
+    hCtx.strokeStyle = '#fbbf24';
+    hCtx.beginPath();
+    hCtx.roundRect(225, 386, 230, 52, 18);
+    hCtx.fill();
+    hCtx.stroke();
+    hCtx.fillStyle = '#fde68a';
+    hCtx.fillText('🏃 全身器官与肌肉 (消耗氧气)', 340, 417);
+
+    // Heart 4-chamber center
+    hCtx.save();
+    hCtx.translate(340, 234);
+    hCtx.scale(pulse, pulse);
+    hCtx.fillStyle = 'rgba(225, 29, 72, 0.22)';
+    hCtx.strokeStyle = '#fb7185';
+    hCtx.lineWidth = 3;
+    hCtx.beginPath();
+    hCtx.roundRect(-115, -76, 230, 154, 42);
+    hCtx.fill();
+    hCtx.stroke();
+
+    // Divider septum
+    hCtx.strokeStyle = 'rgba(255,255,255,0.4)';
+    hCtx.lineWidth = 2;
+    hCtx.beginPath();
+    hCtx.moveTo(0, -68);
+    hCtx.lineTo(0, 70);
+    hCtx.moveTo(-105, -2);
+    hCtx.lineTo(105, -2);
+    hCtx.stroke();
+    hCtx.restore();
+
+    // Chamber labels & highlight rings
+    HEART_NODES.forEach(n => {
+      const sel = n.id === selectedHeartNode.id;
+      if (n.id !== 'lungs' && n.id !== 'body') {
+        hCtx.fillStyle = n.id.startsWith('r') ? 'rgba(59,130,246,0.35)' : 'rgba(239,68,68,0.35)';
+        hCtx.strokeStyle = sel ? '#fde047' : 'rgba(255,255,255,0.45)';
+        hCtx.lineWidth = sel ? 3 : 1.5;
+        hCtx.beginPath();
+        hCtx.roundRect(n.x - 46, n.y - 22, 92, 44, 12);
+        hCtx.fill();
+        hCtx.stroke();
+        hCtx.fillStyle = '#fff';
+        hCtx.font = 'bold 12px sans-serif';
+        hCtx.fillText(n.name, n.x, n.y + 4);
+      } else if (sel) {
+        hCtx.strokeStyle = '#fde047';
+        hCtx.lineWidth = 3;
+        hCtx.beginPath();
+        hCtx.arc(n.x, n.y, 38, 0, Math.PI * 2);
+        hCtx.stroke();
+      }
+    });
+
+    // Moving Blood Cells
+    const speedFactor = (heartBpm / 75) * 0.14;
+    BLOOD_CELLS.forEach(c => {
+      if (heartPlaying) c.progress = (c.progress + speedFactor * dt) % 1;
+      const pos = sampleCircuit(c.progress);
+      hCtx.fillStyle = pos.oxy ? '#ff4d6d' : '#38bdf8';
+      hCtx.beginPath();
+      hCtx.arc(pos.x + c.offset * 0.4, pos.y + c.offset * 0.4, 6.2, 0, Math.PI * 2);
+      hCtx.fill();
+      hCtx.fillStyle = 'rgba(255,255,255,0.75)';
+      hCtx.beginPath();
+      hCtx.arc(pos.x + c.offset * 0.4 - 1.5, pos.y + c.offset * 0.4 - 1.5, 2, 0, Math.PI * 2);
+      hCtx.fill();
+    });
+  }
+  renderHeartChips();
+
+  // =========================================================================
+  // LAB 3: GEARS
+  // =========================================================================
+  const gearCanvas = document.getElementById('gearCanvas');
+  const gCtx = gearCanvas.getContext('2d');
+  let gearPlaying = true;
+  let gearDir = 1; // 1 = CW, -1 = CCW
+  let driverRpm = 40;
+  let z1 = 12;
+  let z2 = 24;
+  let driverAngle = 0;
+
+  function drawSpurGear(ctx, cx, cy, teeth, moduleSize, angle, fillColor, strokeColor, label) {
+    const pitchR = (teeth * moduleSize) / 2;
+    const outerR = pitchR + moduleSize * 0.85;
+    const rootR = Math.max(12, pitchR - moduleSize * 1.05);
+    const step = (Math.PI * 2) / teeth;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+
+    ctx.beginPath();
+    for (let i = 0; i < teeth; i++) {
+      const a0 = i * step;
+      const a1 = a0 + step * 0.18;
+      const a2 = a0 + step * 0.34;
+      const a3 = a0 + step * 0.62;
+      const a4 = a0 + step * 0.78;
+      if (i === 0) ctx.moveTo(Math.cos(a0) * rootR, Math.sin(a0) * rootR);
+      else ctx.lineTo(Math.cos(a0) * rootR, Math.sin(a0) * rootR);
+      ctx.lineTo(Math.cos(a1) * rootR, Math.sin(a1) * rootR);
+      ctx.lineTo(Math.cos(a2) * outerR, Math.sin(a2) * outerR);
+      ctx.lineTo(Math.cos(a3) * outerR, Math.sin(a3) * outerR);
+      ctx.lineTo(Math.cos(a4) * rootR, Math.sin(a4) * rootR);
+    }
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
+
+    // Spokes / decorative holes
+    const spokeR = rootR * 0.56;
+    if (spokeR > 18) {
+      ctx.fillStyle = '#ffffff';
+      for (let s = 0; s < 4; s++) {
+        const sa = (s * Math.PI) / 2;
+        ctx.beginPath();
+        ctx.arc(Math.cos(sa) * spokeR, Math.sin(sa) * spokeR, Math.max(5, rootR * 0.16), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+
+    // Center hub + indicator mark
+    ctx.fillStyle = '#1e293b';
+    ctx.beginPath();
+    ctx.arc(0, 0, Math.min(14, rootR * 0.35), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(rootR * 0.42, 0, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Label below
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, cx, cy + outerR + 24);
+  }
+
+  function updateGearStats() {
+    const ratio = z2 / z1;
+    const drivenRpm = driverRpm / ratio;
+    const d1Str = gearDir === 1 ? '顺时针' : '逆时针';
+    const d2Str = gearDir === 1 ? '逆时针' : '顺时针';
+
+    document.getElementById('gearRatioBadge').textContent = `传动比 ${ratio.toFixed(2)} : 1`;
+    document.getElementById('statDriverRpm').textContent = `${driverRpm.toFixed(1)} 转/分 (${d1Str})`;
+    document.getElementById('statDrivenRpm').textContent = `${drivenRpm.toFixed(1)} 转/分 (${d2Str})`;
+    document.getElementById('statRatio').textContent = `${ratio.toFixed(2)} : 1`;
+    document.getElementById('statTorque').textContent = ratio >= 1 ? `扭矩放大 ${ratio.toFixed(2)} 倍` : `速度加快 ${(1 / ratio).toFixed(2)} 倍`;
+
+    const titleEl = document.getElementById('gearModeTitle');
+    const descEl = document.getElementById('gearModeDesc');
+    if (z2 > z1) {
+      titleEl.textContent = '💪 当前模式：减速增力（爬坡大力士）';
+      descEl.textContent = `主动轮 ${z1} 齿带动从动轮 ${z2} 齿，从动轮转得更慢，但输出力量放大了 ${ratio.toFixed(2)} 倍！自行车爬陡坡和起重机都靠这个原理。`;
+    } else if (z2 < z1) {
+      titleEl.textContent = '⚡ 当前模式：增速减力（极速飞车）';
+      descEl.textContent = `大主动轮 ${z1} 齿带动小从动轮 ${z2} 齿，小齿轮转速直接飙升到 ${drivenRpm.toFixed(1)} 转/分！机械手表秒针、风扇变速箱就是这样加速的。`;
+    } else {
+      titleEl.textContent = '⚖️ 当前模式：1:1 等速换向（平衡模式）';
+      descEl.textContent = `两个齿轮都是 ${z1} 齿，转速和力量完全相等，只改变旋转方向（一个顺时针，一个逆时针）。`;
+    }
+  }
+
+  document.getElementById('gearPlayBtn').addEventListener('click', function() {
+    gearPlaying = !gearPlaying;
+    this.textContent = gearPlaying ? '⏸ 暂停转动' : '▶ 继续转动';
+    playPop();
+  });
+  document.getElementById('gearReverseBtn').addEventListener('click', () => {
+    gearDir *= -1;
+    updateGearStats();
+    playPop();
+  });
+  document.getElementById('gearRpm').addEventListener('input', function() {
+    driverRpm = parseInt(this.value, 10);
+    document.getElementById('gearRpmVal').textContent = `${driverRpm} RPM`;
+    updateGearStats();
+  });
+  document.getElementById('driverTeeth').addEventListener('input', function() {
+    z1 = parseInt(this.value, 10);
+    document.getElementById('driverTeethVal').textContent = `${z1} 齿`;
+    updateGearStats();
+    unlockBadge('gear');
+  });
+  document.getElementById('drivenTeeth').addEventListener('input', function() {
+    z2 = parseInt(this.value, 10);
+    document.getElementById('drivenTeethVal').textContent = `${z2} 齿`;
+    updateGearStats();
+    unlockBadge('gear');
+  });
+  document.getElementById('speakGearBtn').addEventListener('click', () => {
+    const title = document.getElementById('gearModeTitle').textContent;
+    const desc = document.getElementById('gearModeDesc').textContent;
+    speakText(`${title}。${desc}`);
+  });
+
+  function drawGears(dt) {
+    const w = gearCanvas.width, h = gearCanvas.height;
+    gCtx.clearRect(0, 0, w, h);
+
+    // Subtle engineering grid
+    gCtx.strokeStyle = 'rgba(148, 163, 184, 0.16)';
+    gCtx.lineWidth = 1;
+    for (let x = 0; x < w; x += 28) { gCtx.beginPath(); gCtx.moveTo(x, 0); gCtx.lineTo(x, h); gCtx.stroke(); }
+    for (let y = 0; y < h; y += 28) { gCtx.beginPath(); gCtx.moveTo(0, y); gCtx.lineTo(w, y); gCtx.stroke(); }
+
+    const moduleSize = Math.min(11, 360 / (z1 + z2 + 4));
+    const r1 = (z1 * moduleSize) / 2;
+    const r2 = (z2 * moduleSize) / 2;
+    const centerDist = r1 + r2;
+    const midX = w / 2;
+    const cx1 = midX - centerDist / 2 + (r2 - r1) * 0.15;
+    const cx2 = cx1 + centerDist;
+    const cy = h / 2 - 12;
+
+    if (gearPlaying) {
+      driverAngle += gearDir * (driverRpm / 60) * Math.PI * 2 * dt;
+    }
+    // Phase-align driven gear teeth for exact meshing
+    const drivenAngle = -driverAngle * (z1 / z2) + Math.PI / z2;
+
+    drawSpurGear(gCtx, cx1, cy, z1, moduleSize, driverAngle, '#fb923c', '#c2410c', `🟠 主动轮 (${z1}齿)`);
+    drawSpurGear(gCtx, cx2, cy, z2, moduleSize, drivenAngle, '#38bdf8', '#0369a1', `🔵 从动轮 (${z2}齿)`);
+  }
+  updateGearStats();
+
+  // =========================================================================
+  // LAB 4: 10-QUESTION QUIZ & PNG CERTIFICATE
+  // =========================================================================
+  const QUIZ = [
+    { q: '太阳系中体积最大、甚至能装下1300个地球的行星是哪一颗？', opts: ['土星', '木星', '海王星', '火星'], a: 1, exp: '木星是太阳系最大的气态巨行星，它的大红斑是一场持续数百年的超级风暴！' },
+    { q: '下面哪颗行星拥有由冰块和岩石碎片组成的明显美丽光环，而且密度比水还轻？', opts: ['水星', '金星', '土星', '地球'], a: 2, exp: '土星的密度只有 0.687 g/cm³，比水还轻呢！' },
+    { q: '为什么太阳系离太阳第2近的金星，比离太阳最近的水星还要热？', opts: ['金星自转太快', '金星大气有厚厚的温室气体', '金星上有火山喷发不停', '金星体积太大'], a: 1, exp: '金星大气层几乎全是二氧化碳，像超级厚棉被一样锁住热量，表面高达 465°C！' },
+    { q: '当血液流经肺部时，会发生什么神奇的颜色变化？', opts: ['鲜红变暗蓝', '暗蓝变鲜红', '变成绿色', '不会变色'], a: 1, exp: '缺氧的暗蓝血液在肺部吸入氧气后，血红蛋白结合氧气，立刻变回鲜红色！' },
+    { q: '心脏的四个腔室里，肌肉壁最厚、负责把血液泵向全身的是？', opts: ['右心房', '右心室', '左心房', '左心室'], a: 3, exp: '左心室要把血液送到大脑和脚尖那么远的地方，所以需要最强壮的心肌！' },
+    { q: '人在快速冲刺奔跑时，心率（BPM）会怎么变化？', opts: ['大幅加快，每分钟泵出更多氧气', '变慢以节省体力', '完全停止跳动一秒', '保持60不变'], a: 0, exp: '运动时肌肉需要更多氧气，大脑会命令心脏加快跳动（可达140~160 BPM）来加速供氧！' },
+    { q: '如果主动轮顺时针转动，和它直接咬合的从动轮会朝哪个方向转？', opts: ['顺时针', '逆时针', '左右摇摆', '不会转动'], a: 1, exp: '直接啮合的两个齿轮转向总是相反：一个顺时针，另一个必定逆时针！' },
+    { q: '自行车上坡时，想踩得更省力，应该用小齿轮带动大齿轮，这叫什么模式？', opts: ['增速减力模式', '减速增力模式', '等速平衡模式', '摩擦刹车模式'], a: 1, exp: '小齿轮带大齿轮会让转速变慢，但把力量（扭矩）放大，上坡就超级省力啦！' },
+    { q: '一个 10 齿的主动轮以 60 转/分带动一个 20 齿的从动轮，从动轮每秒/每分钟转多少？', opts: ['120 转/分', '60 转/分', '30 转/分', '10 转/分'], a: 2, exp: '传动比是 20:10 = 2:1，从动轮齿数是主动轮的2倍，所以转速减半为 30 转/分。' },
+    { q: '太阳系八大行星中，“躺着”在轨道上滚着公转、四季长达21年的是？', opts: ['天王星', '火星', '水星', '木星'], a: 0, exp: '天王星自转轴倾斜约98度，看起来就像躺着打滚绕太阳公转！' }
+  ];
+
+  let qIdx = 0;
+  let qScore = 0;
+  let qAnswered = false;
+
+  function renderQuestion() {
+    const item = QUIZ[qIdx];
+    qAnswered = false;
+    document.getElementById('quizCounterBadge').textContent = `第 ${qIdx + 1} / ${QUIZ.length} 题 · 得分 ${qScore}`;
+    document.getElementById('quizProgress').style.width = `${((qIdx + 1) / QUIZ.length) * 100}%`;
+    document.getElementById('quizQuestion').textContent = `${qIdx + 1}. ${item.q}`;
+    const optsBox = document.getElementById('quizOptions');
+    optsBox.innerHTML = '';
+    item.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'opt-btn';
+      btn.textContent = `${String.fromCharCode(65 + i)}. ${opt}`;
+      btn.addEventListener('click', () => handleAnswer(i, btn));
+      optsBox.appendChild(btn);
+    });
+    const exp = document.getElementById('quizExplain');
+    exp.classList.remove('show');
+    exp.textContent = '';
+    document.getElementById('quizNextBtn').style.display = 'none';
+  }
+
+  function handleAnswer(choice, clickedBtn) {
+    if (qAnswered) return;
+    qAnswered = true;
+    const item = QUIZ[qIdx];
+    const buttons = document.querySelectorAll('.opt-btn');
+    buttons.forEach((b, i) => {
+      b.disabled = true;
+      if (i === item.a) b.classList.add('correct');
+    });
+    const exp = document.getElementById('quizExplain');
+    if (choice === item.a) {
+      qScore += 10;
+      playChime();
+      exp.style.background = '#f0fdf4';
+      exp.style.borderColor = '#bbf7d0';
+      exp.innerHTML = `✅ <strong>回答正确！+10分</strong> — ${item.exp}`;
+    } else {
+      clickedBtn.classList.add('wrong');
+      playBuzz();
+      exp.style.background = '#fff7ed';
+      exp.style.borderColor = '#fed7aa';
+      exp.innerHTML = `💡 <strong>再接再厉！正确答案是 ${String.fromCharCode(65 + item.a)}</strong> — ${item.exp}`;
+    }
+    exp.classList.add('show');
+    document.getElementById('quizCounterBadge').textContent = `第 ${qIdx + 1} / ${QUIZ.length} 题 · 得分 ${qScore}`;
+    const nextBtn = document.getElementById('quizNextBtn');
+    nextBtn.style.display = 'inline-flex';
+    nextBtn.textContent = qIdx === QUIZ.length - 1 ? '🎉 查看成绩 & 生成奖状' : '下一题 ➜';
+  }
+
+  document.getElementById('quizNextBtn').addEventListener('click', () => {
+    if (qIdx < QUIZ.length - 1) {
+      qIdx++;
+      renderQuestion();
+      playPop();
+    } else {
+      showCertificateStage();
+    }
+  });
+
+  function restartQuiz() {
+    qIdx = 0;
+    qScore = 0;
+    document.getElementById('certCard').style.display = 'none';
+    document.getElementById('quizCard').style.display = 'block';
+    renderQuestion();
+    playPop();
+  }
+  document.getElementById('quizRestartBtn').addEventListener('click', restartQuiz);
+  document.getElementById('playAgainBtn').addEventListener('click', restartQuiz);
+
+  function showCertificateStage() {
+    unlockBadge('quiz');
+    playChime();
+    const rank = qScore >= 90 ? '星际首席科学家 👑' : qScore >= 70 ? '宇宙探索大师 🚀' : '勇敢科学小萌新 🌱';
+    document.getElementById('certRankBadge').textContent = rank;
+    document.getElementById('certSummaryText').textContent = `太棒了！你在 10 题科学大闯关中获得了 ${qScore} / 100 分，荣获「${rank}」称号！填写宝贝名字即可生成高清 PNG 认证奖状：`;
+    const today = new Date();
+    const dStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+    const dateInput = document.getElementById('certDateInput');
+    if (!dateInput.value) dateInput.value = dStr;
+    document.getElementById('certCard').style.display = 'block';
+    renderCertificate();
+    document.getElementById('certCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    speakText(`恭喜完成科学闯关，获得 ${qScore} 分！快填写名字下载你的小小科学家认证奖状吧！`);
+  }
+
+  function renderCertificate() {
+    const canvas = document.getElementById('certCanvas');
+    const c = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const childName = (document.getElementById('childNameInput').value || '星际小探险家').trim();
+    const group = document.getElementById('childGroupInput').value;
+    const dateText = (document.getElementById('certDateInput').value || '2026年11月').trim();
+    const note = (document.getElementById('certNoteInput').value || '保持好奇心，宇宙比想象更精彩！').trim();
+    const rank = qScore >= 90 ? '星际首席科学家' : qScore >= 70 ? '宇宙探索大师' : '科学探索小达人';
+
+    // Background cream parchment + starry top banner
+    const bg = c.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#fffdf7');
+    bg.addColorStop(1, '#fef9eb');
+    c.fillStyle = bg;
+    c.fillRect(0, 0, W, H);
+
+    // Outer double golden border
+    c.strokeStyle = '#d97706';
+    c.lineWidth = 10;
+    c.strokeRect(24, 24, W - 48, H - 48);
+    c.strokeStyle = '#fbbf24';
+    c.lineWidth = 3;
+    c.strokeRect(40, 40, W - 80, H - 80);
+
+    // Top cosmic ribbon
+    const rib = c.createLinearGradient(60, 58, W - 60, 178);
+    rib.addColorStop(0, '#1e1b4b');
+    rib.addColorStop(0.5, '#3730a3');
+    rib.addColorStop(1, '#4f46e5');
+    c.fillStyle = rib;
+    c.beginPath();
+    c.roundRect(68, 66, W - 136, 126, 22);
+    c.fill();
+
+    // Decorative stars on ribbon
+    c.fillStyle = 'rgba(253, 224, 71, 0.75)';
+    [[120, 95, 4], [190, 155, 3], [1020, 102, 4.5], [1085, 160, 3], [930, 88, 2.5]].forEach(([sx, sy, sr]) => {
+      c.beginPath(); c.arc(sx, sy, sr, 0, Math.PI * 2); c.fill();
+    });
+
+    c.fillStyle = '#fde047';
+    c.font = 'bold 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.textAlign = 'center';
+    c.fillText('★  STARLIGHT SCIENCE LAB · OFFICIAL CERTIFICATE  ★', W / 2, 108);
+
+    c.fillStyle = '#ffffff';
+    c.font = '900 46px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText('小小科学家 · 认证奖状', W / 2, 166);
+
+    // Child name highlight
+    c.fillStyle = '#475569';
+    c.font = '600 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText('兹授予表现优异的探索小达人：', W / 2, 255);
+
+    c.fillStyle = '#1e1b4b';
+    c.font = '900 58px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText(childName, W / 2, 332);
+
+    // Golden underline
+    c.strokeStyle = '#f59e0b';
+    c.lineWidth = 4;
+    c.beginPath();
+    c.moveTo(W / 2 - 220, 352);
+    c.lineTo(W / 2 + 220, 352);
+    c.stroke();
+
+    // Body achievement text
+    c.fillStyle = '#334155';
+    c.font = '600 25px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText(`顺利完成《太阳系 · 心脏循环 · 齿轮机械》互动科学实验，`, W / 2, 412);
+    c.fillText(`并在十题科学闯关中获得 ${qScore} 分（${group}），特授予称号：`, W / 2, 456);
+
+    // Rank pill
+    c.fillStyle = '#fef3c7';
+    c.strokeStyle = '#f59e0b';
+    c.lineWidth = 3;
+    c.beginPath();
+    c.roundRect(W / 2 - 210, 488, 420, 68, 34);
+    c.fill();
+    c.stroke();
+    c.fillStyle = '#b45309';
+    c.font = '900 34px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText(`🏆 ${rank}`, W / 2, 534);
+
+    // Parent note
+    c.fillStyle = '#64748b';
+    c.font = 'italic 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText(`“ ${note} ”`, W / 2, 612);
+
+    // Bottom signatures & red official seal
+    c.textAlign = 'left';
+    c.fillStyle = '#475569';
+    c.font = '600 21px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText(`颁发日期：${dateText}`, 110, 728);
+    c.fillText('认证机构：星际小科学家互动实验室', 110, 764);
+
+    // Official red stamp seal
+    c.save();
+    c.translate(970, 710);
+    c.rotate(-0.12);
+    c.strokeStyle = '#dc2626';
+    c.lineWidth = 5;
+    c.beginPath();
+    c.arc(0, 0, 74, 0, Math.PI * 2);
+    c.stroke();
+    c.lineWidth = 2;
+    c.beginPath();
+    c.arc(0, 0, 64, 0, Math.PI * 2);
+    c.stroke();
+    c.fillStyle = '#dc2626';
+    c.textAlign = 'center';
+    c.font = 'bold 20px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText('星际科学实验室', 0, -14);
+    c.font = '900 26px sans-serif';
+    c.fillText('★ 认证 ★', 0, 18);
+    c.font = 'bold 14px sans-serif';
+    c.fillText('OFFICIAL SEAL', 0, 42);
+    c.restore();
+
+    const dataUrl = canvas.toDataURL('image/png');
+    document.getElementById('certPreview').src = dataUrl;
+  }
+
+  document.getElementById('renderCertBtn').addEventListener('click', () => { renderCertificate(); playPop(); });
+  ['childNameInput', 'childGroupInput', 'certDateInput', 'certNoteInput'].forEach(id => {
+    document.getElementById(id).addEventListener('input', renderCertificate);
+  });
+  document.getElementById('downloadCertBtn').addEventListener('click', () => {
+    renderCertificate();
+    const canvas = document.getElementById('certCanvas');
+    const name = (document.getElementById('childNameInput').value || '小科学家').trim();
+    const a = document.createElement('a');
+    a.download = `小小科学家认证奖状_${name}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    playChime();
+  });
+
+  renderQuestion();
+
+  // =========================================================================
+  // UNIFIED ANIMATION LOOP
+  // =========================================================================
+  let lastTs = performance.now();
+  function frame(ts) {
+    const dt = Math.min(0.05, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (activeTab === 'solar') drawSolar(ts);
+    else if (activeTab === 'heart') drawHeart(dt);
+    else if (activeTab === 'gear') drawGears(dt);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

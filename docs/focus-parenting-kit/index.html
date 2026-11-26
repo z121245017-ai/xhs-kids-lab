@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<title>儿童专注力训练营 + 24题科学亲子教养与学习优势测评</title>
+<style>
+  :root {
+    --bg: #f6f8f7;
+    --card: #ffffff;
+    --ink: #1f2937;
+    --muted: #6b7280;
+    --teal: #0f766e;
+    --teal-soft: #ccfbf1;
+    --teal-light: #f0fdfa;
+    --amber: #d97706;
+    --amber-soft: #fef3c7;
+    --rose: #e11d48;
+    --indigo: #4f46e5;
+    --border: #e5e7eb;
+    --shadow: 0 10px 28px -10px rgba(15, 23, 42, 0.1);
+    --radius: 20px;
+    --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  button, input, select { font-family: inherit; }
+
+  .topbar {
+    background: linear-gradient(135deg, #115e59 0%, #0f766e 55%, #0d9488 100%);
+    color: #fff;
+    padding: 14px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    box-shadow: 0 4px 18px rgba(17, 94, 89, 0.22);
+  }
+  .topbar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-icon {
+    width: 42px; height: 42px; border-radius: 14px;
+    background: linear-gradient(135deg, #fde68a, #f59e0b);
+    display: grid; place-items: center; font-size: 22px; flex-shrink: 0;
+  }
+  .brand h1 { margin: 0; font-size: 17px; font-weight: 800; }
+  .brand p { margin: 0; font-size: 12px; color: #ccfbf1; }
+  .top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .pill-btn {
+    border: 1px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .pill-btn.active { background: #f59e0b; border-color: #fbbf24; color: #1f2937; }
+
+  .container { max-width: 1120px; margin: 0 auto; padding: 16px; }
+
+  /* Mode Switcher */
+  .mode-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .mode-btn {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    padding: 14px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .mode-btn.active {
+    border-color: var(--teal);
+    background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%);
+    box-shadow: 0 10px 22px -8px rgba(15, 118, 110, 0.25);
+  }
+  .mode-icon {
+    width: 44px; height: 44px; border-radius: 14px;
+    background: #f3f4f6; display: grid; place-items: center; font-size: 22px; flex-shrink: 0;
+  }
+  .mode-btn.active .mode-icon { background: var(--teal); color: #fff; }
+  .mode-title { font-size: 15px; font-weight: 800; display: block; color: var(--ink); }
+  .mode-sub { font-size: 12px; color: var(--muted); display: block; }
+
+  .mode-panel { display: none; animation: fadeIn 0.25s ease; }
+  .mode-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 18px;
+  }
+  .card-title {
+    margin: 0 0 12px;
+    font-size: 17px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+    background: var(--teal-soft); color: var(--teal);
+  }
+  .badge.amber { background: var(--amber-soft); color: #92400e; }
+
+  .btn {
+    border: none; border-radius: 12px; padding: 9px 15px; font-size: 13px; font-weight: 700;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    transition: all 0.15s ease; min-height: 40px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-teal { background: var(--teal); color: #fff; box-shadow: 0 4px 12px rgba(15,118,110,0.25); }
+  .btn-amber { background: #f59e0b; color: #fff; }
+  .btn-soft { background: var(--teal-light); color: var(--teal); border: 1px solid #99f6e4; }
+  .btn-outline { background: #fff; color: var(--ink); border: 1.5px solid var(--border); }
+
+  /* Schulte Grid */
+  .schulte-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 14px;
+    background: #f9fafb;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .seg-group { display: inline-flex; background: #e5e7eb; padding: 3px; border-radius: 10px; gap: 2px; }
+  .seg-btn {
+    border: none; background: transparent; padding: 6px 11px; border-radius: 8px;
+    font-size: 12px; font-weight: 700; cursor: pointer; color: #4b5563;
+  }
+  .seg-btn.active { background: #fff; color: var(--teal); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+  .hud-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .hud-box {
+    background: #f0fdfa;
+    border: 1px solid #99f6e4;
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+  }
+  .hud-label { font-size: 11px; color: var(--teal); font-weight: 700; display: block; }
+  .hud-val { font-size: 22px; font-weight: 900; color: #134e4a; font-variant-numeric: tabular-nums; }
+
+  .schulte-board {
+    display: grid;
+    gap: 8px;
+    max-width: 440px;
+    margin: 0 auto 14px;
+    padding: 10px;
+    background: #f3f4f6;
+    border-radius: 18px;
+    border: 2px solid #e5e7eb;
+    user-select: none;
+  }
+  .cell-btn {
+    aspect-ratio: 1 / 1;
+    border: 2px solid #d1d5db;
+    border-radius: 14px;
+    background: #ffffff;
+    font-size: 24px;
+    font-weight: 900;
+    color: #111827;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
+    box-shadow: 0 3px 0 #e5e7eb;
+  }
+  .cell-btn:active { transform: scale(0.95); }
+  .cell-btn.done {
+    background: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+    box-shadow: none;
+    opacity: 0.72;
+  }
+  .cell-btn.wrong-flash {
+    background: #fee2e2 !important;
+    border-color: #ef4444 !important;
+    animation: shake 0.25s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .result-banner {
+    display: none;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border: 1.5px solid #6ee7b7;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .result-banner.show { display: block; }
+  .grade-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 13px;
+    background: #059669;
+    color: #fff;
+  }
+
+  /* Check-in stars & Trend Chart */
+  .stars-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 8px 0 12px;
+  }
+  .star-slot {
+    width: 34px; height: 34px; border-radius: 10px;
+    border: 1.5px dashed #d1d5db; display: grid; place-items: center;
+    font-size: 16px; background: #f9fafb; color: #9ca3af;
+  }
+  .star-slot.lit {
+    border-style: solid; border-color: #f59e0b; background: #fef3c7; color: #d97706;
+  }
+  .norm-table {
+    width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px;
+  }
+  .norm-table th, .norm-table td {
+    border: 1px solid var(--border); padding: 6px 8px; text-align: center;
+  }
+  .norm-table th { background: #f9fafb; color: var(--muted); }
+
+  /* Assessment 24Q */
+  .assess-header {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .progress-bar {
+    height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; margin-bottom: 16px;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #0f766e, #14b8a6); width: 0%; transition: width 0.25s ease;
+  }
+  .q-list { display: flex; flex-direction: column; gap: 12px; }
+  .q-item {
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    background: #ffffff;
+    transition: border-color 0.2s;
+  }
+  .q-item.answered { border-color: #99f6e4; background: #fcfffe; }
+  .q-text { font-size: 14.5px; font-weight: 700; margin: 0 0 10px; }
+  .q-tag { font-size: 11px; color: var(--teal); font-weight: 700; margin-bottom: 4px; display: block; }
+  .likert-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .likert-btn {
+    border: 1.5px solid var(--border);
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 8px 4px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.14s ease;
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .likert-btn.selected {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(15, 118, 110, 0.22);
+  }
+
+  /* Report Section */
+  .report-wrap { display: none; margin-top: 18px; }
+  .report-wrap.show { display: block; animation: fadeIn 0.3s ease; }
+  .report-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .bar-row { margin-bottom: 10px; }
+  .bar-meta { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .bar-track { height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .plan-day {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    background: #f9fafb;
+  }
+  .plan-day strong { color: var(--teal); display: block; font-size: 13px; margin-bottom: 4px; }
+  .plan-day span { font-size: 12.5px; color: #374151; }
+
+  .export-preview {
+    width: 100%;
+    max-width: 520px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: block;
+    margin: 14px auto 0;
+  }
+
+  .footer-note {
+    text-align: center; font-size: 12px; color: var(--muted); padding: 20px 12px 28px;
+  }
+
+  @media (max-width: 860px) {
+    .grid-2, .report-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .container { padding: 12px; }
+    .mode-tabs { grid-template-columns: 1fr; gap: 8px; }
+    .likert-row { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+    .likert-btn { font-size: 10.5px; padding: 6px 2px; }
+    .cell-btn { font-size: 20px; border-radius: 11px; }
+    .hud-val { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-icon">🧠</div>
+      <div>
+        <h1>儿童专注力训练营 + 24题科学亲子测评</h1>
+        <p>舒尔特方格视觉训练 · 教养平衡雷达 · 7天家庭执行方案</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="soundToggleBtn" class="pill-btn active" type="button">🔊 音效: 开</button>
+      <span id="dailyStarBadge" class="pill-btn">⭐ 今日打卡 0 颗星</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <nav class="mode-tabs" aria-label="功能模式切换">
+    <button class="mode-btn active" data-mode="schulte" type="button">
+      <span class="mode-icon">🎯</span>
+      <span><span class="mode-title">舒尔特方格视觉专注力训练</span><span class="mode-sub">3×3 / 4×4 / 5×5 + 色彩干扰 + 年龄常模</span></span>
+    </button>
+    <button class="mode-btn" data-mode="assess" type="button">
+      <span class="mode-icon">📊</span>
+      <span><span class="mode-title">24题亲子教养 &amp; 学习优势测评</span><span class="mode-sub">SVG 雷达图 + 7天方案 + PNG长图导出</span></span>
+    </button>
+  </nav>
+
+  <!-- MODE 1: SCHULTE GRID -->
+  <section id="panel-schulte" class="mode-panel active">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">
+          <span>🎯 舒尔特方格专注力训练台</span>
+          <span id="schulteStatusBadge" class="badge">准备就绪</span>
+        </div>
+
+        <div class="schulte-toolbar">
+          <div class="seg-group" aria-label="方格尺寸">
+            <button class="seg-btn size-btn" data-size="3" type="button">3×3 启蒙</button>
+            <button class="seg-btn size-btn active" data-size="4" type="button">4×4 进阶</button>
+            <button class="seg-btn size-btn" data-size="5" type="button">5×5 学霸</button>
+          </div>
+          <select id="ageGroupSelect" style="padding:7px 10px;border-radius:10px;border:1px solid var(--border);font-size:12px;font-weight:700;">
+            <option value="4-6">👶 4-6岁组</option>
+            <option value="7-9" selected>🧒 7-9岁组</option>
+            <option value="10-12">🧑 10-12岁+</option>
+          </select>
+          <button id="colorInterferenceBtn" class="btn btn-outline" type="button" style="min-height:34px;padding:5px 11px;font-size:12px;">🎨 色彩干扰: 关</button>
+          <button id="schulteResetBtn" class="btn btn-teal" type="button" style="min-height:34px;padding:5px 12px;font-size:12px;">🔄 洗牌重开</button>
+        </div>
+
+        <div class="hud-bar">
+          <div class="hud-box"><span class="hud-label">下一个目标</span><span id="nextTargetVal" class="hud-val">1</span></div>
+          <div class="hud-box"><span class="hud-label">实时计时</span><span id="timerVal" class="hud-val">00.00s</span></div>
+          <div class="hud-box"><span class="hud-label">误点次数</span><span id="errorVal" class="hud-val">0</span></div>
+        </div>
+
+        <div id="schulteResultBanner" class="result-banner">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <strong id="resultTitle" style="font-size:15px;color:#065f46;">🎉 训练完成！</strong>
+            <span id="resultGradePill" class="grade-pill">S 级超神</span>
+          </div>
+          <p id="resultDesc" style="margin:6px 0 0;font-size:13px;color:#064e3b;"></p>
+        </div>
+
+        <div id="schulteBoard" class="schulte-board"></div>
+        <p style="margin:0;font-size:12px;color:var(--muted);text-align:center;">
+          💡 训练技巧：眼睛尽量盯住方格正中心，用“余光”扫视周围数字，按 1 → N 顺序最快点击！
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>📈 打卡徽章与专注力成长曲线</span>
+          <button id="clearHistoryBtn" class="btn btn-outline" type="button" style="min-height:30px;padding:4px 10px;font-size:11px;">清空记录</button>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--ink);">⭐ 今日专注打卡星章（每天建议练 3~5 轮）</div>
+        <div id="starRow" class="stars-row"></div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;">📉 最近 12 次用时趋势（越低越快）</div>
+        <div style="background:#f9fafb;border:1px solid var(--border);border-radius:14px;padding:10px;">
+          <svg id="trendSvg" viewBox="0 0 360 150" style="width:100%;height:auto;display:block;"></svg>
+        </div>
+
+        <div style="margin-top:14px;">
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px;">📋 当前年龄段参考常模（<span id="normAgeLabel">7-9岁 · 4×4</span>）</div>
+          <table class="norm-table">
+            <thead><tr><th>评级</th><th>时间标准</th><th>表现评价</th></tr></thead>
+            <tbody id="normTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODE 2: 24-QUESTION ASSESSMENT -->
+  <section id="panel-assess" class="mode-panel">
+    <div class="card">
+      <div class="assess-header">
+        <div>
+          <h2 style="margin:0;font-size:18px;">📊 24题科学亲子教养风格 &amp; 儿童多元学习优势测评</h2>
+          <p style="margin:2px 0 0;font-size:12.5px;color:var(--muted);">请结合最近 1 个月家庭真实日常作答（共 24 题，约需 3 分钟）</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <input id="assessChildName" type="text" maxlength="14" value="宝贝" placeholder="宝贝昵称" style="padding:8px 10px;border-radius:10px;border:1.5px solid var(--border);font-size:13px;width:110px;">
+          <button id="demoFillBtn" class="btn btn-soft" type="button" style="min-height:36px;font-size:12px;">⚡ 一键体验示例作答</button>
+          <span id="assessCountBadge" class="badge amber">已答 0 / 24 题</span>
+        </div>
+      </div>
+      <div class="progress-bar"><div id="assessProgress" class="progress-fill"></div></div>
+
+      <div id="questionList" class="q-list"></div>
+
+      <div style="margin-top:18px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <button id="submitAssessBtn" class="btn btn-teal" type="button" style="padding:12px 26px;font-size:15px;">✨ 生成科学测评报告 &amp; 7天方案</button>
+        <button id="resetAssessBtn" class="btn btn-outline" type="button">↺ 重置问卷</button>
+      </div>
+    </div>
+
+    <!-- REPORT -->
+    <div id="reportWrap" class="report-wrap">
+      <div class="report-grid">
+        <div class="card">
+          <div class="card-title">
+            <span>🕸️ 教养平衡与学习优势 7 维雷达图</span>
+            <span id="reportPrimaryBadge" class="badge">权威引导型</span>
+          </div>
+          <div style="background:#f9fafb;border-radius:16px;padding:10px;border:1px solid var(--border);">
+            <svg id="radarSvg" viewBox="0 0 380 340" style="width:100%;height:auto;display:block;"></svg>
+          </div>
+          <div style="margin-top:12px;">
+            <div style="font-size:13px;font-weight:800;margin-bottom:8px;">🧬 孩子主导学习通道：<span id="learningStyleLabel" style="color:var(--teal);">视觉图像型</span></div>
+            <p id="learningStyleTip" style="margin:0;font-size:13px;color:#374151;background:#f0fdfa;padding:10px 12px;border-radius:12px;border:1px solid #99f6e4;"></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>📋 四维教养风格得分拆解</span>
+            <span id="reportChildBadge" class="badge amber">宝贝专属</span>
+          </div>
+          <div id="parentingBars"></div>
+          <div id="parentingAdviceBox" style="margin-top:12px;padding:12px;border-radius:14px;background:#fffbeb;border:1px solid #fde68a;font-size:13px;color:#78350f;"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <div class="card-title">
+          <span>🗓️ 专属「7天家庭微习惯改善计划」（每天仅需 15 分钟）</span>
+          <button id="exportLongBtn" class="btn btn-amber" type="button">📥 导出 PNG 长图报告</button>
+        </div>
+        <div id="sevenDayPlan" class="plan-grid"></div>
+        <canvas id="longReportCanvas" width="860" height="1560" style="display:none;"></canvas>
+        <div id="longPreviewWrap" style="display:none;text-align:center;margin-top:16px;">
+          <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px;">✅ 长图已生成！电脑端已触发下载，手机端可直接长按图片保存到相册：</p>
+          <img id="longReportImg" class="export-preview" alt="亲子测评长图报告">
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer-note">
+  儿童专注力训练营 · 本地浏览器自动保存成长记录 · 纯离线单文件运行
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ---------- Audio Synth ----------
+  let soundOn = true;
+  let audioCtx = null;
+  function getCtx() {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) audioCtx = new AC();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+    return audioCtx;
+  }
+  function tone(freq, dur = 0.1, type = 'sine', vol = 0.1, delay = 0) {
+    if (!soundOn) return;
+    const ctx = getCtx();
+    if (!ctx) return;
+    const t = ctx.currentTime + delay;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  }
+  function playGoodTap(step) { tone(440 + step * 18, 0.08, 'triangle', 0.1); }
+  function playWrongTap() { tone(180, 0.14, 'sawtooth', 0.09); }
+  function playWinFanfare() {
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 0.16, 'triangle', 0.12, i * 0.08));
+  }
+
+  document.getElementById('soundToggleBtn').addEventListener('click', function() {
+    soundOn = !soundOn;
+    this.classList.toggle('active', soundOn);
+    this.textContent = soundOn ? '🔊 音效: 开' : '🔇 音效: 关';
+    if (soundOn) tone(600, 0.08);
+  });
+
+  // ---------- Mode Switch ----------
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const m = btn.dataset.mode;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.mode-panel').forEach(p => p.classList.toggle('active', p.id === `panel-${m}`));
+      tone(520, 0.07);
+    });
+  });
+
+  // =========================================================================
+  // MODE 1: SCHULTE GRID TRAINING
+  // =========================================================================
+  const STORAGE_KEY = 'xhs_schulte_records_v1';
+  const INTERFERENCE_COLORS = ['#dc2626', '#2563eb', '#059669', '#d97706', '#7c3aed', '#db2777'];
+  // Age norms [S_max, A_max, B_max] in seconds
+  const AGE_NORMS = {
+    '4-6':   { 3: [12, 18, 26], 4: [24, 34, 48], 5: [42, 58, 78] },
+    '7-9':   { 3: [8, 12, 18],  4: [16, 23, 32], 5: [28, 38, 52] },
+    '10-12': { 3: [6, 9, 13],   4: [12, 17, 24], 5: [20, 28, 38] }
+  };
+
+  let gridSize = 4;
+  let colorInterference = false;
+  let nextNum = 1;
+  let errors = 0;
+  let startTime = 0;
+  let running = false;
+  let finished = false;
+  let rafId = null;
+
+  function loadRecords() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (_) { return []; }
+  }
+  function saveRecords(list) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(-40))); } catch (_) {}
+  }
+
+  function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function gradeTime(sec, age, size) {
+    const [sMax, aMax, bMax] = AGE_NORMS[age][size];
+    if (sec <= sMax) return { grade: 'S', label: 'S 级超神反应', msg: '视觉搜索极快且几乎零失误，专注力处于同龄顶尖水平！' };
+    if (sec <= aMax) return { grade: 'A', label: 'A 级优秀专注', msg: '眼手协调和广度扫描都很稳，继续保持每日打卡！' };
+    if (sec <= bMax) return { grade: 'B', label: 'B 级达标良好', msg: '处于同龄正常水平，试着用“余光看全盘”可以再提速 20%！' };
+    return { grade: 'C', label: 'C 级热身加油', msg: '别着急，每天坚持练 3 轮，一周后速度会肉眼可见变快！' };
+  }
+
+  function renderNormTable() {
+    const age = document.getElementById('ageGroupSelect').value;
+    const [sMax, aMax, bMax] = AGE_NORMS[age][gridSize];
+    document.getElementById('normAgeLabel').textContent = `${age}岁 · ${gridSize}×${gridSize}`;
+    document.getElementById('normTableBody').innerHTML = `
+      <tr><td><strong>S 级</strong></td><td>≤ ${sMax} 秒</td><td>同龄前 10% 顶尖视觉专注</td></tr>
+      <tr><td><strong>A 级</strong></td><td>${sMax}.1 ~ ${aMax} 秒</td><td>优秀稳定，抗干扰强</td></tr>
+      <tr><td><strong>B 级</strong></td><td>${aMax}.1 ~ ${bMax} 秒</td><td>同龄平均良好水平</td></tr>
+      <tr><td><strong>C 级</strong></td><td>&gt; ${bMax} 秒</td><td>建议从放慢呼吸逐行扫视练起</td></tr>
+    `;
+  }
+
+  function renderStarsAndChart() {
+    const records = loadRecords();
+    const today = todayStr();
+    const todayCount = records.filter(r => r.date === today).length;
+    document.getElementById('dailyStarBadge').textContent = `⭐ 今日打卡 ${todayCount} 颗星`;
+
+    const starRow = document.getElementById('starRow');
+    starRow.innerHTML = '';
+    const slots = Math.max(5, todayCount);
+    for (let i = 0; i < Math.min(slots, 10); i++) {
+      const div = document.createElement('div');
+      div.className = 'star-slot' + (i < todayCount ? ' lit' : '');
+      div.textContent = i < todayCount ? '★' : '☆';
+      starRow.appendChild(div);
+    }
+
+    // SVG Trend Chart for current gridSize (or all recent)
+    const svg = document.getElementById('trendSvg');
+    const filtered = records.filter(r => r.size === gridSize).slice(-12);
+    if (filtered.length === 0) {
+      svg.innerHTML = `<text x="180" y="78" text-anchor="middle" fill="#9ca3af" font-size="13">完成 1 轮 ${gridSize}×${gridSize} 训练即可生成专属折线图</text>`;
+      return;
+    }
+    const W = 360, H = 150, padL = 34, padR = 16, padT = 18, padB = 26;
+    const times = filtered.map(r => r.sec);
+    const minT = Math.max(0, Math.floor(Math.min(...times) * 0.8));
+    const maxT = Math.ceil(Math.max(...times) * 1.15) || 10;
+    const xStep = filtered.length > 1 ? (W - padL - padR) / (filtered.length - 1) : 0;
+
+    let gridLines = '';
+    for (let k = 0; k <= 2; k++) {
+      const y = padT + ((H - padT - padB) * k) / 2;
+      const val = (maxT - ((maxT - minT) * k) / 2).toFixed(0);
+      gridLines += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e5e7eb" stroke-dasharray="3,3"/>`;
+      gridLines += `<text x="${padL-6}" y="${y+4}" text-anchor="end" fill="#6b7280" font-size="10">${val}s</text>`;
+    }
+
+    const pts = filtered.map((r, i) => {
+      const x = filtered.length === 1 ? W / 2 : padL + i * xStep;
+      const y = padT + ((maxT - r.sec) / Math.max(1, maxT - minT)) * (H - padT - padB);
+      return { x, y, r };
+    });
+
+    const poly = pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    const dots = pts.map((p, i) => `
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="#0f766e" stroke="#fff" stroke-width="1.5"/>
+      <text x="${p.x.toFixed(1)}" y="${(p.y - 8).toFixed(1)}" text-anchor="middle" fill="#134e4a" font-size="10" font-weight="bold">${p.r.sec.toFixed(1)}</text>
+      <text x="${p.x.toFixed(1)}" y="${H - 6}" text-anchor="middle" fill="#9ca3af" font-size="9">#${i+1}</text>
+    `).join('');
+
+    svg.innerHTML = `
+      ${gridLines}
+      ${pts.length > 1 ? `<polyline fill="none" stroke="#14b8a6" stroke-width="2.5" points="${poly}"/>` : ''}
+      ${dots}
+    `;
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildSchulteBoard() {
+    if (rafId) cancelAnimationFrame(rafId);
+    nextNum = 1;
+    errors = 0;
+    running = false;
+    finished = false;
+    document.getElementById('nextTargetVal').textContent = '1';
+    document.getElementById('timerVal').textContent = '00.00s';
+    document.getElementById('errorVal').textContent = '0';
+    document.getElementById('schulteStatusBadge').textContent = '点击数字 1 开始计时';
+    document.getElementById('schulteResultBanner').classList.remove('show');
+
+    const total = gridSize * gridSize;
+    const nums = shuffle(Array.from({ length: total }, (_, i) => i + 1));
+    const board = document.getElementById('schulteBoard');
+    board.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    board.innerHTML = '';
+
+    nums.forEach(num => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cell-btn';
+      btn.textContent = String(num);
+      btn.dataset.num = String(num);
+      if (colorInterference) {
+        btn.style.color = INTERFERENCE_COLORS[Math.floor(Math.random() * INTERFERENCE_COLORS.length)];
+      }
+      btn.addEventListener('click', () => handleCellClick(num, btn));
+      board.appendChild(btn);
+    });
+    renderNormTable();
+    renderStarsAndChart();
+  }
+
+  function tickTimer() {
+    if (!running) return;
+    const elapsed = (performance.now() - startTime) / 1000;
+    document.getElementById('timerVal').textContent = `${elapsed.toFixed(2).padStart(5, '0')}s`;
+    rafId = requestAnimationFrame(tickTimer);
+  }
+
+  function handleCellClick(num, btn) {
+    if (finished || btn.classList.contains('done')) return;
+    const total = gridSize * gridSize;
+    if (!running && num === 1) {
+      running = true;
+      startTime = performance.now();
+      document.getElementById('schulteStatusBadge').textContent = '训练进行中...';
+      tickTimer();
+    }
+    if (num === nextNum) {
+      btn.classList.add('done');
+      playGoodTap(nextNum);
+      if (nextNum === total) {
+        running = false;
+        finished = true;
+        cancelAnimationFrame(rafId);
+        const finalSec = (performance.now() - startTime) / 1000;
+        document.getElementById('timerVal').textContent = `${finalSec.toFixed(2)}s`;
+        document.getElementById('nextTargetVal').textContent = '完成!';
+        document.getElementById('schulteStatusBadge').textContent = '训练已完成';
+
+        const age = document.getElementById('ageGroupSelect').value;
+        const g = gradeTime(finalSec, age, gridSize);
+        const recs = loadRecords();
+        recs.push({ date: todayStr(), size: gridSize, sec: parseFloat(finalSec.toFixed(2)), errors, grade: g.grade });
+        saveRecords(recs);
+        renderStarsAndChart();
+
+        document.getElementById('resultTitle').textContent = `🎉 ${gridSize}×${gridSize} 完成！用时 ${finalSec.toFixed(2)} 秒（误点 ${errors} 次）`;
+        document.getElementById('resultGradePill').textContent = g.label;
+        document.getElementById('resultDesc').textContent = g.msg;
+        document.getElementById('schulteResultBanner').classList.add('show');
+        playWinFanfare();
+      } else {
+        nextNum++;
+        document.getElementById('nextTargetVal').textContent = String(nextNum);
+      }
+    } else {
+      if (running) {
+        errors++;
+        document.getElementById('errorVal').textContent = String(errors);
+      }
+      playWrongTap();
+      btn.classList.remove('wrong-flash');
+      void btn.offsetWidth;
+      btn.classList.add('wrong-flash');
+    }
+  }
+
+  document.querySelectorAll('.size-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      gridSize = parseInt(btn.dataset.size, 10);
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.toggle('active', b === btn));
+      buildSchulteBoard();
+      tone(540, 0.06);
+    });
+  });
+  document.getElementById('ageGroupSelect').addEventListener('change', renderNormTable);
+  document.getElementById('colorInterferenceBtn').addEventListener('click', function() {
+    colorInterference = !colorInterference;
+    this.textContent = colorInterference ? '🎨 色彩干扰: 开' : '🎨 色彩干扰: 关';
+    this.classList.toggle('btn-amber', colorInterference);
+    this.classList.toggle('btn-outline', !colorInterference);
+    buildSchulteBoard();
+  });
+  document.getElementById('schulteResetBtn').addEventListener('click', buildSchulteBoard);
+  document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY);
+    renderStarsAndChart();
+  });
+  buildSchulteBoard();
+
+  // =========================================================================
+  // MODE 2: 24-QUESTION PARENTING & LEARNING STYLE ASSESSMENT
+  // =========================================================================
+  const QUESTIONS = [
+    // Authoritative (权威引导 0..3)
+    { cat: 'authoritative', tag: '教养沟通 · 界限与共情', q: '当孩子做错事或情绪崩溃时，我会先接纳他的情绪，再和气坚定地讲清规则。' },
+    { cat: 'authoritative', tag: '教养沟通 · 自主决策', q: '在不影响安全的前提下，我愿意让孩子自己决定穿什么衣服或先做哪科作业。' },
+    { cat: 'authoritative', tag: '教养沟通 · 正向反馈', q: '表扬孩子时，我习惯夸赞他的“具体努力过程”（如思路清晰），而不只夸“你真聪明”。' },
+    { cat: 'authoritative', tag: '教养沟通 · 规则一致', q: '家里定好的作息和屏幕时间规则，父母双方能够温和且一致地共同遵守。' },
+    // Authoritarian (严厉控制 4..7)
+    { cat: 'authoritarian', tag: '规则要求 · 权威服从', q: '孩子提出异议或磨蹭时，我经常会提高嗓门要求他“别讲条件，按我说的做”。' },
+    { cat: 'authoritarian', tag: '规则要求 · 成绩结果', q: '看到孩子作业写错或分数下降，我很难控制住焦躁，容易立刻批评指责。' },
+    { cat: 'authoritarian', tag: '规则要求 · 比较心理', q: '我有时会下意识把孩子和同班同学或“别人家的孩子”做比较来激励他。' },
+    { cat: 'authoritarian', tag: '规则要求 · 严格排程', q: '我倾向于替孩子安排好每天每一小时的学习计划，不希望他把时间浪费在发呆上。' },
+    // Permissive (宽松顺从 8..11)
+    { cat: 'permissive', tag: '日常边界 · 原则妥协', q: '只要孩子哭闹撒娇或一再恳求，我常常会心软打破之前约定好的规矩（如多看动画片）。' },
+    { cat: 'permissive', tag: '日常边界 · 冲突回避', q: '为了避免亲子冲突或破坏好心情，有时明知孩子习惯不好也会选择先顺着他。' },
+    { cat: 'permissive', tag: '日常边界 · 任务兜底', q: '晚上快睡觉了孩子还没写完作业，我有时会替他收拾书包甚至帮忙完成手工收尾。' },
+    { cat: 'permissive', tag: '日常边界 · 缺乏奖惩', q: '家里的规则经常随大人的心情变化，今天管得严、明天忙起来就完全不管了。' },
+    // Anxious (焦虑包办 12..15)
+    { cat: 'anxious', tag: '心理状态 · 过度担忧', q: '刷到育儿焦虑帖或看到别人报班时，我会忍不住担心孩子落后，临时加买练习册。' },
+    { cat: 'anxious', tag: '心理状态 · 陪读盯防', q: '孩子写作业时，我习惯一直坐在旁边盯着，只要写歪一个字或发呆十秒就忍不住提醒。' },
+    { cat: 'anxious', tag: '心理状态 · 情绪内耗', q: '每次冲孩子发完火后，我又会陷入深深的自责，担心自己毁了孩子的自信心。' },
+    { cat: 'anxious', tag: '心理状态 · 代劳试错', q: '看到孩子系鞋带、整理书桌慢吞吞，我常常忍不住伸手直接帮他搞定。' },
+    // Visual Learning (视觉优势 16..18)
+    { cat: 'visual', tag: '学习通道 · 视觉空间', q: '孩子对绘本插画、思维导图、拼图或颜色标记特别敏感，看一遍图比听十遍更容易记住。' },
+    { cat: 'visual', tag: '学习通道 · 观察细节', q: '孩子看书或看动画时能很快发现画面细节，喜欢通过画画、涂鸦来表达想法。' },
+    { cat: 'visual', tag: '学习通道 · 图像记忆', q: '背古诗或认字时，把文字编成画面故事或用荧光笔标色，孩子的记忆效率明显更高。' },
+    // Auditory Learning (听觉优势 19..21)
+    { cat: 'auditory', tag: '学习通道 · 听觉语言', q: '孩子喜欢听音频故事、儿歌或大人朗读，听过一遍的台词和旋律能很快复述出来。' },
+    { cat: 'auditory', tag: '学习通道 · 出声思考', q: '孩子做题或看书时喜欢小声念叨出来，或者通过“当小老师讲给妈妈听”记得特别牢。' },
+    { cat: 'auditory', tag: '学习通道 · 节奏指令', q: '口头叮嘱的几件事，如果编成顺口溜或带节奏的口令，孩子执行得又快又开心。' },
+    // Kinesthetic Learning (动觉优势 22..23 + extra item 24)
+    { cat: 'kinesthetic', tag: '学习通道 · 动手体验', q: '孩子学新知识时喜欢边摸边摆弄（如积木、手指算术、实验道具），干坐着听讲容易走神。' },
+    { cat: 'kinesthetic', tag: '学习通道 · 肢体记忆', q: '把知识变成角色扮演、户外寻宝或实操小游戏时，孩子的专注时长会比平时翻倍！' }
+  ];
+
+  const LIKERT_LABELS = ['完全不符', '不太符合', '一般/有时', '比较符合', '非常符合'];
+  const answers = new Array(QUESTIONS.length).fill(0);
+
+  function renderQuestions() {
+    const list = document.getElementById('questionList');
+    list.innerHTML = '';
+    QUESTIONS.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = 'q-item' + (answers[idx] ? ' answered' : '');
+      card.id = `q-item-${idx}`;
+      card.innerHTML = `<span class="q-tag">第 ${idx + 1} 题 · ${item.tag}</span><p class="q-text">${idx + 1}. ${item.q}</p>`;
+      const row = document.createElement('div');
+      row.className = 'likert-row';
+      LIKERT_LABELS.forEach((lbl, valIdx) => {
+        const score = valIdx + 1;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'likert-btn' + (answers[idx] === score ? ' selected' : '');
+        btn.innerHTML = `<strong>${score}</strong><span>${lbl}</span>`;
+        btn.addEventListener('click', () => {
+          answers[idx] = score;
+          card.classList.add('answered');
+          row.querySelectorAll('.likert-btn').forEach((b, bi) => b.classList.toggle('selected', bi === valIdx));
+          updateAssessProgress();
+          tone(480 + score * 30, 0.05);
+        });
+        row.appendChild(btn);
+      });
+      card.appendChild(row);
+      list.appendChild(card);
+    });
+    updateAssessProgress();
+  }
+
+  function updateAssessProgress() {
+    const done = answers.filter(v => v > 0).length;
+    document.getElementById('assessCountBadge').textContent = `已答 ${done} / ${QUESTIONS.length} 题`;
+    document.getElementById('assessProgress').style.width = `${(done / QUESTIONS.length) * 100}%`;
+  }
+
+  document.getElementById('demoFillBtn').addEventListener('click', () => {
+    const preset = [4,5,4,4, 2,3,2,2, 2,2,1,2, 3,4,3,3, 5,4,5, 3,4,3, 5,4];
+    preset.forEach((v, i) => answers[i] = v);
+    renderQuestions();
+    computeAndShowReport();
+    playWinFanfare();
+  });
+
+  document.getElementById('resetAssessBtn').addEventListener('click', () => {
+    answers.fill(0);
+    document.getElementById('reportWrap').classList.remove('show');
+    renderQuestions();
+    tone(420, 0.06);
+  });
+
+  function avgPct(cat) {
+    const idxs = QUESTIONS.map((q, i) => q.cat === cat ? i : -1).filter(i => i >= 0);
+    const sum = idxs.reduce((acc, i) => acc + answers[i], 0);
+    return Math.round((sum / (idxs.length * 5)) * 100);
+  }
+
+  let latestReport = null;
+
+  function computeAndShowReport() {
+    const missing = answers.findIndex(v => v === 0);
+    if (missing !== -1) {
+      alert(`还有第 ${missing + 1} 题未作答，请完成全部 24 题（或点击顶部“一键体验示例作答”预览完整报告）！`);
+      document.getElementById(`q-item-${missing}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const childName = (document.getElementById('assessChildName').value || '宝贝').trim();
+    const scores = {
+      authoritative: avgPct('authoritative'),
+      authoritarian: avgPct('authoritarian'),
+      permissive: avgPct('permissive'),
+      anxious: avgPct('anxious'),
+      visual: avgPct('visual'),
+      auditory: avgPct('auditory'),
+      kinesthetic: avgPct('kinesthetic')
+    };
+
+    // Determine primary parenting style & growth area
+    const parentingList = [
+      { key: 'authoritative', name: '权威引导型（高温暖+高边界）', score: scores.authoritative, color: '#0f766e' },
+      { key: 'authoritarian', name: '严厉控制型（高规则+强督促）', score: scores.authoritarian, color: '#dc2626' },
+      { key: 'permissive', name: '宽松顺从型（高接纳+弱边界）', score: scores.permissive, color: '#f59e0b' },
+      { key: 'anxious', name: '焦虑包办型（高担忧+高频盯防）', score: scores.anxious, color: '#7c3aed' }
+    ];
+    const sortedParenting = [...parentingList].sort((a, b) => b.score - a.score);
+    const primaryParent = sortedParenting[0];
+
+    const learningList = [
+      { key: 'visual', name: '视觉图像型 (Visual)', score: scores.visual, tip: `${childName} 对色彩、图表、空间结构吸收最快！建议用思维导图、颜色分类本、可视化沙漏/任务卡来替代纯口头唠叨。` },
+      { key: 'auditory', name: '听觉语言型 (Auditory)', score: scores.auditory, tip: `${childName} 拥有很强的听觉韵律和复述能力！建议鼓励“费曼学习法”（让孩子讲给你听）、使用顺口溜口令与高质量音频故事。` },
+      { key: 'kinesthetic', name: '动觉体验型 (Kinesthetic)', score: scores.kinesthetic, tip: `${childName} 在“动手操作+场景体验”中专注力翻倍！建议把计算题变成积木/卡片游戏，学习20分钟搭配2分钟拉伸动作。` }
+    ];
+    const topLearn = [...learningList].sort((a, b) => b.score - a.score)[0];
+
+    // Advice based on highest risk dimension
+    const riskItem = [
+      { k: 'anxious', s: scores.anxious, msg: '当前最需要松绑的是「陪读盯防与育儿焦虑」：把“盯着写”改为“提前约好检查点”，把犯错权还给孩子，你的情绪松弛，孩子的大脑前额叶才能高效专注。' },
+      { k: 'authoritarian', s: scores.authoritarian, msg: '当前建议适当降低「高压指令频率」：用“有限选择权”（先写数学还是先写语文？）替代“快去写”，既守住底线又保护内驱力。' },
+      { k: 'permissive', s: scores.permissive, msg: '当前建议重点建立「温柔而坚定的日常契约」：规则定好后少说教、直接执行自然结果，避免因为心软反复拉锯。' }
+    ].sort((a, b) => b.s - a.s)[0];
+
+    const planDays = [
+      { d: 'Day 1 · 撤离陪读椅', t: '写作业时家长退后2米或同桌各做各的事，不打断笔尖，改用小番茄钟静音计时。' },
+      { d: 'Day 2 · 舒尔特热身 3 分钟', t: '学习前先玩 2 轮 4×4 舒尔特方格激活视神经，把“开机慢”变成“秒入状态”。' },
+      { d: 'Day 3 · 优势通道改造', t: `按「${topLearn.name.split(' ')[0]}」设计今晚任务：用画图/口述或教具实操完成 1 道难题。` },
+      { d: 'Day 4 · 有限选择权对话', t: '把命令句换成二选一：“你想用蓝色笔还是红色笔开始？先做A还是先做B？”' },
+      { d: 'Day 5 · 具体过程夸奖日', t: '睡前找 1 个具体细节表扬孩子（如“今天自己检查出了漏题”），不贴聪明标签。' },
+      { d: 'Day 6 · 家庭无屏幕探索', t: '安排 30 分钟科学实验或桌游（结合《星际小科学家》互动问答），训练持续专注。' },
+      { d: 'Day 7 · 周末复盘颁奖仪式', t: '一起看本周打卡星章和舒尔特曲线变化，让孩子亲眼看到自己的进步！' }
+    ];
+
+    latestReport = { childName, scores, primaryParent, parentingList, topLearn, riskItem, planDays };
+
+    document.getElementById('reportPrimaryBadge').textContent = primaryParent.name.split('（')[0];
+    document.getElementById('reportChildBadge').textContent = `${childName} 的家庭档案`;
+    document.getElementById('learningStyleLabel').textContent = `${topLearn.name} · ${topLearn.score}%`;
+    document.getElementById('learningStyleTip').textContent = topLearn.tip;
+
+    document.getElementById('parentingBars').innerHTML = parentingList.map(p => `
+      <div class="bar-row">
+        <div class="bar-meta"><span>${p.name}</span><span style="color:${p.color};">${p.score}%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${p.score}%;background:${p.color};"></div></div>
+      </div>
+    `).join('');
+
+    document.getElementById('parentingAdviceBox').innerHTML = `<strong>💡 专家微调建议：</strong>${riskItem.msg}`;
+    document.getElementById('sevenDayPlan').innerHTML = planDays.map(p => `
+      <div class="plan-day"><strong>${p.d}</strong><span>${p.t}</span></div>
+    `).join('');
+
+    drawRadarSvg(scores);
+    document.getElementById('reportWrap').classList.add('show');
+    document.getElementById('reportWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function drawRadarSvg(scores) {
+    const svg = document.getElementById('radarSvg');
+    const cx = 190, cy = 172, R = 108;
+    const dims = [
+      { label: '权威引导', val: scores.authoritative },
+      { label: '严厉控制', val: scores.authoritarian },
+      { label: '宽松顺从', val: scores.permissive },
+      { label: '焦虑包办', val: scores.anxious },
+      { label: '视觉优势', val: scores.visual },
+      { label: '听觉优势', val: scores.auditory },
+      { label: '动觉体验', val: scores.kinesthetic }
+    ];
+    const n = dims.length;
+    let rings = '';
+    [0.25, 0.5, 0.75, 1].forEach(k => {
+      const pts = dims.map((_, i) => {
+        const a = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+        return `${(cx + Math.cos(a) * R * k).toFixed(1)},${(cy + Math.sin(a) * R * k).toFixed(1)}`;
+      }).join(' ');
+      rings += `<polygon points="${pts}" fill="none" stroke="#d1d5db" stroke-width="1"/>`;
+    });
+
+    let axes = '';
+    let dataPts = [];
+    dims.forEach((d, i) => {
+      const a = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+      const xEnd = cx + Math.cos(a) * R;
+      const yEnd = cy + Math.sin(a) * R;
+      const lx = cx + Math.cos(a) * (R + 26);
+      const ly = cy + Math.sin(a) * (R + 20);
+      axes += `<line x1="${cx}" y1="${cy}" x2="${xEnd.toFixed(1)}" y2="${yEnd.toFixed(1)}" stroke="#e5e7eb"/>`;
+      axes += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" fill="#1f2937" font-size="11.5" font-weight="bold">${d.label} ${d.val}%</text>`;
+      const rVal = (d.val / 100) * R;
+      dataPts.push([cx + Math.cos(a) * rVal, cy + Math.sin(a) * rVal]);
+    });
+
+    const polyStr = dataPts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+    const dots = dataPts.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="#0f766e" stroke="#fff" stroke-width="1.5"/>`).join('');
+
+    svg.innerHTML = `
+      ${rings}
+      ${axes}
+      <polygon points="${polyStr}" fill="rgba(20, 184, 166, 0.28)" stroke="#0f766e" stroke-width="2.5"/>
+      ${dots}
+    `;
+  }
+
+  function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+    let line = '';
+    let curY = y;
+    for (let i = 0; i < text.length; i++) {
+      const test = line + text[i];
+      if (ctx.measureText(test).width > maxWidth && line) {
+        ctx.fillText(line, x, curY);
+        line = text[i];
+        curY += lineHeight;
+      } else {
+        line = test;
+      }
+    }
+    if (line) ctx.fillText(line, x, curY);
+    return curY + lineHeight;
+  }
+
+  function exportLongPngReport() {
+    if (!latestReport) return;
+    const { childName, scores, primaryParent, parentingList, topLearn, riskItem, planDays } = latestReport;
+    const canvas = document.getElementById('longReportCanvas');
+    const c = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    // Background
+    c.fillStyle = '#f6f8f7';
+    c.fillRect(0, 0, W, H);
+
+    // Header Banner
+    const hdr = c.createLinearGradient(0, 0, W, 210);
+    hdr.addColorStop(0, '#115e59');
+    hdr.addColorStop(1, '#0d9488');
+    c.fillStyle = hdr;
+    c.fillRect(0, 0, W, 210);
+
+    c.fillStyle = '#fde68a';
+    c.font = 'bold 20px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.textAlign = 'center';
+    c.fillText('24题科学亲子教养 & 儿童多元学习优势测评报告', W / 2, 54);
+
+    c.fillStyle = '#ffffff';
+    c.font = '900 40px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText(`${childName} 的专属成长评估档案`, W / 2, 114);
+
+    c.fillStyle = '#ccfbf1';
+    c.font = '600 20px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText(`主导风格：${primaryParent.name.split('（')[0]}  |  优势通道：${topLearn.name.split(' ')[0]}`, W / 2, 162);
+
+    // Card 1: Radar + Learning Style
+    c.fillStyle = '#ffffff';
+    c.beginPath(); c.roundRect(36, 236, W - 72, 420, 24); c.fill();
+    c.strokeStyle = '#e5e7eb'; c.lineWidth = 2; c.stroke();
+
+    c.fillStyle = '#1f2937';
+    c.textAlign = 'left';
+    c.font = '800 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+    c.fillText('一、七维平衡雷达与优势通道', 64, 282);
+
+    // Draw radar on canvas
+    const rcx = 235, rcy = 468, rR = 115;
+    const dims = [
+      { l: '权威引导', v: scores.authoritative },
+      { l: '严厉控制', v: scores.authoritarian },
+      { l: '宽松顺从', v: scores.permissive },
+      { l: '焦虑包办', v: scores.anxious },
+      { l: '视觉', v: scores.visual },
+      { l: '听觉', v: scores.auditory },
+      { l: '动觉', v: scores.kinesthetic }
+    ];
+    [0.33, 0.66, 1].forEach(k => {
+      c.strokeStyle = '#d1d5db'; c.lineWidth = 1.5; c.beginPath();
+      dims.forEach((_, i) => {
+        const a = -Math.PI/2 + (i * 2 * Math.PI)/dims.length;
+        const px = rcx + Math.cos(a)*rR*k, py = rcy + Math.sin(a)*rR*k;
+        if (i===0) c.moveTo(px, py); else c.lineTo(px, py);
+      });
+      c.closePath(); c.stroke();
+    });
+    c.fillStyle = 'rgba(20, 184, 166, 0.28)';
+    c.strokeStyle = '#0f766e'; c.lineWidth = 3; c.beginPath();
+    dims.forEach((d, i) => {
+      const a = -Math.PI/2 + (i * 2 * Math.PI)/dims.length;
+      const rr = (d.v/100)*rR;
+      const px = rcx + Math.cos(a)*rr, py = rcy + Math.sin(a)*rr;
+      if (i===0) c.moveTo(px, py); else c.lineTo(px, py);
+    });
+    c.closePath(); c.fill(); c.stroke();
+
+    c.fillStyle = '#1f2937'; c.font = 'bold 14px "PingFang SC", sans-serif'; c.textAlign = 'center';
+    dims.forEach((d, i) => {
+      const a = -Math.PI/2 + (i * 2 * Math.PI)/dims.length;
+      c.fillText(`${d.l} ${d.v}%`, rcx + Math.cos(a)*(rR+34), rcy + Math.sin(a)*(rR+24));
+    });
+
+    // Right column bars
+    c.textAlign = 'left';
+    let by = 326;
+    parentingList.forEach(p => {
+      c.fillStyle = '#374151'; c.font = 'bold 17px "PingFang SC", sans-serif';
+      c.fillText(`${p.name.split('（')[0]}  ${p.score}%`, 445, by);
+      c.fillStyle = '#e5e7eb'; c.beginPath(); c.roundRect(445, by + 10, 340, 14, 7); c.fill();
+      c.fillStyle = p.color; c.beginPath(); c.roundRect(445, by + 10, Math.max(12, 3.4 * p.score), 14, 7); c.fill();
+      by += 54;
+    });
+    c.fillStyle = '#0f766e'; c.font = '800 18px "PingFang SC", sans-serif';
+    c.fillText(`主导通道：${topLearn.name}`, 445, 558);
+    c.fillStyle = '#4b5563'; c.font = '15px "PingFang SC", sans-serif';
+    wrapCanvasText(c, topLearn.tip, 445, 586, 345, 22);
+
+    // Card 2: Expert Advice
+    c.fillStyle = '#fffbeb';
+    c.beginPath(); c.roundRect(36, 678, W - 72, 165, 24); c.fill();
+    c.strokeStyle = '#fde68a'; c.lineWidth = 2; c.stroke();
+    c.fillStyle = '#92400e'; c.font = '800 22px "PingFang SC", sans-serif';
+    c.fillText('二、当前最值得先松绑的教养卡点', 64, 720);
+    c.fillStyle = '#78350f'; c.font = '18px "PingFang SC", sans-serif';
+    wrapCanvasText(c, riskItem.msg, 64, 756, W - 128, 28);
+
+    // Card 3: 7-day plan
+    c.fillStyle = '#ffffff';
+    c.beginPath(); c.roundRect(36, 864, W - 72, 624, 24); c.fill();
+    c.strokeStyle = '#e5e7eb'; c.lineWidth = 2; c.stroke();
+    c.fillStyle = '#1f2937'; c.font = '800 24px "PingFang SC", sans-serif';
+    c.fillText('三、7 天家庭微习惯执行清单（每天15分钟）', 64, 910);
+
+    let py = 954;
+    planDays.forEach(item => {
+      c.fillStyle = '#f0fdfa';
+      c.beginPath(); c.roundRect(64, py - 24, W - 128, 66, 14); c.fill();
+      c.fillStyle = '#0f766e'; c.font = '800 17px "PingFang SC", sans-serif';
+      c.fillText(item.d, 82, py);
+      c.fillStyle = '#374151'; c.font = '16px "PingFang SC", sans-serif';
+      c.fillText(item.t.slice(0, 40) + (item.t.length > 40 ? '...' : ''), 82, py + 26);
+      py += 76;
+    });
+
+    // Footer
+    c.fillStyle = '#6b7280'; c.textAlign = 'center'; c.font = '16px "PingFang SC", sans-serif';
+    c.fillText('儿童专注力训练营 & 科学亲子测评 · 本地生成零隐私上传', W / 2, 1525);
+
+    const url = canvas.toDataURL('image/png');
+    document.getElementById('longReportImg').src = url;
+    document.getElementById('longPreviewWrap').style.display = 'block';
+    const a = document.createElement('a');
+    a.download = `${childName}_亲子教养与专注力测评长图报告.png`;
+    a.href = url;
+    a.click();
+    playWinFanfare();
+  }
+
+  document.getElementById('submitAssessBtn').addEventListener('click', computeAndShowReport);
+  document.getElementById('exportLongBtn').addEventListener('click', exportLongPngReport);
+  renderQuestions();
+})();
+</script>
+</body>
+</html>
