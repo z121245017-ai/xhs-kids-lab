@@ -1151,7 +1151,7 @@
     });
     c.closePath(); c.fill(); c.stroke();
 
-    c.fillStyle = '#1f2937'; c.font = 'bold 14px "PingFang SC", sans-serif'; c.textAlign = 'center';
+    c.fillStyle = '#1f2937'; c.font = 'bold 14px "PingFang SC", "Microsoft YaHei", sans-serif'; c.textAlign = 'center';
     dims.forEach((d, i) => {
       const a = -Math.PI/2 + (i * 2 * Math.PI)/dims.length;
       c.fillText(`${d.l} ${d.v}%`, rcx + Math.cos(a)*(rR+34), rcy + Math.sin(a)*(rR+24));
@@ -1161,46 +1161,46 @@
     c.textAlign = 'left';
     let by = 326;
     parentingList.forEach(p => {
-      c.fillStyle = '#374151'; c.font = 'bold 17px "PingFang SC", sans-serif';
+      c.fillStyle = '#374151'; c.font = 'bold 17px "PingFang SC", "Microsoft YaHei", sans-serif';
       c.fillText(`${p.name.split('（')[0]}  ${p.score}%`, 445, by);
       c.fillStyle = '#e5e7eb'; c.beginPath(); c.roundRect(445, by + 10, 340, 14, 7); c.fill();
       c.fillStyle = p.color; c.beginPath(); c.roundRect(445, by + 10, Math.max(12, 3.4 * p.score), 14, 7); c.fill();
       by += 54;
     });
-    c.fillStyle = '#0f766e'; c.font = '800 18px "PingFang SC", sans-serif';
+    c.fillStyle = '#0f766e'; c.font = '800 18px "PingFang SC", "Microsoft YaHei", sans-serif';
     c.fillText(`主导通道：${topLearn.name}`, 445, 558);
-    c.fillStyle = '#4b5563'; c.font = '15px "PingFang SC", sans-serif';
+    c.fillStyle = '#4b5563'; c.font = '15px "PingFang SC", "Microsoft YaHei", sans-serif';
     wrapCanvasText(c, topLearn.tip, 445, 586, 345, 22);
 
     // Card 2: Expert Advice
     c.fillStyle = '#fffbeb';
     c.beginPath(); c.roundRect(36, 678, W - 72, 165, 24); c.fill();
     c.strokeStyle = '#fde68a'; c.lineWidth = 2; c.stroke();
-    c.fillStyle = '#92400e'; c.font = '800 22px "PingFang SC", sans-serif';
+    c.fillStyle = '#92400e'; c.font = '800 22px "PingFang SC", "Microsoft YaHei", sans-serif';
     c.fillText('二、当前最值得先松绑的教养卡点', 64, 720);
-    c.fillStyle = '#78350f'; c.font = '18px "PingFang SC", sans-serif';
+    c.fillStyle = '#78350f'; c.font = '18px "PingFang SC", "Microsoft YaHei", sans-serif';
     wrapCanvasText(c, riskItem.msg, 64, 756, W - 128, 28);
 
     // Card 3: 7-day plan
     c.fillStyle = '#ffffff';
     c.beginPath(); c.roundRect(36, 864, W - 72, 624, 24); c.fill();
     c.strokeStyle = '#e5e7eb'; c.lineWidth = 2; c.stroke();
-    c.fillStyle = '#1f2937'; c.font = '800 24px "PingFang SC", sans-serif';
+    c.fillStyle = '#1f2937'; c.font = '800 24px "PingFang SC", "Microsoft YaHei", sans-serif';
     c.fillText('三、7 天家庭微习惯执行清单（每天15分钟）', 64, 910);
 
     let py = 954;
     planDays.forEach(item => {
       c.fillStyle = '#f0fdfa';
       c.beginPath(); c.roundRect(64, py - 24, W - 128, 66, 14); c.fill();
-      c.fillStyle = '#0f766e'; c.font = '800 17px "PingFang SC", sans-serif';
+      c.fillStyle = '#0f766e'; c.font = '800 17px "PingFang SC", "Microsoft YaHei", sans-serif';
       c.fillText(item.d, 82, py);
-      c.fillStyle = '#374151'; c.font = '16px "PingFang SC", sans-serif';
+      c.fillStyle = '#374151'; c.font = '16px "PingFang SC", "Microsoft YaHei", sans-serif';
       c.fillText(item.t.slice(0, 40) + (item.t.length > 40 ? '...' : ''), 82, py + 26);
       py += 76;
     });
 
     // Footer
-    c.fillStyle = '#6b7280'; c.textAlign = 'center'; c.font = '16px "PingFang SC", sans-serif';
+    c.fillStyle = '#6b7280'; c.textAlign = 'center'; c.font = '16px "PingFang SC", "Microsoft YaHei", sans-serif';
     c.fillText('儿童专注力训练营 & 科学亲子测评 · 本地生成零隐私上传', W / 2, 1525);
 
     const url = canvas.toDataURL('image/png');
