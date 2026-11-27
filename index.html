@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
-<title>小红书儿童科普 · 专注力 · 双语思维数字产品三合一合集</title>
+<title>小红书儿童科普 · 专注力 · 双语思维 · 自律养成四合一合集</title>
 <style>
   :root {
     --bg: #fafaf9;
@@ -14,6 +14,7 @@
     --indigo: #4f46e5;
     --teal: #0f766e;
     --amber: #d97706;
+    --violet: #7c3aed;
     --border: #e7e5e4;
     --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   }
@@ -31,7 +32,7 @@
     padding: 46px 18px 56px;
     text-align: center;
   }
-  .hero-inner { max-width: 960px; margin: 0 auto; }
+  .hero-inner { max-width: 980px; margin: 0 auto; }
   .pill {
     display: inline-block;
     padding: 6px 14px;
@@ -43,8 +44,8 @@
     color: #fde68a;
     margin-bottom: 14px;
   }
-  .hero h1 { margin: 0 0 12px; font-size: clamp(23px, 4vw, 37px); font-weight: 900; line-height: 1.25; }
-  .hero p { margin: 0 auto; max-width: 700px; color: #e2e8f0; font-size: 15px; }
+  .hero h1 { margin: 0 0 12px; font-size: clamp(22px, 3.8vw, 36px); font-weight: 900; line-height: 1.25; }
+  .hero p { margin: 0 auto; max-width: 740px; color: #e2e8f0; font-size: 15px; }
   .hero-badges {
     margin-top: 20px;
     display: flex;
@@ -61,7 +62,7 @@
     font-weight: 600;
   }
 
-  .container { max-width: 1180px; margin: -28px auto 0; padding: 0 16px 40px; }
+  .container { max-width: 1220px; margin: -28px auto 0; padding: 0 16px 40px; }
 
   /* Bundle Pricing Strip */
   .bundle-bar {
@@ -90,13 +91,13 @@
   .price-pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
   }
   .price-tag {
-    padding: 8px 14px;
+    padding: 7px 13px;
     border-radius: 12px;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 800;
     background: #fff;
     color: #78350f;
@@ -107,10 +108,15 @@
     color: #fff;
     border-color: #92400e;
   }
+  .price-tag.vip {
+    background: #4f46e5;
+    color: #fff;
+    border-color: #3730a3;
+  }
 
   .cards-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 18px;
   }
   .product-card {
@@ -129,6 +135,7 @@
   .card-banner.science { background: linear-gradient(135deg, #312e81, #4f46e5); }
   .card-banner.focus { background: linear-gradient(135deg, #115e59, #0d9488); }
   .card-banner.story { background: linear-gradient(135deg, #92400e, #d97706); }
+  .card-banner.habit { background: linear-gradient(135deg, #5b21b6, #7c3aed); }
   .card-tag {
     display: inline-block;
     font-size: 11.5px;
@@ -182,6 +189,7 @@
   .cta-btn.indigo { background: var(--indigo); box-shadow: 0 8px 18px -6px rgba(79,70,229,0.5); }
   .cta-btn.teal { background: var(--teal); box-shadow: 0 8px 18px -6px rgba(15,118,110,0.5); }
   .cta-btn.amber { background: #b45309; box-shadow: 0 8px 18px -6px rgba(180,83,9,0.5); }
+  .cta-btn.violet { background: var(--violet); box-shadow: 0 8px 18px -6px rgba(124,58,237,0.5); }
 
   .how-box {
     margin-top: 24px;
@@ -213,7 +221,7 @@
     color: var(--muted);
   }
 
-  @media (max-width: 980px) {
+  @media (max-width: 900px) {
     .cards-grid, .steps { grid-template-columns: 1fr; }
   }
 </style>
@@ -223,13 +231,13 @@
 <header class="hero">
   <div class="hero-inner">
     <span class="pill">✨ 100% 纯离线单文件 HTML · 手机/平板/电脑秒开体验</span>
-    <h1>儿童互动科普 · 专注力 · 双语思维冒险三合一合集</h1>
-    <p>专为 4–12 岁家庭打造的沉浸式互动数字产品矩阵：无需安装 App、无广告、零外部依赖，打开浏览器即可带娃边玩边学。</p>
+    <h1>儿童互动科普 · 专注力 · 双语思维 · 自律养成四合一合集</h1>
+    <p>专为 4–12 岁家庭打造的沉浸式互动数字产品矩阵：无需安装 App、无广告、零外部依赖，打开浏览器即可带娃边玩边学、每日自律打卡。</p>
     <div class="hero-badges">
       <span>🪐 4 大动态科学实验室</span>
       <span>🎯 舒尔特方格 + 24题亲子测评</span>
       <span>🧭 15分支双语思维冒险</span>
-      <span>🏆 证书 &amp; 长图一键导出</span>
+      <span>👾 21天自律小怪兽打卡墙</span>
     </div>
   </div>
 </header>
@@ -237,16 +245,34 @@
 <main class="container">
   <section class="bundle-bar" aria-label="套装定价方案">
     <div class="bundle-info">
-      <strong>🎁 三合一亲子成长数字全家桶（永久离线可用）</strong>
-      <span>覆盖「科学启蒙 × 专注力训练 × 双语思维共读」三大刚需场景，支持电脑/iPad/手机本地秒开</span>
+      <strong>🎁 四合一亲子成长数字全家桶（永久离线可用）</strong>
+      <span>覆盖「科学启蒙 × 专注力训练 × 双语思维共读 × 21天习惯自律」四大刚需场景，支持电脑/iPad/手机本地秒开</span>
     </div>
     <div class="price-pills">
       <span class="price-tag">单品尝鲜 ¥9.9</span>
-      <span class="price-tag hot">🔥 三合一全家桶 ¥19.9（立省 ¥9.8）</span>
+      <span class="price-tag hot">🔥 三合一/四合一全家桶 ¥19.9–¥24.9</span>
+      <span class="price-tag vip">👑 VIP 定制版 ¥39.9</span>
     </div>
   </section>
 
   <section class="cards-grid">
+    <article class="product-card">
+      <div class="card-banner habit">
+        <span class="card-tag">👾 4-12岁 · 每日高频自律打卡 + 5阶萌宠进化</span>
+        <h2>《21天自律小怪兽打卡积分墙》</h2>
+        <p>每日习惯打卡攒星力进化银河星龙，自带专注倒计时、家庭愿望小商店与 PNG 奖状导出</p>
+      </div>
+      <div class="card-body">
+        <ul class="feature-list">
+          <li><strong>🐉 5阶小星兽自动进化：</strong>星光蛋 → 萌芽兽 → 花蕾兽 → 星盾兽 → 银河星龙，带 Q 弹动效与音效</li>
+          <li><strong>✅ 自定义每日习惯板：</strong>内置 6 大好习惯 + 家长自由增删改星值（+1 至 +5 星），支持 21 天连续矩阵</li>
+          <li><strong>⏱️ 内置专注倒计时器：</strong>5 / 15 / 25 分钟三档切换，计时完成自动奖励星星并计入今日打卡</li>
+          <li><strong>🎁 愿望商店 + PNG 奖状：</strong>积分兑换公园放风/故事特权，一键导出 1080×1440「21天自律之星奖状」</li>
+        </ul>
+        <a class="cta-btn violet" href="./habit-pet-board/">👾 立即进入：21天自律小怪兽打卡墙 ➜</a>
+      </div>
+    </article>
+
     <article class="product-card">
       <div class="card-banner science">
         <span class="card-tag">🚀 4-12岁 · 天文 / 生物 / 物理启蒙</span>
@@ -260,7 +286,7 @@
           <li><strong>⚙️ 机械齿轮游乐场：</strong>自由调主从轮齿数，实时计算传动比、转速与省力/增速原理</li>
           <li><strong>🏆 10题闯关 + PNG 奖状：</strong>自定义宝贝名字生成高清红印章「小小科学家认证奖状」</li>
         </ul>
-        <a class="cta-btn indigo" href="./kids-science-lab/index.html">🚀 立即进入：星际小科学家实验室 ➜</a>
+        <a class="cta-btn indigo" href="./kids-science-lab/">🚀 立即进入：星际小科学家实验室 ➜</a>
       </div>
     </article>
 
@@ -277,7 +303,7 @@
           <li><strong>📊 24 题教养 &amp; 学习优势：</strong>权威/严厉/宽松/焦虑四维平衡 + VAK 视觉/听觉/动觉雷达图</li>
           <li><strong>📥 一键 PNG 长图导出：</strong>生成完整 7 天家庭微习惯方案长图，手机长按保存随时打卡</li>
         </ul>
-        <a class="cta-btn teal" href="./focus-parenting-kit/index.html">🎯 立即进入：专注力与亲子测评营 ➜</a>
+        <a class="cta-btn teal" href="./focus-parenting-kit/">🎯 立即进入：专注力与亲子测评营 ➜</a>
       </div>
     </article>
 
@@ -294,7 +320,7 @@
           <li><strong>🌐 中英双语 + 语音朗读：</strong>一键切换中文/English 全界面双语，支持浏览器语音伴读</li>
           <li><strong>🎓 可打印亲子反思证书：</strong>生成专属结业证书与睡前对话卡，支持 A4 打印与 PNG 导出</li>
         </ul>
-        <a class="cta-btn amber" href="./story-adventure/index.html">🧭 立即进入：小探险家双语思维冒险 ➜</a>
+        <a class="cta-btn amber" href="./story-adventure/">🧭 立即进入：小探险家双语思维冒险 ➜</a>
       </div>
     </article>
   </section>
@@ -319,7 +345,7 @@
 </main>
 
 <footer>
-  星际小科学家 · 儿童专注力训练营 · 小探险家双语思维冒险 · 纯静态单文件数字产品展示页
+  星际小科学家 · 儿童专注力训练营 · 小探险家双语思维冒险 · 21天自律小怪兽打卡墙 · 纯静态单文件数字产品展示页
 </footer>
 
 </body>

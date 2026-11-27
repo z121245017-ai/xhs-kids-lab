@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👾</text></svg>">
+<title>21天自律小怪兽打卡积分墙 · 纯离线互动版</title>
+<style>
+  :root {
+    --bg: #fffaf0;
+    --bg-accent: #fef3c7;
+    --card: #ffffff;
+    --ink: #1e293b;
+    --muted: #64748b;
+    --indigo: #4f46e5;
+    --indigo-soft: #eef2ff;
+    --purple: #7c3aed;
+    --amber: #d97706;
+    --amber-bright: #f59e0b;
+    --amber-soft: #fef3c7;
+    --emerald: #059669;
+    --emerald-soft: #d1fae5;
+    --rose: #e11d48;
+    --rose-soft: #ffe4e6;
+    --border: #e7e5e4;
+    --shadow: 0 14px 32px -14px rgba(30, 41, 59, 0.14);
+    --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    background: radial-gradient(circle at top left, #fef3c7 0%, #fffaf0 38%, #f5f3ff 100%);
+    color: var(--ink);
+    line-height: 1.55;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  button, input, select, textarea { font-family: inherit; }
+
+  /* Sticky Topbar */
+  .topbar {
+    background: linear-gradient(135deg, #312e81 0%, #4f46e5 52%, #7c3aed 100%);
+    color: #fff;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 6px 22px rgba(49, 46, 129, 0.28);
+  }
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fde68a, #f59e0b);
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+    flex-shrink: 0;
+  }
+  .brand-text h1 {
+    margin: 0;
+    font-size: clamp(15px, 2.8vw, 18px);
+    font-weight: 900;
+    letter-spacing: 0.2px;
+    line-height: 1.25;
+  }
+  .brand-text p {
+    margin: 0;
+    font-size: 11.5px;
+    color: #e0e7ff;
+  }
+  .top-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #fff;
+  }
+  .stat-pill.gold {
+    background: rgba(245, 158, 11, 0.26);
+    border-color: rgba(253, 230, 138, 0.55);
+    color: #fef3c7;
+  }
+  .icon-btn {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.14s ease, background 0.14s ease;
+  }
+  .icon-btn:hover { background: rgba(255, 255, 255, 0.24); }
+  .icon-btn:active { transform: scale(0.95); }
+  .icon-btn.active {
+    background: #10b981;
+    border-color: #34d399;
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 14px 42px;
+  }
+
+  /* Mobile Quick Nav */
+  .quick-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+    scrollbar-width: none;
+  }
+  .quick-nav::-webkit-scrollbar { display: none; }
+  .nav-chip {
+    flex-shrink: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    padding: 7px 13px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+  }
+  .nav-chip:hover { border-color: var(--indigo); color: var(--indigo); }
+
+  /* Two-Column Grid */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .col-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .card-title {
+    margin: 0;
+    font-size: 17.5px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge-pill {
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--indigo-soft);
+    color: var(--indigo);
+  }
+  .badge-pill.amber { background: var(--amber-soft); color: #92400e; }
+  .badge-pill.emerald { background: var(--emerald-soft); color: #065f46; }
+
+  /* Pet Stage Card */
+  .pet-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f5f3ff 100%);
+    border: 2px solid #e0e7ff;
+    position: relative;
+    overflow: hidden;
+  }
+  .pet-arena {
+    background: radial-gradient(circle at 50% 45%, #fef9c3 0%, #eef2ff 55%, #e0e7ff 100%);
+    border-radius: 20px;
+    padding: 18px 14px 16px;
+    text-align: center;
+    position: relative;
+    border: 1px solid #ddd6fe;
+  }
+  .pet-stage-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #c7d2fe;
+    color: #3730a3;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  .pet-svg-wrap {
+    width: 196px;
+    height: 184px;
+    margin: 4px auto;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .pet-svg-wrap svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: petFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 10px 14px rgba(79, 70, 229, 0.18));
+  }
+  .pet-svg-wrap.boing svg {
+    animation: petBoing 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes petFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-7px) rotate(1deg); }
+  }
+  @keyframes petBoing {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.14, 0.9) translateY(-6px); }
+    70% { transform: scale(0.95, 1.07) translateY(-10px); }
+    100% { transform: scale(1); }
+  }
+  @keyframes sparklePulse {
+    0%, 100% { opacity: 0.45; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.16); }
+  }
+  .sparkle-anim {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sparklePulse 2s ease-in-out infinite;
+  }
+  .pet-speech {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #c7d2fe;
+    border-radius: 14px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #312e81;
+    margin-top: 4px;
+    box-shadow: 0 4px 10px rgba(49, 46, 129, 0.08);
+    max-width: 92%;
+  }
+
+  /* Evolution Stepper & Progress */
+  .evo-progress-wrap { margin-top: 14px; }
+  .evo-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    height: 12px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #4f46e5, #a855f7, #f59e0b);
+    transition: width 0.35s ease;
+  }
+  .evo-stages-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .evo-chip {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 6px 4px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    transition: all 0.2s ease;
+  }
+  .evo-chip.unlocked {
+    border-color: #a5b4fc;
+    background: #eef2ff;
+    color: #3730a3;
+    font-weight: 700;
+  }
+  .evo-chip.current {
+    border: 2px solid #4f46e5;
+    background: #fef3c7;
+    color: #78350f;
+    font-weight: 900;
+    transform: translateY(-2px);
+  }
+  .evo-chip span { display: block; font-size: 16px; line-height: 1.2; }
+
+  /* Star Balances */
+  .star-wallet {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .wallet-box {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .wallet-box strong {
+    display: block;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--indigo);
+    line-height: 1.2;
+  }
+  .wallet-box.gold strong { color: #d97706; }
+  .wallet-box.green strong { color: #059669; }
+  .wallet-box span { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+
+  /* Focus Timer */
+  .timer-card {
+    background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+    border: 2px solid #fde68a;
+  }
+  .timer-presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .preset-btn {
+    flex: 1;
+    min-width: 82px;
+    border: 1.5px solid #fcd34d;
+    background: #fff;
+    color: #92400e;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .preset-btn.active {
+    background: #f59e0b;
+    color: #fff;
+    border-color: #d97706;
+  }
+  .timer-display-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 18px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .timer-clock {
+    font-size: clamp(38px, 7vw, 48px);
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #9a3412;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+  .timer-reward-hint {
+    margin-top: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #b45309;
+  }
+  .timer-controls {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 8px;
+  }
+  .btn-chunky {
+    border: none;
+    border-radius: 14px;
+    padding: 11px 14px;
+    font-size: 13.5px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.12s ease, opacity 0.12s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 42px;
+  }
+  .btn-chunky:active { transform: translateY(2px); }
+  .btn-primary {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #fff;
+    box-shadow: 0 5px 0 #3730a3;
+  }
+  .btn-amber {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    box-shadow: 0 5px 0 #92400e;
+  }
+  .btn-emerald {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    box-shadow: 0 5px 0 #065f46;
+  }
+  .btn-soft {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+  }
+  .btn-danger-soft {
+    background: #fff1f2;
+    color: #be123c;
+    border: 1px solid #fecdd3;
+  }
+
+  /* Task Board */
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 13px;
+    border-radius: 16px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafc;
+    transition: all 0.2s ease;
+  }
+  .task-item.done {
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+  }
+  .task-left {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+  .task-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    border: 2px solid #cbd5e1;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+  }
+  .task-item.done .task-check {
+    background: #10b981;
+    border-color: #059669;
+  }
+  .task-info { min-width: 0; }
+  .task-title {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--ink);
+    word-break: break-word;
+  }
+  .task-item.done .task-title {
+    text-decoration: line-through;
+    color: #065f46;
+  }
+  .task-sub {
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .task-right {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+  }
+  .star-tag {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+    font-size: 12.5px;
+    font-weight: 900;
+    padding: 4px 9px;
+    border-radius: 999px;
+  }
+  .mini-del-btn {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 4px 6px;
+    border-radius: 8px;
+  }
+  .mini-del-btn:hover { background: #fee2e2; color: #e11d48; }
+
+  .add-form {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #cbd5e1;
+    display: grid;
+    grid-template-columns: 62px 1fr 86px auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .input-field {
+    width: 100%;
+    padding: 9px 11px;
+    border-radius: 12px;
+    border: 1.5px solid #cbd5e1;
+    font-size: 13.5px;
+    background: #fff;
+    color: var(--ink);
+  }
+  .input-field:focus {
+    outline: none;
+    border-color: var(--indigo);
+  }
+
+  /* 21-Day Streak Matrix */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+  .day-cell {
+    border-radius: 14px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafc;
+    padding: 8px 4px;
+    text-align: center;
+    position: relative;
+    min-height: 62px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.14s ease, border-color 0.14s ease;
+  }
+  .day-cell:hover { transform: translateY(-2px); border-color: #a5b4fc; }
+  .day-cell.checked {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-color: #f59e0b;
+    color: #78350f;
+  }
+  .day-cell.active-day {
+    border: 2px solid #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+  }
+  .day-cell.milestone::after {
+    content: "🏆";
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    font-size: 13px;
+  }
+  .day-num { font-size: 11px; font-weight: 800; color: var(--muted); }
+  .day-cell.checked .day-num { color: #92400e; }
+  .day-mark { font-size: 18px; line-height: 1.25; margin-top: 2px; }
+  .day-stars { font-size: 10.5px; font-weight: 800; color: #b45309; }
+  .matrix-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  /* Wish Shop */
+  .shop-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .shop-item {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 12px;
+    background: #fafaf9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .shop-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .shop-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .shop-cost {
+    font-size: 12px;
+    font-weight: 900;
+    color: #b45309;
+    background: #fef3c7;
+    padding: 3px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .redeem-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    font-weight: 800;
+    cursor: pointer;
+    background: #4f46e5;
+    color: #fff;
+    transition: opacity 0.15s ease;
+  }
+  .redeem-btn:disabled {
+    background: #cbd5e1;
+    color: #64748b;
+    cursor: not-allowed;
+  }
+  .history-list {
+    margin-top: 12px;
+    max-height: 148px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .history-row {
+    font-size: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 7px 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: #475569;
+  }
+
+  /* Certificate & Backup Section */
+  .cert-panel {
+    margin-top: 18px;
+    background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+    border: 2px solid #fcd34d;
+  }
+  .cert-controls {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 14px;
+  }
+  .field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: #475569;
+    margin-bottom: 4px;
+  }
+  .cert-preview-card {
+    background: #fffdf7;
+    border: 3px double #d97706;
+    border-radius: 18px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .cert-preview-text h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    color: #92400e;
+  }
+  .cert-preview-text p {
+    margin: 0;
+    font-size: 13px;
+    color: #57534e;
+  }
+  .backup-bar {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #cbd5e1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .backup-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Toast & Confetti */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%) translateY(90px);
+    background: rgba(15, 23, 42, 0.94);
+    color: #fff;
+    padding: 11px 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 700;
+    z-index: 90;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.28s ease;
+    opacity: 0;
+    pointer-events: none;
+    max-width: 92vw;
+    text-align: center;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* Modal for exported PNG preview */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.68);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 100;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-card {
+    background: #fff;
+    border-radius: 22px;
+    max-width: 460px;
+    width: 100%;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+  }
+  .modal-card img {
+    width: 100%;
+    max-height: 62vh;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin: 10px 0;
+  }
+
+  footer {
+    text-align: center;
+    padding: 14px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 920px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .cert-controls { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .container { padding: 12px 10px 34px; }
+    .card { padding: 15px; border-radius: 20px; }
+    .add-form { grid-template-columns: 56px 1fr; }
+    .add-form select, .add-form button { grid-column: span 1; }
+    .shop-grid { grid-template-columns: 1fr; }
+    .matrix-grid { gap: 5px; }
+    .day-cell { min-height: 54px; border-radius: 11px; }
+    .timer-controls { grid-template-columns: 1fr 1fr; }
+    #timerStartPauseBtn { grid-column: span 2; }
+    .evo-stages-row { gap: 4px; }
+    .evo-chip { font-size: 10px; padding: 5px 2px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-badge">👾</div>
+      <div class="brand-text">
+        <h1>21天自律小怪兽打卡积分墙</h1>
+        <p>4–12岁亲子每日习惯养成 · 纯离线本地保存</p>
+      </div>
+    </div>
+    <div class="top-stats">
+      <span class="stat-pill gold">⭐ 可用积分 <strong id="topSpendableStars">0</strong></span>
+      <span class="stat-pill">✨ 累计星力 <strong id="topTotalStars">0</strong></span>
+      <span class="stat-pill">🔥 打卡 <strong id="topStreakDays">0</strong>/21天</span>
+      <button id="soundToggleBtn" class="icon-btn active" type="button">🔊 音效开</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <nav class="quick-nav" aria-label="快捷导航">
+    <a class="nav-chip" href="#petSection">👾 小星兽进化</a>
+    <a class="nav-chip" href="#taskSection">✅ 今日习惯打卡</a>
+    <a class="nav-chip" href="#timerSection">⏱️ 专注倒计时</a>
+    <a class="nav-chip" href="#matrixSection">📅 21天连续矩阵</a>
+    <a class="nav-chip" href="#shopSection">🎁 积分愿望商店</a>
+    <a class="nav-chip" href="#certSection">🏆 荣誉奖状导出</a>
+  </nav>
+
+  <div class="main-grid">
+    <!-- Left Column: Pet + 21-Day Matrix -->
+    <div class="col-stack">
+      <section id="petSection" class="card pet-card">
+        <div class="card-head">
+          <h2 class="card-title">🌟 守护萌宠：小星兽成长舱</h2>
+          <span id="petStageBadge" class="badge-pill">第 1 阶段 · 星光蛋</span>
+        </div>
+
+        <div class="pet-arena">
+          <div id="petStageTitle" class="pet-stage-tag">🥚 Lv.1 神秘星光蛋</div>
+          <div id="petSvgWrap" class="pet-svg-wrap" title="点一点小星兽互动！"></div>
+          <div id="petSpeech" class="pet-speech">完成今天的习惯任务，喂我吃小星星吧！</div>
+        </div>
+
+        <div class="evo-progress-wrap">
+          <div class="evo-meta">
+            <span id="evoProgressLabel">距离下一阶段进化：还需 10 颗星</span>
+            <span id="evoProgressPct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="evoProgressFill" class="progress-fill" style="width: 0%"></div>
+          </div>
+          <div id="evoStagesRow" class="evo-stages-row"></div>
+        </div>
+
+        <div class="star-wallet">
+          <div class="wallet-box gold">
+            <strong id="walletSpendable">0</strong>
+            <span>可用积分（商店兑换）</span>
+          </div>
+          <div class="wallet-box">
+            <strong id="walletTotal">0</strong>
+            <span>累计星力（驱动进化）</span>
+          </div>
+          <div class="wallet-box green">
+            <strong id="walletToday">0</strong>
+            <span>今日已获星星</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="matrixSection" class="card">
+        <div class="card-head">
+          <h2 class="card-title">📅 21天自律连续打卡矩阵</h2>
+          <span id="matrixSummaryBadge" class="badge-pill emerald">已完成 0 / 21 天</span>
+        </div>
+        <div id="matrixGrid" class="matrix-grid"></div>
+        <div class="matrix-actions">
+          <span id="activeDayHint">当前记录：第 1 天（每日完成任意任务自动点亮，也可点击格子切换补卡）</span>
+          <button id="advanceDayBtn" class="btn-chunky btn-soft" type="button" style="padding:7px 12px;min-height:34px;font-size:12px;">⏭️ 进入下一天打卡</button>
+        </div>
+      </section>
+
+      <section id="timerSection" class="card timer-card">
+        <div class="card-head">
+          <h2 class="card-title">⏱️ 专注倒计时奖励器</h2>
+          <span class="badge-pill amber">结束自动发星！</span>
+        </div>
+        <div class="timer-presets">
+          <button type="button" class="preset-btn active" data-mins="5">5 分钟 (+1⭐)</button>
+          <button type="button" class="preset-btn" data-mins="15">15 分钟 (+2⭐)</button>
+          <button type="button" class="preset-btn" data-mins="25">25 分钟 (+3⭐)</button>
+        </div>
+        <div class="timer-display-box">
+          <div id="timerClock" class="timer-clock">05:00</div>
+          <div id="timerStatusText" class="timer-reward-hint">准备就绪：完成本轮专注可得 +1 颗星星</div>
+        </div>
+        <div class="timer-controls">
+          <button id="timerStartPauseBtn" class="btn-chunky btn-amber" type="button">▶ 开始专注</button>
+          <button id="timerResetBtn" class="btn-chunky btn-soft" type="button">↺ 重置</button>
+          <button id="timerFinishDemoBtn" class="btn-chunky btn-emerald" type="button" title="提前完成本轮专注">✓ 结算</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right Column: Habit Tasks + Wish Shop -->
+    <div class="col-stack">
+      <section id="taskSection" class="card">
+        <div class="card-head">
+          <h2 class="card-title">✅ 今日习惯任务板</h2>
+          <span id="taskDonePill" class="badge-pill">今日 0 / 6</span>
+        </div>
+
+        <div id="taskList" class="task-list"></div>
+
+        <form id="addTaskForm" class="add-form">
+          <input id="newTaskIcon" class="input-field" type="text" value="🌟" maxlength="4" aria-label="任务图标" title="图标 Emoji">
+          <input id="newTaskTitle" class="input-field" type="text" placeholder="添加家长自定义习惯（如：练琴15分钟）" maxlength="30" required>
+          <select id="newTaskStars" class="input-field" aria-label="奖励星数">
+            <option value="1">+1 ⭐</option>
+            <option value="2" selected>+2 ⭐</option>
+            <option value="3">+3 ⭐</option>
+            <option value="4">+4 ⭐</option>
+            <option value="5">+5 ⭐</option>
+          </select>
+          <button class="btn-chunky btn-primary" type="submit" style="padding:9px 14px;min-height:38px;box-shadow:none;">+ 添加</button>
+        </form>
+      </section>
+
+      <section id="shopSection" class="card">
+        <div class="card-head">
+          <h2 class="card-title">🎁 积分愿望小商店</h2>
+          <span id="shopStarPill" class="badge-pill amber">当前可用 0 ⭐</span>
+        </div>
+
+        <div id="shopGrid" class="shop-grid"></div>
+
+        <form id="addRewardForm" class="add-form">
+          <input id="newRewardIcon" class="input-field" type="text" value="🎈" maxlength="4" aria-label="奖励图标">
+          <input id="newRewardTitle" class="input-field" type="text" placeholder="自定义家庭奖励（如：挑一本新绘本）" maxlength="26" required>
+          <input id="newRewardCost" class="input-field" type="number" min="1" max="200" value="10" aria-label="所需星数">
+          <button class="btn-chunky btn-amber" type="submit" style="padding:9px 14px;min-height:38px;box-shadow:none;">+ 上架</button>
+        </form>
+
+        <div style="margin-top:14px;font-size:13px;font-weight:800;color:#475569;">📜 最近兑换记录</div>
+        <div id="redeemHistoryList" class="history-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Certificate & Backup Panel -->
+  <section id="certSection" class="card cert-panel">
+    <div class="card-head">
+      <h2 class="card-title">🏆 21天自律之星荣誉奖状 · 一键高清导出</h2>
+      <span class="badge-pill amber">1080×1440 小红书晒单高清 PNG</span>
+    </div>
+
+    <div class="cert-controls">
+      <div>
+        <label class="field-label" for="childNameInput">宝贝昵称</label>
+        <input id="childNameInput" class="input-field" type="text" placeholder="例如：小星宝" maxlength="16">
+      </div>
+      <div>
+        <label class="field-label" for="parentNoteInput">家长表扬寄语（印在奖状上）</label>
+        <input id="parentNoteInput" class="input-field" type="text" placeholder="例如：坚持21天养成好习惯，爸爸妈妈为你骄傲！" maxlength="50">
+      </div>
+      <button id="exportCertBtn" class="btn-chunky btn-amber" type="button">📥 导出 1080×1440 荣誉奖状 PNG</button>
+    </div>
+
+    <div class="cert-preview-card">
+      <div class="cert-preview-text">
+        <h3 id="certPreviewHeadline">🏆 授予：小星宝 · 21天自律之星</h3>
+        <p id="certPreviewMeta">守护神兽：Lv.1 神秘星光蛋 ｜ 累计星力：0 颗 ｜ 打卡天数：0 / 21 天</p>
+      </div>
+      <span class="badge-pill emerald">支持手机保存相册 &amp; A4 打印</span>
+    </div>
+
+    <div class="backup-bar">
+      <span style="font-size:12.5px;color:var(--muted);">💾 所有打卡、进化与兑换记录均自动保存在本机浏览器，支持 JSON 备份跨设备迁移。</span>
+      <div class="backup-btns">
+        <button id="exportJsonBtn" class="btn-chunky btn-soft" type="button" style="padding:7px 12px;min-height:36px;font-size:12.5px;">⬇ 导出 JSON 备份</button>
+        <label class="btn-chunky btn-soft" style="padding:7px 12px;min-height:36px;font-size:12.5px;cursor:pointer;">
+          ⬆ 导入 JSON 恢复
+          <input id="importJsonInput" type="file" accept=".json,application/json" style="display:none;">
+        </label>
+        <button id="resetAllBtn" class="btn-chunky btn-danger-soft" type="button" style="padding:7px 12px;min-height:36px;font-size:12.5px;">🗑 重置全部数据</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  21天自律小怪兽打卡积分墙 · 100% 纯离线单文件 HTML · 零外部依赖 · 本地安全存储
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<div id="certModal" class="modal-backdrop" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <h3 style="margin:0 0 4px;font-size:17px;">🎉 21天自律之星荣誉奖状已生成</h3>
+    <p style="margin:0;font-size:12.5px;color:#64748b;">手机可长按下方图片保存相册，电脑可点击立即下载 PNG（1080×1440）</p>
+    <img id="certModalImg" alt="21天自律之星荣誉奖状">
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <a id="certDownloadLink" class="btn-chunky btn-amber" style="text-decoration:none;flex:1;" download="21天自律之星荣誉奖状.png">⬇ 下载高清 PNG</a>
+      <button id="certCloseBtn" class="btn-chunky btn-soft" type="button">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const STORAGE_KEY = 'habit_pet_board_v1';
+
+  const STAGES = [
+    {
+      level: 1, minStars: 0, emoji: '🥚', short: '星光蛋', name: 'Lv.1 神秘星光蛋',
+      quote: '蛋壳正在吸收小星星的能量，快去打卡唤醒我吧！',
+      color: '#6366f1'
+    },
+    {
+      level: 2, minStars: 10, emoji: '🐣', short: '萌芽兽', name: 'Lv.2 萌芽小星兽',
+      quote: '咔嚓！我破壳啦～每天坚持打卡我会越来越强壮！',
+      color: '#0ea5e9'
+    },
+    {
+      level: 3, minStars: 30, emoji: '🌱', short: '花蕾兽', name: 'Lv.3 奇思花蕾兽',
+      quote: '头顶长出幸运四叶芽啦！今天也要元气满满哦～',
+      color: '#10b981'
+    },
+    {
+      level: 4, minStars: 60, emoji: '🛡️', short: '星盾兽', name: 'Lv.4 星盾守护兽',
+      quote: '披上金色小斗篷！自律让我拥有守护全家的超能力！',
+      color: '#f59e0b'
+    },
+    {
+      level: 5, minStars: 100, emoji: '🐉', short: '银河龙', name: 'Lv.5 银河星龙王',
+      quote: '闪耀银河终极形态解锁！你就是最棒的自律小冠军！',
+      color: '#7c3aed'
+    }
+  ];
+
+  const DEFAULT_TASKS = [
+    { id: 't1', icon: '📚', title: '作业专注 25分钟', desc: '坐姿端正、不拖拉走神', stars: 3 },
+    { id: 't2', icon: '📖', title: '自主阅读 20分钟', desc: '绘本/桥梁书/科普书均可', stars: 2 },
+    { id: 't3', icon: '🪥', title: '早晚认真刷牙', desc: '巴氏刷牙法 2 分钟以上', stars: 1 },
+    { id: 't4', icon: '🎒', title: '主动整理书包', desc: '自己削铅笔、按课表装书', stars: 2 },
+    { id: 't5', icon: '🏃', title: '跳绳/户外运动', desc: '出汗锻炼 20 分钟活力满满', stars: 3 },
+    { id: 't6', icon: '🌙', title: '睡前情绪复盘', desc: '分享今天最开心的一件小事', stars: 2 }
+  ];
+
+  const DEFAULT_REWARDS = [
+    { id: 'r1', icon: '🌳', title: '周末公园放风', cost: 12 },
+    { id: 'r2', icon: '📖', title: '选择今晚睡前故事', cost: 6 },
+    { id: 'r3', icon: '📺', title: '兑换30分钟动画片', cost: 10 },
+    { id: 'r4', icon: '🎁', title: '小小盲盒基金', cost: 25 }
+  ];
+
+  function createDefaultState() {
+    const days = {};
+    for (let i = 1; i <= 21; i++) {
+      days[i] = { checked: false, completedTaskIds: [], starsEarned: 0 };
+    }
+    return {
+      childName: '小星宝',
+      parentNote: '每天进步一点点，坚持21天遇见更自律的自己！',
+      soundOn: true,
+      totalStarsEarned: 0,
+      spendableStars: 0,
+      activeDay: 1,
+      tasks: DEFAULT_TASKS.map(t => ({ ...t })),
+      rewards: DEFAULT_REWARDS.map(r => ({ ...r })),
+      days,
+      redemptions: [],
+      timerMinutes: 5,
+      focusSessionsDone: 0
+    };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return createDefaultState();
+      const parsed = JSON.parse(raw);
+      const base = createDefaultState();
+      const mergedDays = { ...base.days, ...(parsed.days || {}) };
+      for (let i = 1; i <= 21; i++) {
+        if (!mergedDays[i] || typeof mergedDays[i] !== 'object') {
+          mergedDays[i] = { checked: false, completedTaskIds: [], starsEarned: 0 };
+        }
+        if (!Array.isArray(mergedDays[i].completedTaskIds)) {
+          mergedDays[i].completedTaskIds = [];
+        }
+      }
+      return {
+        ...base,
+        ...parsed,
+        tasks: Array.isArray(parsed.tasks) && parsed.tasks.length ? parsed.tasks : base.tasks,
+        rewards: Array.isArray(parsed.rewards) && parsed.rewards.length ? parsed.rewards : base.rewards,
+        redemptions: Array.isArray(parsed.redemptions) ? parsed.redemptions : [],
+        days: mergedDays,
+        activeDay: Math.min(21, Math.max(1, Number(parsed.activeDay) || 1)),
+        totalStarsEarned: Math.max(0, Number(parsed.totalStarsEarned) || 0),
+        spendableStars: Math.max(0, Number(parsed.spendableStars) || 0)
+      };
+    } catch (_) {
+      return createDefaultState();
+    }
+  }
+
+  let state = loadState();
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (_) {}
+  }
+
+  // Web Audio Synthesizer (graceful fallback)
+  let audioCtx = null;
+  function playTone(notes) {
+    if (!state.soundOn) return;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      if (!audioCtx) audioCtx = new Ctx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      notes.forEach(([freq, offset, dur, type = 'sine', vol = 0.14]) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now + offset);
+        gain.gain.setValueAtTime(0.001, now + offset);
+        gain.gain.exponentialRampToValueAtTime(vol, now + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + offset);
+        osc.stop(now + offset + dur + 0.02);
+      });
+    } catch (_) {}
+  }
+  const sfxStar = () => playTone([[523.25, 0, 0.12, 'triangle'], [659.25, 0.08, 0.14, 'triangle'], [783.99, 0.16, 0.22, 'sine']]);
+  const sfxEvolve = () => playTone([[523.25, 0, 0.12], [659.25, 0.1, 0.12], [783.99, 0.2, 0.14], [1046.5, 0.32, 0.35, 'triangle', 0.18]]);
+  const sfxRedeem = () => playTone([[587.33, 0, 0.11, 'sine'], [880, 0.1, 0.24, 'triangle']]);
+  const sfxClick = () => playTone([[440, 0, 0.07, 'sine', 0.08]]);
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  function getCurrentStage(stars) {
+    let current = STAGES[0];
+    for (const s of STAGES) {
+      if (stars >= s.minStars) current = s;
+    }
+    return current;
+  }
+
+  function getPetSvg(level) {
+    // 5 rich distinct inline SVG illustrations
+    if (level === 1) {
+      return `<svg viewBox="0 0 200 190" aria-label="Lv.1 星光蛋">
+        <defs>
+          <radialGradient id="eggGrad" cx="38%" cy="32%" r="68%">
+            <stop offset="0%" stop-color="#fef9c3"/>
+            <stop offset="55%" stop-color="#c7d2fe"/>
+            <stop offset="100%" stop-color="#6366f1"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="100" cy="168" rx="48" ry="11" fill="rgba(79,70,229,0.16)"/>
+        <path d="M100 28 C134 28 154 78 150 118 C146 150 126 164 100 164 C74 164 54 150 50 118 C46 78 66 28 100 28 Z" fill="url(#eggGrad)" stroke="#4338ca" stroke-width="4"/>
+        <path d="M64 95 Q84 78 100 96 Q116 114 138 92" fill="none" stroke="#fef08a" stroke-width="5" stroke-linecap="round"/>
+        <polygon class="sparkle-anim" points="100,48 105,60 118,60 107,68 111,80 100,72 89,80 93,68 82,60 95,60" fill="#fde047" stroke="#ca8a04" stroke-width="1.5"/>
+        <circle class="sparkle-anim" cx="42" cy="58" r="5" fill="#f59e0b"/>
+        <circle class="sparkle-anim" cx="158" cy="64" r="4" fill="#ec4899"/>
+      </svg>`;
+    }
+    if (level === 2) {
+      return `<svg viewBox="0 0 200 190" aria-label="Lv.2 萌芽小星兽">
+        <ellipse cx="100" cy="168" rx="46" ry="10" fill="rgba(14,165,233,0.18)"/>
+        <circle cx="62" cy="56" r="16" fill="#7dd3fc" stroke="#0284c7" stroke-width="3.5"/>
+        <circle cx="138" cy="56" r="16" fill="#7dd3fc" stroke="#0284c7" stroke-width="3.5"/>
+        <ellipse cx="100" cy="108" rx="54" ry="48" fill="#bae6fd" stroke="#0284c7" stroke-width="4"/>
+        <ellipse cx="100" cy="124" rx="34" ry="25" fill="#fef9c3"/>
+        <circle cx="80" cy="96" r="8" fill="#0f172a"/><circle cx="83" cy="93" r="3" fill="#fff"/>
+        <circle cx="120" cy="96" r="8" fill="#0f172a"/><circle cx="123" cy="93" r="3" fill="#fff"/>
+        <ellipse cx="66" cy="109" rx="7" ry="4" fill="#fda4af"/>
+        <ellipse cx="134" cy="109" rx="7" ry="4" fill="#fda4af"/>
+        <path d="M90 110 Q100 120 110 110" fill="none" stroke="#0f172a" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M100 60 Q98 40 112 36" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+        <circle class="sparkle-anim" cx="114" cy="34" r="7" fill="#fde047" stroke="#d97706" stroke-width="2"/>
+      </svg>`;
+    }
+    if (level === 3) {
+      return `<svg viewBox="0 0 200 190" aria-label="Lv.3 奇思花蕾兽">
+        <ellipse cx="100" cy="168" rx="50" ry="11" fill="rgba(16,185,129,0.2)"/>
+        <path d="M100 54 C96 34 78 22 68 34 C60 44 82 54 100 54 Z" fill="#34d399" stroke="#047857" stroke-width="3"/>
+        <path d="M100 54 C104 34 122 22 132 34 C140 44 118 54 100 54 Z" fill="#6ee7b7" stroke="#047857" stroke-width="3"/>
+        <circle cx="100" cy="36" r="9" fill="#fde047" stroke="#d97706" stroke-width="2.5"/>
+        <ellipse cx="100" cy="112" rx="56" ry="48" fill="#a7f3d0" stroke="#059669" stroke-width="4"/>
+        <ellipse cx="52" cy="120" rx="14" ry="10" fill="#6ee7b7" stroke="#059669" stroke-width="3"/>
+        <ellipse cx="148" cy="120" rx="14" ry="10" fill="#6ee7b7" stroke="#059669" stroke-width="3"/>
+        <ellipse cx="100" cy="128" rx="35" ry="24" fill="#fffbeb"/>
+        <circle cx="80" cy="100" r="8.5" fill="#064e3b"/><circle cx="83" cy="97" r="3.2" fill="#fff"/>
+        <circle cx="120" cy="100" r="8.5" fill="#064e3b"/><circle cx="123" cy="97" r="3.2" fill="#fff"/>
+        <path d="M88 114 Q100 125 112 114" fill="none" stroke="#064e3b" stroke-width="3.5" stroke-linecap="round"/>
+        <polygon class="sparkle-anim" points="40,68 44,76 52,76 45,81 48,89 40,84 32,89 35,81 28,76 36,76" fill="#fde047"/>
+        <polygon class="sparkle-anim" points="160,70 163,77 170,77 164,82 166,89 160,85 154,89 156,82 150,77 157,77" fill="#f472b6"/>
+      </svg>`;
+    }
+    if (level === 4) {
+      return `<svg viewBox="0 0 200 190" aria-label="Lv.4 星盾守护兽">
+        <ellipse cx="100" cy="170" rx="54" ry="11" fill="rgba(245,158,11,0.24)"/>
+        <path d="M44 106 L28 148 L100 160 L172 148 L156 106 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="62,62 46,32 82,48" fill="#fbbf24" stroke="#b45309" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="138,62 154,32 118,48" fill="#fbbf24" stroke="#b45309" stroke-width="3.5" stroke-linejoin="round"/>
+        <ellipse cx="100" cy="108" rx="54" ry="48" fill="#fde68a" stroke="#d97706" stroke-width="4"/>
+        <ellipse cx="100" cy="126" rx="33" ry="24" fill="#fff"/>
+        <polygon points="100,114 114,122 110,138 100,144 90,138 86,122" fill="#4f46e5" stroke="#312e81" stroke-width="2.5"/>
+        <polygon points="100,120 103,126 109,126 104,130 106,136 100,132 94,136 96,130 91,126 97,126" fill="#fde047"/>
+        <circle cx="80" cy="92" r="8.5" fill="#1e293b"/><circle cx="83" cy="89" r="3" fill="#fff"/>
+        <circle cx="120" cy="92" r="8.5" fill="#1e293b"/><circle cx="123" cy="89" r="3" fill="#fff"/>
+        <path d="M90 104 Q100 112 110 104" fill="none" stroke="#78350f" stroke-width="3.5" stroke-linecap="round"/>
+        <circle class="sparkle-anim" cx="100" cy="24" r="8" fill="#fde047" stroke="#d97706" stroke-width="2"/>
+      </svg>`;
+    }
+    return `<svg viewBox="0 0 200 190" aria-label="Lv.5 银河星龙王">
+      <defs>
+        <linearGradient id="wingGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#c084fc"/>
+          <stop offset="100%" stop-color="#4f46e5"/>
+        </linearGradient>
+        <radialGradient id="dragonBody" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#e9d5ff"/>
+          <stop offset="55%" stop-color="#8b5cf6"/>
+          <stop offset="100%" stop-color="#4c1d95"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="100" cy="172" rx="58" ry="11" fill="rgba(124,58,237,0.24)"/>
+      <path d="M52 104 Q18 68 24 42 Q50 56 64 84 Z" fill="url(#wingGrad)" stroke="#312e81" stroke-width="3"/>
+      <path d="M148 104 Q182 68 176 42 Q150 56 136 84 Z" fill="url(#wingGrad)" stroke="#312e81" stroke-width="3"/>
+      <polygon points="74,56 64,22 90,46" fill="#fde047" stroke="#b45309" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="126,56 136,22 110,46" fill="#fde047" stroke="#b45309" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="88,48 100,26 112,48" fill="#f59e0b" stroke="#92400e" stroke-width="2.5"/>
+      <ellipse cx="100" cy="110" rx="52" ry="48" fill="url(#dragonBody)" stroke="#3b0764" stroke-width="4"/>
+      <ellipse cx="100" cy="128" rx="34" ry="24" fill="#fef3c7"/>
+      <polygon points="100,114 105,125 117,125 107,132 111,144 100,137 89,144 93,132 83,125 95,125" fill="#f59e0b" stroke="#92400e" stroke-width="2"/>
+      <circle cx="80" cy="92" r="9" fill="#fff"/><circle cx="81" cy="92" r="5" fill="#1e1b4b"/><circle cx="83" cy="89" r="2.2" fill="#fff"/>
+      <circle cx="120" cy="92" r="9" fill="#fff"/><circle cx="119" cy="92" r="5" fill="#1e1b4b"/><circle cx="121" cy="89" r="2.2" fill="#fff"/>
+      <path d="M88 106 Q100 116 112 106" fill="none" stroke="#fde047" stroke-width="3.5" stroke-linecap="round"/>
+      <circle class="sparkle-anim" cx="30" cy="28" r="5" fill="#fde047"/>
+      <circle class="sparkle-anim" cx="170" cy="28" r="5" fill="#38bdf8"/>
+      <circle class="sparkle-anim" cx="100" cy="14" r="5" fill="#f472b6"/>
+    </svg>`;
+  }
+
+  function triggerPetBoing() {
+    const wrap = document.getElementById('petSvgWrap');
+    wrap.classList.remove('boing');
+    void wrap.offsetWidth;
+    wrap.classList.add('boing');
+  }
+
+  function addStars(amount, reasonText) {
+    const prevStage = getCurrentStage(state.totalStarsEarned);
+    state.totalStarsEarned = Math.max(0, state.totalStarsEarned + amount);
+    state.spendableStars = Math.max(0, state.spendableStars + amount);
+    const nextStage = getCurrentStage(state.totalStarsEarned);
+    saveState();
+    renderAll();
+    triggerPetBoing();
+    if (nextStage.level > prevStage.level) {
+      sfxEvolve();
+      showToast(`🎉 进化啦！小星兽升级为【${nextStage.name}】！`);
+    } else if (amount > 0) {
+      sfxStar();
+      showToast(`⭐ ${reasonText} (+${amount} 颗星)`);
+    }
+  }
+
+  // Toggle task for activeDay
+  function toggleTask(taskId) {
+    const task = state.tasks.find(t => t.id === taskId);
+    if (!task) return;
+    const dayObj = state.days[state.activeDay];
+    const idx = dayObj.completedTaskIds.indexOf(taskId);
+    if (idx === -1) {
+      dayObj.completedTaskIds.push(taskId);
+      dayObj.starsEarned = (dayObj.starsEarned || 0) + task.stars;
+      dayObj.checked = true;
+      addStars(task.stars, `完成「${task.title}」`);
+    } else {
+      dayObj.completedTaskIds.splice(idx, 1);
+      dayObj.starsEarned = Math.max(0, (dayObj.starsEarned || 0) - task.stars);
+      dayObj.checked = dayObj.completedTaskIds.length > 0;
+      state.totalStarsEarned = Math.max(0, state.totalStarsEarned - task.stars);
+      state.spendableStars = Math.max(0, state.spendableStars - task.stars);
+      sfxClick();
+      saveState();
+      renderAll();
+      showToast(`已取消「${task.title}」(-${task.stars} ⭐)`);
+    }
+  }
+
+  // Focus Timer Logic
+  let timerInterval = null;
+  let timerRunning = false;
+  let timerRemainingSec = state.timerMinutes * 60;
+
+  function getTimerReward(mins) {
+    if (mins >= 25) return 3;
+    if (mins >= 15) return 2;
+    return 1;
+  }
+
+  function formatMMSS(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function renderTimer() {
+    document.getElementById('timerClock').textContent = formatMMSS(timerRemainingSec);
+    const reward = getTimerReward(state.timerMinutes);
+    document.getElementById('timerStatusText').textContent = timerRunning
+      ? `专注进行中… 完成后自动获得 +${reward} 颗星`
+      : `准备就绪：完成 ${state.timerMinutes} 分钟专注可得 +${reward} 颗星星`;
+    const btn = document.getElementById('timerStartPauseBtn');
+    btn.textContent = timerRunning ? '⏸ 暂停专注' : '▶ 开始专注';
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      b.classList.toggle('active', Number(b.dataset.mins) === state.timerMinutes);
+    });
+  }
+
+  function completeFocusTimer() {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    const reward = getTimerReward(state.timerMinutes);
+    state.focusSessionsDone = (state.focusSessionsDone || 0) + 1;
+    const dayObj = state.days[state.activeDay];
+    dayObj.checked = true;
+    dayObj.starsEarned = (dayObj.starsEarned || 0) + reward;
+    timerRemainingSec = state.timerMinutes * 60;
+    addStars(reward, `${state.timerMinutes}分钟专注完成`);
+    renderTimer();
+  }
+
+  function startOrPauseTimer() {
+    if (timerRunning) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      sfxClick();
+      renderTimer();
+      return;
+    }
+    timerRunning = true;
+    sfxClick();
+    renderTimer();
+    timerInterval = setInterval(() => {
+      timerRemainingSec -= 1;
+      if (timerRemainingSec <= 0) {
+        completeFocusTimer();
+      } else {
+        renderTimer();
+      }
+    }, 1000);
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerRemainingSec = state.timerMinutes * 60;
+    sfxClick();
+    renderTimer();
+  }
+
+  // Render All UI
+  function renderAll() {
+    const stage = getCurrentStage(state.totalStarsEarned);
+    const nextStage = STAGES.find(s => s.level === stage.level + 1) || null;
+    const checkedDays = Object.values(state.days).filter(d => d.checked).length;
+    const activeDayObj = state.days[state.activeDay];
+
+    // Topbar & Wallets
+    document.getElementById('topSpendableStars').textContent = state.spendableStars;
+    document.getElementById('topTotalStars').textContent = state.totalStarsEarned;
+    document.getElementById('topStreakDays').textContent = checkedDays;
+    document.getElementById('walletSpendable').textContent = state.spendableStars;
+    document.getElementById('walletTotal').textContent = state.totalStarsEarned;
+    document.getElementById('walletToday').textContent = activeDayObj.starsEarned || 0;
+    document.getElementById('shopStarPill').textContent = `当前可用 ${state.spendableStars} ⭐`;
+
+    const soundBtn = document.getElementById('soundToggleBtn');
+    soundBtn.classList.toggle('active', state.soundOn);
+    soundBtn.textContent = state.soundOn ? '🔊 音效开' : '🔇 静音';
+
+    // Pet Card
+    document.getElementById('petStageBadge').textContent = `第 ${stage.level} 阶段 · ${stage.short}`;
+    document.getElementById('petStageTitle').textContent = `${stage.emoji} ${stage.name}`;
+    document.getElementById('petSvgWrap').innerHTML = getPetSvg(stage.level);
+    document.getElementById('petSpeech').textContent = stage.quote;
+
+    if (nextStage) {
+      const span = nextStage.minStars - stage.minStars;
+      const done = state.totalStarsEarned - stage.minStars;
+      const pct = Math.min(100, Math.max(0, Math.round((done / span) * 100)));
+      const need = Math.max(0, nextStage.minStars - state.totalStarsEarned);
+      document.getElementById('evoProgressLabel').textContent = `距离「${nextStage.short}」还需 ${need} 颗星`;
+      document.getElementById('evoProgressPct').textContent = `${pct}%`;
+      document.getElementById('evoProgressFill').style.width = `${pct}%`;
+    } else {
+      document.getElementById('evoProgressLabel').textContent = '🎉 已解锁全部 5 阶终极进化！';
+      document.getElementById('evoProgressPct').textContent = 'MAX';
+      document.getElementById('evoProgressFill').style.width = '100%';
+    }
+
+    document.getElementById('evoStagesRow').innerHTML = STAGES.map(s => {
+      const unlocked = state.totalStarsEarned >= s.minStars;
+      const current = s.level === stage.level;
+      return `
+        <div class="evo-chip ${unlocked ? 'unlocked' : ''} ${current ? 'current' : ''}">
+          <span>${s.emoji}</span>
+          ${s.short}<br>${s.minStars}⭐
+        </div>
+      `;
+    }).join('');
+
+    // Tasks
+    const doneIds = activeDayObj.completedTaskIds || [];
+    document.getElementById('taskDonePill').textContent = `第${state.activeDay}天 ${doneIds.length} / ${state.tasks.length}`;
+    const taskList = document.getElementById('taskList');
+    taskList.innerHTML = '';
+    state.tasks.forEach(t => {
+      const isDone = doneIds.includes(t.id);
+      const row = document.createElement('div');
+      row.className = `task-item ${isDone ? 'done' : ''}`;
+      row.innerHTML = `
+        <div class="task-left" role="button" tabindex="0" aria-pressed="${isDone}">
+          <div class="task-check">${isDone ? '✓' : ''}</div>
+          <div class="task-info">
+            <div class="task-title">${t.icon} ${t.title}</div>
+            <div class="task-sub">${t.desc || '每日自律习惯养成'}</div>
+          </div>
+        </div>
+        <div class="task-right">
+          <span class="star-tag">+${t.stars} ⭐</span>
+          <button type="button" class="mini-del-btn" title="删除此任务" aria-label="删除任务">✕</button>
+        </div>
+      `;
+      row.querySelector('.task-left').addEventListener('click', () => toggleTask(t.id));
+      row.querySelector('.mini-del-btn').addEventListener('click', () => {
+        if (state.tasks.length <= 1) {
+          showToast('至少保留 1 个习惯任务哦');
+          return;
+        }
+        state.tasks = state.tasks.filter(item => item.id !== t.id);
+        saveState();
+        renderAll();
+        showToast(`已移除任务「${t.title}」`);
+      });
+      taskList.appendChild(row);
+    });
+
+    // 21-Day Matrix
+    document.getElementById('matrixSummaryBadge').textContent = `已完成 ${checkedDays} / 21 天`;
+    document.getElementById('activeDayHint').textContent = `当前编辑：第 ${state.activeDay} 天（点选任意格子可切换打卡日期）`;
+    const matrixGrid = document.getElementById('matrixGrid');
+    matrixGrid.innerHTML = '';
+    for (let d = 1; d <= 21; d++) {
+      const info = state.days[d];
+      const isActive = d === state.activeDay;
+      const isMilestone = d === 7 || d === 14 || d === 21;
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = `day-cell ${info.checked ? 'checked' : ''} ${isActive ? 'active-day' : ''} ${isMilestone ? 'milestone' : ''}`;
+      cell.innerHTML = `
+        <span class="day-num">D${d}</span>
+        <span class="day-mark">${info.checked ? '⭐' : '○'}</span>
+        <span class="day-stars">${info.checked ? `+${Math.max(1, info.starsEarned || 1)}★` : (isMilestone ? '里程碑' : '待打卡')}</span>
+      `;
+      cell.addEventListener('click', () => {
+        state.activeDay = d;
+        sfxClick();
+        saveState();
+        renderAll();
+      });
+      matrixGrid.appendChild(cell);
+    }
+
+    // Wish Shop
+    const shopGrid = document.getElementById('shopGrid');
+    shopGrid.innerHTML = '';
+    state.rewards.forEach(r => {
+      const canAfford = state.spendableStars >= r.cost;
+      const card = document.createElement('div');
+      card.className = 'shop-item';
+      card.innerHTML = `
+        <div class="shop-top">
+          <div class="shop-title">${r.icon} ${r.title}</div>
+          <span class="shop-cost">${r.cost} ⭐</span>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button type="button" class="redeem-btn" ${canAfford ? '' : 'disabled'}>${canAfford ? '立即兑换' : `还差 ${r.cost - state.spendableStars} ⭐`}</button>
+          <button type="button" class="mini-del-btn" title="下架奖励">✕</button>
+        </div>
+      `;
+      card.querySelector('.redeem-btn').addEventListener('click', () => {
+        if (state.spendableStars < r.cost) return;
+        state.spendableStars -= r.cost;
+        const now = new Date();
+        const stamp = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        state.redemptions.unshift({ title: `${r.icon} ${r.title}`, cost: r.cost, time: stamp });
+        state.redemptions = state.redemptions.slice(0, 20);
+        sfxRedeem();
+        saveState();
+        renderAll();
+        showToast(`🎁 兑换成功！「${r.title}」(-${r.cost} ⭐)`);
+      });
+      card.querySelector('.mini-del-btn').addEventListener('click', () => {
+        state.rewards = state.rewards.filter(item => item.id !== r.id);
+        saveState();
+        renderAll();
+      });
+      shopGrid.appendChild(card);
+    });
+
+    // Redemption History
+    const histEl = document.getElementById('redeemHistoryList');
+    if (!state.redemptions.length) {
+      histEl.innerHTML = '<div class="history-row"><span>还没有兑换记录，快攒小星星换第一个奖励吧！</span></div>';
+    } else {
+      histEl.innerHTML = state.redemptions.map(h => `
+        <div class="history-row">
+          <span><strong>${h.title}</strong></span>
+          <span>-${h.cost} ⭐ · ${h.time}</span>
+        </div>
+      `).join('');
+    }
+
+    // Certificate preview text
+    const child = (state.childName || '小星宝').trim() || '小星宝';
+    document.getElementById('certPreviewHeadline').textContent = `🏆 授予：${child} · 21天自律之星`;
+    document.getElementById('certPreviewMeta').textContent =
+      `守护神兽：${stage.name} ｜ 累计星力：${state.totalStarsEarned} 颗 ｜ 打卡天数：${checkedDays} / 21 天`;
+  }
+
+  // Generate 1080x1440 Canvas Certificate PNG
+  function generateCertificateDataUrl() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1440;
+    const ctx = canvas.getContext('2d');
+
+    const child = (state.childName || '小星宝').trim() || '小星宝';
+    const note = (state.parentNote || '每天进步一点点，坚持21天遇见更自律的自己！').trim();
+    const stage = getCurrentStage(state.totalStarsEarned);
+    const checkedDays = Object.values(state.days).filter(d => d.checked).length;
+
+    // Warm cream background
+    const bgGrad = ctx.createLinearGradient(0, 0, 1080, 1440);
+    bgGrad.addColorStop(0, '#fffdf5');
+    bgGrad.addColorStop(0.5, '#fffbeb');
+    bgGrad.addColorStop(1, '#eef2ff');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, 1080, 1440);
+
+    // Outer & inner decorative certificate frames
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 14;
+    ctx.strokeRect(42, 42, 996, 1356);
+    ctx.strokeStyle = '#4f46e5';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(64, 64, 952, 1312);
+
+    // Top Ribbon
+    ctx.fillStyle = '#4f46e5';
+    ctx.beginPath();
+    ctx.roundRect(220, 108, 640, 68, 34);
+    ctx.fill();
+    ctx.fillStyle = '#fef3c7';
+    ctx.font = 'bold 30px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('21天自律小怪兽打卡成长计划 · 官方认证', 540, 152);
+
+    // Main Title
+    ctx.fillStyle = '#92400e';
+    ctx.font = '900 72px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('自律之星荣誉奖状', 540, 272);
+
+    ctx.fillStyle = '#64748b';
+    ctx.font = 'bold 26px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('21-DAY HABIT & SELF-DISCIPLINE HONOR CERTIFICATE', 540, 322);
+
+    // Child Name Highlight
+    ctx.fillStyle = '#1e293b';
+    ctx.font = 'bold 34px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('特授予优秀的小朋友：', 540, 410);
+
+    ctx.fillStyle = '#4f46e5';
+    ctx.font = '900 76px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(child, 540, 502);
+
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(300, 526);
+    ctx.lineTo(780, 526);
+    ctx.stroke();
+
+    // Pet Badge Emblem on Canvas
+    ctx.fillStyle = '#eef2ff';
+    ctx.beginPath();
+    ctx.arc(540, 680, 118, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#6366f1';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+
+    ctx.font = '104px "Apple Color Emoji", "Segoe UI Emoji", sans-serif';
+    ctx.fillText(stage.emoji, 540, 706);
+
+    ctx.fillStyle = '#312e81';
+    ctx.font = 'bold 28px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(`守护神兽已进化至：${stage.name}`, 540, 848);
+
+    // Three Metric Cards
+    const metrics = [
+      { label: '连续打卡天数', val: `${checkedDays} / 21 天`, x: 140 },
+      { label: '累计获得星力', val: `${state.totalStarsEarned} 颗⭐`, x: 410 },
+      { label: '完成专注轮次', val: `${state.focusSessionsDone || 0} 轮`, x: 680 }
+    ];
+    metrics.forEach(m => {
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.roundRect(m.x, 892, 260, 128, 22);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = 'bold 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+      ctx.fillText(m.label, m.x + 130, 940);
+
+      ctx.fillStyle = '#d97706';
+      ctx.font = '900 38px "PingFang SC", "Microsoft YaHei", sans-serif';
+      ctx.fillText(m.val, m.x + 130, 994);
+    });
+
+    // 21-Day Mini Matrix
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#fde68a';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(140, 1052, 800, 146, 22);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#78350f';
+    ctx.font = 'bold 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('21天自律习惯打卡足迹', 540, 1090);
+
+    for (let i = 0; i < 21; i++) {
+      const col = i % 7;
+      const row = Math.floor(i / 7);
+      const cx = 218 + col * 107;
+      const cy = 1126 + row * 28;
+      const ok = state.days[i + 1]?.checked;
+      ctx.fillStyle = ok ? '#f59e0b' : '#e2e8f0';
+      ctx.beginPath();
+      ctx.roundRect(cx - 42, cy - 12, 84, 22, 8);
+      ctx.fill();
+      ctx.fillStyle = ok ? '#ffffff' : '#64748b';
+      ctx.font = 'bold 14px "PingFang SC", "Microsoft YaHei", sans-serif';
+      ctx.fillText(`D${i + 1}${ok ? ' ★' : ''}`, cx, cy + 4);
+    }
+
+    // Parent Note
+    ctx.fillStyle = '#334155';
+    ctx.font = 'bold 26px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(`家长寄语：${note.slice(0, 32)}`, 540, 1258);
+
+    // Date & Red Seal
+    const d = new Date();
+    const dateStr = `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#64748b';
+    ctx.font = 'bold 24px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(`颁发日期：${dateStr}`, 140, 1336);
+
+    ctx.save();
+    ctx.translate(850, 1300);
+    ctx.rotate(-0.18);
+    ctx.strokeStyle = 'rgba(225, 29, 72, 0.86)';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.arc(0, 0, 62, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, 52, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(225, 29, 72, 0.9)';
+    ctx.textAlign = 'center';
+    ctx.font = '900 22px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('自律之星', 0, -4);
+    ctx.font = 'bold 18px "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('官方认证章', 0, 22);
+    ctx.restore();
+
+    return canvas.toDataURL('image/png');
+  }
+
+  // Event Bindings
+  document.getElementById('petSvgWrap').addEventListener('click', () => {
+    triggerPetBoing();
+    sfxStar();
+    const lines = [
+      '再坚持一个习惯任务，星星能量就满格啦！',
+      '点我给你加油！今天也要做最棒的自己！',
+      '试试用专注倒计时，完成直接送小星星哦！'
+    ];
+    document.getElementById('petSpeech').textContent = lines[Math.floor(Math.random() * lines.length)];
+  });
+
+  document.getElementById('soundToggleBtn').addEventListener('click', () => {
+    state.soundOn = !state.soundOn;
+    saveState();
+    renderAll();
+    if (state.soundOn) sfxClick();
+  });
+
+  document.getElementById('advanceDayBtn').addEventListener('click', () => {
+    state.activeDay = state.activeDay >= 21 ? 1 : state.activeDay + 1;
+    sfxClick();
+    saveState();
+    renderAll();
+    showToast(`已切换到第 ${state.activeDay} 天打卡面板`);
+  });
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (timerRunning) {
+        showToast('请先暂停或重置当前倒计时再切换时长');
+        return;
+      }
+      state.timerMinutes = Number(btn.dataset.mins);
+      timerRemainingSec = state.timerMinutes * 60;
+      sfxClick();
+      saveState();
+      renderTimer();
+    });
+  });
+
+  document.getElementById('timerStartPauseBtn').addEventListener('click', startOrPauseTimer);
+  document.getElementById('timerResetBtn').addEventListener('click', resetTimer);
+  document.getElementById('timerFinishDemoBtn').addEventListener('click', completeFocusTimer);
+
+  document.getElementById('addTaskForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const icon = (document.getElementById('newTaskIcon').value || '🌟').trim();
+    const title = document.getElementById('newTaskTitle').value.trim();
+    const stars = Math.min(5, Math.max(1, Number(document.getElementById('newTaskStars').value) || 2));
+    if (!title) return;
+    state.tasks.push({ id: `t_${Date.now()}`, icon, title, desc: '家长自定义每日习惯', stars });
+    document.getElementById('newTaskTitle').value = '';
+    sfxClick();
+    saveState();
+    renderAll();
+    showToast(`已添加习惯「${title}」(+${stars} ⭐)`);
+  });
+
+  document.getElementById('addRewardForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const icon = (document.getElementById('newRewardIcon').value || '🎈').trim();
+    const title = document.getElementById('newRewardTitle').value.trim();
+    const cost = Math.min(200, Math.max(1, Number(document.getElementById('newRewardCost').value) || 10));
+    if (!title) return;
+    state.rewards.push({ id: `r_${Date.now()}`, icon, title, cost });
+    document.getElementById('newRewardTitle').value = '';
+    sfxClick();
+    saveState();
+    renderAll();
+    showToast(`已上架奖励「${title}」(${cost} ⭐)`);
+  });
+
+  const childInput = document.getElementById('childNameInput');
+  const noteInput = document.getElementById('parentNoteInput');
+  childInput.value = state.childName;
+  noteInput.value = state.parentNote;
+  childInput.addEventListener('input', () => {
+    state.childName = childInput.value;
+    saveState();
+    renderAll();
+  });
+  noteInput.addEventListener('input', () => {
+    state.parentNote = noteInput.value;
+    saveState();
+  });
+
+  document.getElementById('exportCertBtn').addEventListener('click', () => {
+    const dataUrl = generateCertificateDataUrl();
+    window.__lastCertPngDataUrl = dataUrl;
+    document.getElementById('certModalImg').src = dataUrl;
+    document.getElementById('certDownloadLink').href = dataUrl;
+    document.getElementById('certModal').classList.add('open');
+    sfxEvolve();
+  });
+
+  document.getElementById('certCloseBtn').addEventListener('click', () => {
+    document.getElementById('certModal').classList.remove('open');
+  });
+  document.getElementById('certModal').addEventListener('click', (e) => {
+    if (e.target.id === 'certModal') e.currentTarget.classList.remove('open');
+  });
+
+  document.getElementById('exportJsonBtn').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `habit-pet-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('已导出 JSON 备份文件');
+  });
+
+  document.getElementById('importJsonInput').addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(String(reader.result));
+        if (!parsed || typeof parsed !== 'object' || !parsed.days) {
+          showToast('JSON 格式不正确，未导入');
+          return;
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+        state = loadState();
+        childInput.value = state.childName;
+        noteInput.value = state.parentNote;
+        resetTimer();
+        renderAll();
+        showToast('🎉 JSON 备份恢复成功！');
+      } catch (_) {
+        showToast('解析 JSON 失败，请检查文件');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('resetAllBtn').addEventListener('click', () => {
+    state = createDefaultState();
+    saveState();
+    childInput.value = state.childName;
+    noteInput.value = state.parentNote;
+    resetTimer();
+    renderAll();
+    showToast('已重置为初始 21 天挑战状态');
+  });
+
+  renderTimer();
+  renderAll();
+})();
+</script>
+</body>
+</html>
